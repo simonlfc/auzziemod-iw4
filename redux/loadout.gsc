@@ -5,6 +5,7 @@
 
 give_loadout()
 {
+    self closeInGameMenu();
     self takeAllWeapons();
     self _clearPerks();
     self _detachAll();

@@ -9,6 +9,7 @@ on_script_menu_response()
     {
         self waittill( "menuresponse", menu, response );
         self iPrintLn( "^5Callback received from: ", menu, "(", response, ")" );
+        
         if ( menu == "map_voting" )
         {
             if ( isSubStr( response, "map_vote:" ) )

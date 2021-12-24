@@ -40,9 +40,8 @@ menudef
 	CHOICE_BUTTON( 5, "@MENU_PERK2_CAPS", ; )
 	CHOICE_BUTTON( 6, "@MENU_PERK3_CAPS", ; )
 	CHOICE_SEPARATOR( 7 )
-	CHOICE_BUTTON( 7, "@PLATFORM_PLAY_ONLINE_CAPS", scriptmenuresponse "loadout_give:"; )
+	CHOICE_BUTTON( 7, "PLAY", scriptmenuresponse "loadout_give:"; )
 }
-
 
 #define CAC_BUTTON( idx, text, action_, vis ) \
 		CHOICE_BUTTON_VIS( idx, text, action_, localVarString( "cac_type" ) == vis )

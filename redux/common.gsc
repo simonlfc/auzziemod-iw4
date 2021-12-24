@@ -9,7 +9,7 @@ init()
     level.onlineGame = true;
     level.rankedMatch = true;
     level.modifyPlayerDamage = redux\common::modify_player_damage;
-    
+
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
 
@@ -22,11 +22,16 @@ on_player_connect()
     for(;;)
     {
         level waittill( "connected", player );
-        player.used_slow_last = false;
-        player.loadout = [];
-        player thread redux\commands::init();
-        player thread redux\ui_callbacks::on_script_menu_response();
-        //player thread redux\loadout::wait_for_loadout();
+        if ( !player isBot() )
+        {
+            player.used_slow_last = false;
+            if ( !isDefined( player.loadout ) )
+                player.loadout = [];
+
+            player thread redux\commands::init();
+            player thread redux\ui_callbacks::on_script_menu_response();
+            //player thread redux\loadout::wait_for_loadout();
+        }
         player thread on_player_spawned();
     }
 }
@@ -39,8 +44,11 @@ on_player_spawned()
         self waittill( "spawned_player" );
         self thread ammo_regen();
 
-        if ( self isBot() )
-            self thread bot_score_check();
+        if ( level.gametype == "dm" )
+        {
+            if ( self isBot() )
+                self thread bot_score_check();
+        }
     }
 }
 
@@ -54,7 +62,6 @@ bot_score_check()
         {
             maps\mp\gametypes\_gamescore::_setPlayerScore( self, 0 );
             maps\mp\gametypes\_gamescore::sendUpdatedDMScores();
-            break;
         }
     }
 }
