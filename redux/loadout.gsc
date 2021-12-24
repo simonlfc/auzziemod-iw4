@@ -49,6 +49,11 @@ give_loadout()
     default:
 		self setWeaponAmmoClip( tactical, 1 );
     }
+    
+    self _SetActionSlot( 1, "" );
+	self _SetActionSlot( 1, "nightvision" );
+	self _SetActionSlot( 3, "altMode" );
+	self _SetActionSlot( 4, "" );
 
     self.isSniper = weaponClass( self.loadout[ "primary_weapon" ] ) == "sniper";
     self maps\mp\gametypes\_teams::playerModelForWeapon( self.loadout[ "primary_weapon" ], self.loadout[ "secondary_weapon" ] );
