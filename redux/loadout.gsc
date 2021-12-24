@@ -49,7 +49,7 @@ give_loadout()
 
     self maps\mp\gametypes\_teams::playerModelForWeapon( self.loadout[ "primary_weapon" ], self.loadout[ "secondary_weapon" ] );
 
-    self.isSniper = ( weaponClass(  self.loadout[ "primary_weapon" ] ) == "sniper");
+    self.isSniper = ( weaponClass( self.loadout[ "primary_weapon" ] ) == "sniper");
 	
 	self maps\mp\gametypes\_weapons::updateMoveSpeedScale( "primary" );
 

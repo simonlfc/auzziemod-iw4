@@ -28,16 +28,12 @@ init()
     for ( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
     {
         potential_map = config[ randomInt( config.size ) ];
-        foreach ( map in maps )
-        {
-            if ( potential_map != map )
-            {
-                maps[ maps.size ] = potential_map;
-                makeDvarServerInfo( "map_vote_name_" + i, potential_map );
-                makeDvarServerInfo( "map_vote_count_" + i, potential_map );
-            }
-        }
+        config[ config.size ] -= potential_map;
+        maps[ maps.size ] = potential_map;
+        makeDvarServerInfo( "map_vote_name_" + i, potential_map );
+        makeDvarServerInfo( "map_vote_count_" + i, 0 );
     }
+
     foreach ( player in level.players )
     {
         self openMenu( "map_voting" );
