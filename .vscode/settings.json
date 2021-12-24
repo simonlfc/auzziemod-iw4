@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.gsc": "gsc",
+        "*.menu": "c",
+        "*.inc": "c",
+        "*.str": "str",
+        "**/weapons/mp/*": "log",
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
+}
