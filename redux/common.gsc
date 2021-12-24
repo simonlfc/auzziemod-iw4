@@ -4,7 +4,7 @@
 
 init()
 {    
-    thread redux\hooks::init();
+    thread redux\hooks::hooks();
 
     level.onlineGame = true;
     level.rankedMatch = true;

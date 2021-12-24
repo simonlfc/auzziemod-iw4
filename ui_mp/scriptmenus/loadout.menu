@@ -40,7 +40,7 @@ menudef
 	CHOICE_BUTTON( 5, "@MENU_PERK2_CAPS", ; )
 	CHOICE_BUTTON( 6, "@MENU_PERK3_CAPS", ; )
 	CHOICE_SEPARATOR( 7 )
-	CHOICE_BUTTON( 7, "PLAY", scriptmenuresponse "loadout_give:"; )
+	CHOICE_BUTTON( 7, "PLAY", scriptmenuresponse "class4"; )
 }
 
 #define CAC_BUTTON( idx, text, action_, vis ) \
