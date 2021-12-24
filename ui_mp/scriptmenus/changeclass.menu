@@ -5,8 +5,6 @@
 #define MENU_NAME					"changeclass"
 #define MENU_TITLE					"@MPUI_CHOOSE_CLASS_CAP"
 
-#define ON_MENU_ESC \
-		scriptmenuresponse "back";
 
 menudef
 {

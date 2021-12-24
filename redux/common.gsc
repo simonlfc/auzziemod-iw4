@@ -9,10 +9,6 @@ init()
     level.onlineGame = true;
     level.rankedMatch = true;
     level.modifyPlayerDamage = redux\common::modify_player_damage;
-
-    precacheItem( "codol-cheytac_mp" );
-    precacheItem( "codol-l115a3_mp" );
-    precacheItem( "codol-msr_mp" );
     
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
@@ -27,6 +23,7 @@ on_player_connect()
     {
         level waittill( "connected", player );
         player.used_slow_last = false;
+        player.loadout = [];
         player thread redux\commands::init();
         player thread redux\ui_callbacks::on_script_menu_response();
         //player thread redux\loadout::wait_for_loadout();
@@ -97,7 +94,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
     if ( isBulletDamage( sMeansOfDeath ) && getWeaponClass( sWeapon ) != "weapon_sniper" )
         iDamage = 1;
 
-	if ( getWeaponClass( sWeapon ) == "weapon_sniper" || sWeapon == "throwingknife_mp" || isSubStr( sWeapon, "fal_" ) )
+	if ( getWeaponClass( sWeapon ) == "weapon_sniper" || sWeapon == "throwingknife_mp" )
 		iDamage = 99999;
 
     // Mala fix

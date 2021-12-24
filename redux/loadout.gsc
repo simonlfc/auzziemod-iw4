@@ -7,7 +7,7 @@ give_loadout()
 {
     self takeAllWeapons();
     self _clearPerks();
-	self _detachAll();
+    self _detachAll();
 
     self loadoutAllPerks( 
         self.loadout[ "loadout_lethal" ], 
@@ -17,27 +17,34 @@ give_loadout()
     );
 
     primary = buildWeaponName( 
-		self.loadout[ "primary_weapon" ],
-		self.loadout[ "primary_attachment_1" ]
-	);
-    self _giveWeapon( primary, self.loadout[ "primary_camo" ] );
+        self.loadout[ "primary_weapon" ],
+        self.loadout[ "primary_attachment" ]
+    );
+    self _giveWeapon( primary, int( self.loadout[ "primary_camo" ] ) );
     self setSpawnWeapon( primary );
-    if ( self hasPerk( "specialty_extraammo", true ) )
-		self giveMaxAmmo( primary );
 
     secondary = buildWeaponName( 
-		self.loadout[ "secondary_weapon" ],
-		self.loadout[ "secondary_attachment_1" ]
-	);
-    self _giveWeapon( secondary );
-    if ( self hasPerk( "specialty_extraammo", true ) && getWeaponClass( secondary ) != "weapon_projectile" )
-		self giveMaxAmmo( secondary, self.loadout[ "secondary_camo" ] );
+        self.loadout[ "secondary_weapon" ],
+        self.loadout[ "secondary_attachment" ]
+    );
+    self _giveWeapon( secondary, int( self.loadout[ "secondary_camo" ] ) );
 
     self maps\mp\gametypes\_teams::playerModelForWeapon( self.loadout[ "primary_weapon" ], self.loadout[ "secondary_weapon" ] );
 }
 
 init_loadout_stat( stat, value )
 {
-    self.loadout[ stat ] = strTok( value, ":" )[1];
+    value = strTok( value, ":" )[1];
+
+    if ( stat == "primary_attachment" )
+        value = tableLookup( "mp/statsTable.csv", 4, self.loadout[ "primary_weapon" ], 10 + int( value ) );
+    else if ( stat == "secondary_attachment" )
+        value = tableLookup( "mp/statsTable.csv", 4, self.loadout[ "secondary_weapon" ], 10 + int( value ) );
+
+    if ( value == "" )
+        value = "none";
+
+    self iPrintLn( "Initialised stat: ", stat, " with: ", value );
+    self.loadout[ stat ] = value;
     return;
 }
