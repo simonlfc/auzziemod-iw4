@@ -5,7 +5,9 @@ auzziemod IW4 is a minimalistic open-source rewrite of 71st Recon's decade old M
 
 Previously always closed-source, I decided to open-source this one because there isn't much point keeping a trickshotting mod private anymore.
 
-As always, auzziemod is designed to be as close to vanilla IW4 as much as possible, so it's a slightly harder experience compareed to other servers.
+As always, auzziemod is designed to be as close to vanilla IW4 as much as possible, so it's a slightly harder experience compared to most sniping servers.
+
+> ***This mod is only compatible with IW4x 0.7.0, yet to be released.***
 
 ## Features
 + One mod for both FFA & SND
