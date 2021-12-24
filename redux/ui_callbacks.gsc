@@ -26,6 +26,7 @@ on_script_menu_response()
                 case "loadout_primary_attachment":      redux\loadout::init_loadout_stat( "primary_attachment", response );             break;
                 case "loadout_secondary":               redux\loadout::init_loadout_stat( "secondary_weapon", response );               break;
                 case "loadout_secondary_attachment":    redux\loadout::init_loadout_stat( "secondary_attachment", response );           break;
+                case "loadout_secondary_camo":          redux\loadout::init_loadout_stat( "secondary_camo", response );                 break;
                 case "loadout_lethal":                  redux\loadout::init_loadout_stat( "lethal", response );                         break;
                 case "loadout_tactical":                redux\loadout::init_loadout_stat( "tactical", response );                       break;
                 case "loadout_perk1":                   redux\loadout::init_loadout_stat( "perk1", response );                          break;

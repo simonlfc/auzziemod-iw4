@@ -25,10 +25,10 @@ init()
     maps = [];
     
     config = strTok( fileRead( "map_voting.cfg" ), "\n" );
-    for( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
+    for ( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
     {
         potential_map = config[ randomInt( config.size ) ];
-        foreach( map in maps )
+        foreach ( map in maps )
         {
             if ( potential_map != map )
             {
@@ -38,7 +38,7 @@ init()
             }
         }
     }
-    foreach( player in level.players )
+    foreach ( player in level.players )
     {
         self openMenu( "map_voting" );
     }

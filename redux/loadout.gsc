@@ -31,7 +31,7 @@ give_loadout()
 	);
     self _giveWeapon( secondary );
     if ( self hasPerk( "specialty_extraammo", true ) && getWeaponClass( secondary ) != "weapon_projectile" )
-		self giveMaxAmmo( secondary );
+		self giveMaxAmmo( secondary, self.loadout[ "secondary_camo" ] );
 
     self maps\mp\gametypes\_teams::playerModelForWeapon( self.loadout[ "primary_weapon" ], self.loadout[ "secondary_weapon" ] );
 }
@@ -39,4 +39,5 @@ give_loadout()
 init_loadout_stat( stat, value )
 {
     self.loadout[ stat ] = strTok( value, ":" )[1];
+    return;
 }
