@@ -2,8 +2,8 @@
 #include "ui_mp/common/templates.inc"
 #include "ui/menudef.h"
 
-#define MENU_NAME					"changeclass"
-#define MENU_TITLE					"@MPUI_CHOOSE_CLASS_CAP"
+#define MENU_NAME					"loadout"
+#define MENU_TITLE					"LOADOUT"
 
 #define ON_MENU_ESC \
 		scriptmenuresponse "back";
@@ -25,30 +25,23 @@ menudef
 	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_AXIS" )
 	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
 	
-	// Classes
-	CHOICE_DEFAULT_CLASS( 0, "Random Intervention (SOH)", "class0" )
-	CHOICE_DEFAULT_CLASS( 1, "Random Intervention (Mara)", "class1" )
-	CHOICE_DEFAULT_CLASS( 2, "Random Barrett", "class2" )
-	CHOICE_DEFAULT_CLASS( 3, "Random L118A", "class3" )
+	CHOICE_BUTTON( 0, "@MENU_PRIMARY_CAPS", ; )
+	CHOICE_BUTTON( 1, "@MENU_SECONDARY_CAPS", ; )
+	CHOICE_SEPARATOR( 2 )
+	CHOICE_BUTTON( 2, "@MENU_EQUIPMENT_CAPS", ; )
+	CHOICE_BUTTON( 3, "@MENU_SPECIAL_GRENADE_CAPS", ; )
 	CHOICE_SEPARATOR( 4 )
-	CHOICE_BUTTON_FOCUS( 4, 		"Create New Class", 				open "loadout";
-																		close "self";, 
-																		setLocalVarString "loadoutClassName" ( "Created Class" ); 
-																		UPDATE_CAC_FOCUS;, ; )
-	CHOICE_SEPARATOR( 5 )
-	CHOICE_CUSTOM_CLASS( 5, "custom1" )
-	CHOICE_CUSTOM_CLASS( 6, "custom2" )
-	CHOICE_CUSTOM_CLASS( 7, "custom3" )
-	CHOICE_CUSTOM_CLASS( 8, "custom4" )
-	CHOICE_CUSTOM_CLASS( 9, "custom5" )
-	CHOICE_CUSTOM_CLASS( 10, "custom6" )
-	CHOICE_CUSTOM_CLASS( 11, "custom7" )
-	CHOICE_CUSTOM_CLASS( 12, "custom8" )
-	CHOICE_CUSTOM_CLASS( 13, "custom9" )
-	CHOICE_CUSTOM_CLASS( 14, "custom10" )
-	CHOICE_CUSTOM_CLASS( 15, "custom11" )
-	CHOICE_CUSTOM_CLASS( 16, "custom12" )
-	CHOICE_CUSTOM_CLASS( 17, "custom13" )
-	CHOICE_CUSTOM_CLASS( 18, "custom14" )
-	CHOICE_CUSTOM_CLASS( 19, "custom15" )
+	CHOICE_BUTTON( 4, "@MENU_PERK1_CAPS", ; )
+	CHOICE_BUTTON( 5, "@MENU_PERK2_CAPS", ; )
+	CHOICE_BUTTON( 6, "@MENU_PERK3_CAPS", ; )
+	CHOICE_SEPARATOR( 7 )
+	CHOICE_BUTTON( 7, "@PLATFORM_PLAY_ONLINE_CAPS", ; )
+}
+
+menudef
+{
+	name "loadout_select"
+	rect -64 40 640 480 0 0
+	forecolor 1 1 1 1
+	CAC_POPUP
 }

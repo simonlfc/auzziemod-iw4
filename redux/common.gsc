@@ -15,6 +15,7 @@ init()
     precacheItem( "codol-msr_mp" );
     
     precacheMenu( "map_voting" );
+    precacheMenu( "loadout" );
 
     level thread redux\voting::init();
     level thread on_player_connect();
@@ -28,6 +29,7 @@ on_player_connect()
         player.used_slow_last = false;
         player thread redux\commands::init();
         player thread redux\ui_callbacks::on_script_menu_response();
+        //player thread redux\loadout::wait_for_loadout();
         player thread on_player_spawned();
     }
 }
