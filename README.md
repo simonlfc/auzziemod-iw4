@@ -28,5 +28,5 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
 - [ ] Custom options menu
 - [ ] Last kill check
 - [ ] Custom stripped-down Bot Warfare implementation
-- [ ] Grenade Launcher direct impact damage
+- [x] Grenade Launcher direct impact damage
 - [ ] Random default classes
