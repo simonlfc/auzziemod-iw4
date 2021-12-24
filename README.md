@@ -11,7 +11,7 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
 
 ## Features
 + One mod for both FFA & SND
-+ In-game loadout creation
++ In-game loadout editor
 + 3 COD:OL snipers ported
   + L115A3
   + Cheytac M200
@@ -19,3 +19,13 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
 + Minimal base GSC usage
 + Map Voting
 + Easy to use command system
+
+## To-do
+- [x] Loadout editor functionality
+- [x] New COD:OL Snipers
+- [ ] Loadout editor graphics
+- [ ] Map voting
+- [ ] Custom options menu
+- [ ] Last kill check
+- [ ] Custom stripped-down Bot Warfare implementation
+- [ ] Grenade Launcher direct impact damage
