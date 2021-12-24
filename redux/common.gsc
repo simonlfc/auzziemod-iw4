@@ -74,8 +74,7 @@ ammo_regen()
         {
             if ( maps\mp\gametypes\_weapons::isPrimaryWeapon( weapon ) )
                 self setWeaponAmmoStock( weapon, weaponMaxAmmo( weapon ) );
-            
-            if ( getWeaponClass( weapon ) == "weapon_grenade" || getWeaponClass( weapon ) == "weapon_explosive" )
+            else
                 self setWeaponAmmoClip( weapon, self getWeaponAmmoClip( weapon ) + 1 );
         }
         wait 10;
@@ -94,23 +93,27 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
     if ( level.gametype == "sd" && sMeansOfDeath == "MOD_FALLING" )
         iDamage = 1;
 
-    if ( sMeansOfDeath == "MOD_MELEE" )
+    if ( sMeansOfDeath == "MOD_MELEE"
+    || sMeansOfDeath == "MOD_GRENADE"
+    || sMeansOfDeath == "MOD_GRENADE_SPLASH"
+    || sMeansOfDeath == "MOD_PROJECTILE"
+    || sMeansOfDeath == "MOD_PROJECTILE_SPLASH"
+    || sMeansOfDeath == "MOD_EXPLOSIVE"
+    || sMeansOfDeath == "MOD_IMPACT" )
         iDamage = 1;
+
+    if ( isSubStr( sWeapon, "gl_" ) && sMeansOfDeath == "MOD_IMPACT" )
+		iDamage = 99999;
 
     if ( isBulletDamage( sMeansOfDeath ) && getWeaponClass( sWeapon ) != "weapon_sniper" )
         iDamage = 1;
 
-	if ( getWeaponClass( sWeapon ) == "weapon_sniper" || sWeapon == "throwingknife_mp" )
+    // Mala fix
+	if ( isBulletDamage( sMeansOfDeath ) && ( getWeaponClass( sWeapon ) == "weapon_grenade" || getWeaponClass( sWeapon ) == "weapon_explosive" ) )
 		iDamage = 99999;
 
-    // Mala fix
-	if ( getWeaponClass( sWeapon ) == "weapon_grenade" || getWeaponClass( sWeapon ) == "weapon_explosive" )
-	{
-		if ( sMeansOfDeath == "MOD_RIFLE_BULLET" )
-			iDamage = 99999;
-		else
-			iDamage = 1;
-	}
+	if ( getWeaponClass( sWeapon ) == "weapon_sniper" || sWeapon == "throwingknife_mp" )
+		iDamage = 99999;
 
 	return int( iDamage );
 }
