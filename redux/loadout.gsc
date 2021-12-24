@@ -30,34 +30,32 @@ give_loadout()
     );
     self _giveWeapon( secondary, int( self.loadout[ "secondary_camo" ] ) );
 
-    // Secondary Offhand
-	offhandSecondaryWeapon = self.loadout[ "tactical" ] + "_mp";
+    // Tactical
+	tactical = self.loadout[ "tactical" ] + "_mp";
 	if ( self.loadout[ "tactical" ] == "flash_grenade" )
-		self SetOffhandSecondaryClass( "flash" );
+		self setOffhandSecondaryClass( "flash" );
 	else
-		self SetOffhandSecondaryClass( "smoke" );
+		self setOffhandSecondaryClass( "smoke" );
 	
-	self giveWeapon( offhandSecondaryWeapon );
-	if( self.loadout[ "tactical" ] == "smoke_grenade" )
-		self setWeaponAmmoClip( offhandSecondaryWeapon, 1 );
-	else if( self.loadout[ "tactical" ] == "flash_grenade" )
-		self setWeaponAmmoClip( offhandSecondaryWeapon, 2 );
-	else if( self.loadout[ "tactical" ] == "concussion_grenade" )
-		self setWeaponAmmoClip( offhandSecondaryWeapon, 2 );
-	else
-		self setWeaponAmmoClip( offhandSecondaryWeapon, 1 );
+	self giveWeapon( tactical );
+    self setWeaponAmmoClip( tactical, tableLookup( "mp/statsTable.csv", 4, self.loadout[ "tactical" ], 5 ) );
 
+    switch ( self.loadout[ "tactical" ] )
+    {
+    case "flash_grenade":
+    case "concussion_grenade":
+		self setWeaponAmmoClip( tactical, 2 );
+        break;
+    default:
+		self setWeaponAmmoClip( tactical, 1 );
+    }
+
+    self.isSniper = weaponClass( self.loadout[ "primary_weapon" ] ) == "sniper";
     self maps\mp\gametypes\_teams::playerModelForWeapon( self.loadout[ "primary_weapon" ], self.loadout[ "secondary_weapon" ] );
-
-    self.isSniper = ( weaponClass( self.loadout[ "primary_weapon" ] ) == "sniper");
-	
 	self maps\mp\gametypes\_weapons::updateMoveSpeedScale( "primary" );
-
-	// cac specialties that require loop threads
-	self maps\mp\perks\_perks::cac_selector();
 	
-	self notify ( "changed_kit" );
-	self notify ( "giveLoadout" );
+	self notify( "changed_kit" );
+	self notify( "giveLoadout" );
 }
 
 init_loadout_stat( stat, value )
@@ -72,7 +70,7 @@ init_loadout_stat( stat, value )
     if ( value == "" )
         value = "none";
 
-    self iPrintLn( "Initialised stat: ", stat, " with: ", value );
+    //self iPrintLn( "Initialised stat: ", stat, " with: ", value );
     self.loadout[ stat ] = value;
     return;
 }

@@ -106,6 +106,9 @@
 #define CHOICE_BUTTON_VIS( itemIndex, textArg, actionArg, visArg ) \
 		CHOICE_BUTTON_ALL( itemIndex, textArg, actionArg, ;, ;, visArg, ; )
 
+#define CHOICE_BUTTON_FOCUS_VIS( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg ) \
+		CHOICE_BUTTON_ALL( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, visArg, ; )
+
 #define CHOICE_BUTTON_FOCUS( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg ) \
 		CHOICE_BUTTON_ALL( itemIndex, textArg, actionArg, onFocusArg, leaveFocusArg, 1, ; )
 

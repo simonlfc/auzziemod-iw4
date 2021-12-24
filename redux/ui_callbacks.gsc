@@ -8,7 +8,7 @@ on_script_menu_response()
     for(;;)
     {
         self waittill( "menuresponse", menu, response );
-        self iPrintLn( "^5Callback received from: ", menu, "(", response, ")" );
+        //self iPrintLn( "^5Callback received from: ", menu, "(", response, ")" );
         
         if ( menu == "map_voting" )
         {
@@ -22,7 +22,7 @@ on_script_menu_response()
 			self closeInGameMenu();
 
 			self.selectedClass = true;
-			self [[level.class]]("class4");
+			self [[level.class]]( "class4" );
         }
 
         if ( isSubStr( response, "loadout_" ) )
