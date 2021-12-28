@@ -38,7 +38,7 @@ give_loadout()
 		self setOffhandSecondaryClass( "smoke" );
 	
 	self giveWeapon( tactical );
-    self setWeaponAmmoClip( tactical, tableLookup( "mp/statsTable.csv", 4, self.loadout[ "tactical" ], 5 ) );
+    self setWeaponAmmoClip( tactical, tablelookup( "redux/statsTable.csv", 4, self.loadout[ "tactical" ], 5 ) );
 
     switch ( self.loadout[ "tactical" ] )
     {
@@ -68,9 +68,9 @@ init_loadout_stat( stat, value )
     value = strTok( value, ":" )[1];
 
     if ( stat == "primary_attachment" )
-        value = tableLookup( "mp/statsTable.csv", 4, self.loadout[ "primary_weapon" ], 10 + int( value ) );
+        value = tablelookup( "redux/statsTable.csv", 4, self.loadout[ "primary_weapon" ], 10 + int( value ) );
     else if ( stat == "secondary_attachment" )
-        value = tableLookup( "mp/statsTable.csv", 4, self.loadout[ "secondary_weapon" ], 10 + int( value ) );
+        value = tablelookup( "redux/statsTable.csv", 4, self.loadout[ "secondary_weapon" ], 10 + int( value ) );
 
     if ( value == "" )
         value = "none";

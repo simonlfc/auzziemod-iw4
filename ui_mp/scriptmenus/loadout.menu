@@ -116,13 +116,13 @@ menudef
 
 // add disable param when it = an existing weapon in your loadout
 #define CAC_WEAPON( idx, weapon ) \
-		CHOICE_BUTTON_FOCUS_VIS( idx, "@" + tableLookup( "mp/statsTable.csv", 4, weapon, 3 ), CAC_SELECT_WEAPON( weapon );, setLocalVarString "cac_current_focus" ( weapon );, ;, tableLookup( "mp/statsTable.csv", 4, weapon, 2 ) == localVarString( "cac_type" ) )
+		CHOICE_BUTTON_FOCUS_VIS( idx, "@" + tablelookup( "redux/statsTable.csv", 4, weapon, 3 ), CAC_SELECT_WEAPON( weapon );, setLocalVarString "cac_current_focus" ( weapon );, ;, tablelookup( "redux/statsTable.csv", 4, weapon, 2 ) == localVarString( "cac_type" ) )
 		
 #define CAC_ATTACHMENT( idx, fixed_idx ) \
-		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/attachmentTable.csv", 4, tableLookup( "mp/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ), 3 ), CAC_SELECT_ATTACHMENT( fixed_idx );, tableLookup( "mp/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ) != "" && localVarString( "cac_type" ) == "attachments" )
+		CHOICE_BUTTON_VIS( idx, "@" + tablelookup( "redux/attachmentTable.csv", 4, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ), 3 ), CAC_SELECT_ATTACHMENT( fixed_idx );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ) != "" && localVarString( "cac_type" ) == "attachments" )
 
 #define CAC_CAMO( idx, fixed_idx, name ) \
-		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/camoTable.csv", 1, name, 2 ), CAC_SELECT_CAMO( fixed_idx );, tableLookup( "mp/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 0 ) < 52 && localVarString( "cac_type" ) == "camos" )
+		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/camoTable.csv", 1, name, 2 ), CAC_SELECT_CAMO( fixed_idx );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 0 ) < 52 && localVarString( "cac_type" ) == "camos" )
 
 #define CAC_PERK( idx, name, slot ) \
 		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/perkTable.csv", 1, name, 9 ), CAC_SELECT_PERK( name );, localVarString( "cac_type" ) == "perk_select" && localVarInt( "perk_slot" ) == slot )
@@ -130,7 +130,7 @@ menudef
 #define CAC_LETHAL( idx, name ) \
 		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/perkTable.csv", 1, name, 2 ), setLocalVarString "loadout_lethal" ( name ); scriptmenuresponse "loadout_lethal:"name; close "loadout_select";, localVarString( "cac_type" ) == "lethal_select" )
 
-#define GET_TACTICAL_LOCNAME( name )	locstring( "@MPUI_N_XN", "@" + tablelookup( "mp/statsTable.csv", 4, name, 3 ) , int( tablelookup( "mp/statsTable.csv", 4, name, 5 ) ) )
+#define GET_TACTICAL_LOCNAME( name )	locstring( "@MPUI_N_XN", "@" + tablelookup( "redux/statsTable.csv", 4, name, 3 ) , int( tablelookup( "redux/statsTable.csv", 4, name, 5 ) ) )
 
 #define CAC_TACTICAL( idx, name ) \
 		CHOICE_BUTTON_VIS( idx, GET_TACTICAL_LOCNAME( name ), setLocalVarString "loadout_tactical" ( name ); scriptmenuresponse "loadout_tactical:"name; close "loadout_select";, localVarString( "cac_type" ) == "tactical_select" )
@@ -179,7 +179,7 @@ menudef
 	CAC_ATTACHMENT( 8, "8" )
 	CAC_ATTACHMENT( 9, "9" )
 
-	PREPROC_SHADER_VIS( -375 12 200 101.333 3 1, tablelookup( "mp/statstable.csv", 4, localvarstring( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
+	PREPROC_SHADER_VIS( -375 12 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
 	CAC_WEAPON( 0, "m4" )
 	CAC_WEAPON( 1, "famas" )
 	CAC_WEAPON( 2, "scar" )

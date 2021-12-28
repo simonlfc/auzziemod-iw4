@@ -12,6 +12,11 @@ init()
 
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
+    
+    precacheItem( "cheytac_irons_mp" );
+    precacheItem( "codol-cheytac_mp" );
+    precacheItem( "codol-l115a3_mp" );
+    precacheItem( "codol-msr_mp" );
 
     level thread redux\voting::init();
     level thread on_player_connect();

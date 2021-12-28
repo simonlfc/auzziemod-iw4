@@ -13,10 +13,33 @@ hooks()
     replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::is_valid_deathstreak_hook ); // Disable deathstreaks
     replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); // Disable Riot Shield
     replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); // Disable Last Stand
+    replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); // Intercept valid weapon check to allow for our custom attachments
 	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::give_loadout_hook ); // Intercept loadout functions with our own
 	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); // Allow class changing at any time
 	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); // Add damage callback and disable assisted suicides
 }
+
+is_valid_weapon_hook( refString )
+{
+	if ( isSubStr( refString, "irons" ) )
+		return true;
+
+	if ( !isDefined( level.weaponRefs ) )
+	{
+		level.weaponRefs = [];
+
+		foreach ( weaponRef in level.weaponList )
+			level.weaponRefs[ weaponRef ] = true;
+	}
+
+	if ( isDefined( level.weaponRefs[ refString ] ) )
+		return true;
+
+	assertMsg( "Replacing invalid weapon/attachment combo: " + refString );
+	
+	return false;
+}
+
 
 give_loadout_hook( team, class, allowCopycat )
 {
@@ -377,9 +400,6 @@ is_valid_primary_hook( refString )
 		case "ak74u":
 		case "peacekeeper":
 		case "dragunov":
-		case "codol-cheytac":
-		case "codol-l115a3":
-		case "codol-msr":
 			return true;
 		default:
 			assertMsg( "Replacing invalid primary weapon: " + refString );
