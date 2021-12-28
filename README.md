@@ -16,6 +16,7 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
   + L115A3
   + Cheytac M200
   + Remington MSR
++ Custom Intervention iron sight attachment
 + Minimal base GSC usage
 + Map Voting
 + Easy to use command system
