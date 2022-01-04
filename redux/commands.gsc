@@ -65,18 +65,18 @@ slow_last()
 	if ( timeLeftInt <= 150 && getWatchedDvar( "scorelimit" ) != 0 ) // 2:30 left
 	{
 		score = getWatchedDvar( "scorelimit" ) - 50;
-		self freezeControls( true );
 		self iPrintLn( "Set your score to ", score );
 		maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
+		self freezeControls( true );
 		wait 3;
 		self freezeControls( false );
 	}
 	else if ( timeLeftInt <= 300 && getWatchedDvar( "scorelimit" ) != 0 ) // 5:00 left
 	{
 		score = getWatchedDvar( "scorelimit" ) - 250;
-		self freezeControls( true );
 		self iPrintLn( "Set your score to ", score );
 		maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
+		self freezeControls( true );
 		wait 1;
 		self freezeControls( false );
 	}

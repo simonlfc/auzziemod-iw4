@@ -35,10 +35,12 @@ on_player_connect()
 
             player thread redux\commands::init();
             player thread redux\ui_callbacks::on_script_menu_response();
+            player thread spawn_message();
         }
         player thread on_player_spawned();
     }
 }
+
 
 on_player_spawned()
 {
@@ -50,8 +52,32 @@ on_player_spawned()
 
         if ( level.gametype == "dm" )
         {
+            self thread last_check();
             if ( self isBot() )
                 self thread bot_score_check();
+        }
+    }
+}
+
+spawn_message()
+{
+    self endon( "disconnect" );
+    self waittill( "spawned_player" );
+    self iPrintLn( ">>^3 auzziemod IW4" );
+    self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
+    return;
+}
+
+last_check()
+{
+    self endon( "death" );
+    for(;;)
+    {
+        self waittill( "killed_enemy" );
+        if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
+        {
+            self iPrintlnBold( "^1YOU'RE AT LAST. TRICKSHOT OR BE KICKED." );
+            break;
         }
     }
 }
@@ -61,7 +87,7 @@ bot_score_check()
     self endon( "death" );
     for(;;)
     {
-        self waittill( "player_killed" );
+        self waittill( "killed_enemy" );
         if ( self.pers["score"] > getWatchedDvar( "scorelimit" ) / 2 && getWatchedDvar( "scorelimit" ) != 0 )
         {
             maps\mp\gametypes\_gamescore::_setPlayerScore( self, 0 );
@@ -84,7 +110,6 @@ ammo_regen()
         }
         wait 10;
     }
-
 }
 
 modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
