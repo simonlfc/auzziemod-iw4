@@ -108,20 +108,67 @@ give_loadout_hook( team, class, allowCopycat )
 	{
 		class_num = getClassIndex( class );
 		self.class_num = class_num;
+
+		loadoutPrimary = "none";
 		
-		loadoutPrimary = table_getWeapon( level.classTableName, class_num, 0 );
-		loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, class_num, 0 , 0);
-		loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, class_num, 0, 1 );
-		loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, class_num, 0 );
-		loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, class_num, 1 );
-		loadoutSecondary = table_getWeapon( level.classTableName, class_num, 1 );
-		loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, class_num, 1 , 0);
-		loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, class_num, 1, 1 );;
-		loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, class_num, 1 );
-		loadoutEquipment = table_getEquipment( level.classTableName, class_num, 0 );
-		loadoutPerk1 = table_getPerk( level.classTableName, class_num, 1 );
-		loadoutPerk2 = table_getPerk( level.classTableName, class_num, 2 );
-		loadoutPerk3 = table_getPerk( level.classTableName, class_num, 3 );
+		switch ( class_num )
+		{
+		case 0:
+			loadoutPrimary = "cheytac";
+			loadoutPrimaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutPrimary, randomIntRange( 11, 17 ) ); // iron sight attachment
+			break;	
+		case 1:
+			loadoutPrimary = "barrett";
+			break;	
+		case 2:
+			loadoutPrimary = "wa2000";
+			break;	
+		case 3:
+			loadoutPrimary = "m21";
+			break;
+		}
+		loadoutPrimaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutPrimary, randomIntRange( 11, 16 ) );
+		loadoutPrimaryAttachment2 = "none";
+		loadoutPrimaryCamo = tableLookup( "mp/camoTable.csv", 0, randomInt( 8 ), 1 );
+
+		random_secondaries = [];
+		random_secondaries[0] = "beretta";
+		random_secondaries[1] = "usp";
+		random_secondaries[2] = "deserteagle";
+		random_secondaries[3] = "coltanaconda";
+		random_secondaries[4] = "glock";
+		random_secondaries[5] = "beretta393";
+		random_secondaries[6] = "pp2000";
+		random_secondaries[7] = "tmp";
+		random_secondaries[8] = "m79";
+		random_secondaries[9] = "rpg";
+		random_secondaries[10] = "at4";
+		random_secondaries[11] = "stinger";
+		random_secondaries[12] = "javelin";
+		random_secondaries[13] = "ranger";
+		random_secondaries[14] = "model1887";
+		random_secondaries[15] = "striker";
+		random_secondaries[16] = "aa12";
+		random_secondaries[17] = "m1014";
+		random_secondaries[18] = "spas12";
+
+		loadoutSecondary = random_secondaries[ randomInt( random_secondaries.size ) ];
+		loadoutSecondaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutSecondary, randomIntRange( 11, 16 ) );
+		loadoutSecondaryAttachment2 = "none";
+		loadoutSecondaryCamo = tableLookup( "mp/camoTable.csv", 0, randomInt( 8 ), 1 );
+		
+		if ( level.gametype == "sd" )
+			loadoutEquipment = "throwingknife_mp";
+		else
+			loadoutEquipment = "specialty_tacticalinsertion";
+
+		loadoutPerk1 = "specialty_fastreload";
+		loadoutPerk2 = "specialty_bulletdamage";
+		if ( level.gametype == "sd" )
+			loadoutPerk3 = "specialty_extendedmelee";
+		else
+			loadoutPerk3 = "specialty_bulletaccuracy";
+
 		loadoutOffhand = table_getOffhand( level.classTableName, class_num );
 		loadoutDeathstreak = table_getDeathstreak( level.classTableName, class_num );
 	}
@@ -181,9 +228,6 @@ give_loadout_hook( team, class, allowCopycat )
 	
 	if ( loadoutPerk1 != "specialty_onemanarmy" && loadoutSecondary == "onemanarmy" )
 		loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
-
-	loadoutSecondaryCamo = "none";
-
 
 	if ( level.killstreakRewards )
 	{

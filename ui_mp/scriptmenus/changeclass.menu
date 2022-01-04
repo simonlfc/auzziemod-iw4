@@ -24,10 +24,10 @@ menudef
 	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
 	
 	// Classes
-	CHOICE_DEFAULT_CLASS( 0, "Random Intervention (SOH)", "class0" )
-	CHOICE_DEFAULT_CLASS( 1, "Random Intervention (Mara)", "class1" )
-	CHOICE_DEFAULT_CLASS( 2, "Random Barrett", "class2" )
-	CHOICE_DEFAULT_CLASS( 3, "Random L118A", "class3" )
+	CHOICE_DEFAULT_CLASS( 0, "Random Intervention", "class0" )
+	CHOICE_DEFAULT_CLASS( 1, "Random Barrett", "class1" )
+	CHOICE_DEFAULT_CLASS( 2, "Random WA2000", "class2" )
+	CHOICE_DEFAULT_CLASS( 3, "Random M21 EBR", "class3" )
 	CHOICE_SEPARATOR( 4 )
 	CHOICE_BUTTON_FOCUS( 4, 		"Create New Class", 				open "loadout";
 																		close "self";, 
