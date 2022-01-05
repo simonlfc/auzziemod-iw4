@@ -6,15 +6,17 @@ init()
 {
 	self endon( "disconnect" );
 	self thread registerCommand( "drop",        "^3usage: drop []" );
-	self thread registerCommand( "suicide",     "^3usage: suicide []" );
-	self thread registerCommand( "streak",      "^3usage: streak [streak name]" );
-	self thread registerCommand( "slowlast",    "^3usage: slowlast []" );
+	self thread registerCommand( "streak",      "^3usage: streak [name]" );
+	if ( level.gametype == "dm" )
+	{
+		self thread registerCommand( "suicide",     "^3usage: suicide []" );
+		self thread registerCommand( "slowlast",    "^3usage: slowlast []" );
+	}
 }
 
 registerCommand( command, detail )
 {
 	self endon ( "disconnect" );
-
 	self notifyOnPlayerCommand( command, command );
 	self setClientDvar( command, detail );
 	for(;;)

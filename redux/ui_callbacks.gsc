@@ -8,13 +8,10 @@ on_script_menu_response()
     for(;;)
     {
         self waittill( "menuresponse", menu, response );
-        //self iPrintLn( "^5Callback received from: ", menu, "(", response, ")" );
-        
-        if ( menu == "map_voting" )
-        {
-            if ( isSubStr( response, "map_vote:" ) )
-                self redux\voting::cast_map_vote( strTok( response, ":" )[1] );
-        }
+        self iPrintLn( "^5Callback received from: ", menu, "(", response, ")" );
+
+        if ( isSubStr( response, "cast_vote" ) )
+            self redux\voting::cast_map_vote( int( strTok( response, ":" )[1] ) );
         
         if ( response == "class4" )
         {

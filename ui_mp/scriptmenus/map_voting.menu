@@ -1,0 +1,69 @@
+#include "ui_mp/common/macros.inc"
+#include "ui_mp/common/templates.inc"
+#include "ui/menudef.h"
+
+#define MENU_NAME					"map_voting"
+
+menudef
+{
+	name 							MENU_NAME
+	rect 							0 0 640 480 0 0
+	forecolor 						1 1 1 1
+	blurWorld						7
+	onOpen
+	{
+		exec "-scores";
+	}
+	onEsc
+	{
+		open "popup_leavegame";
+	}
+
+	#define CARD_WIDTH					160
+	#define CARD_HEIGHT					90
+	#define CARD_ROW( idx )				( ( idx - 0 ) % 2 )
+	#define CARD_COL( idx )				( ( idx - 0 - ( ( idx - 0 ) % 2 ) ) / 2 )
+
+	#define CARD_X( idx ) 				( -262.5 + ( CARD_WIDTH + 5 ) * CARD_COL( idx ) )
+	#define CARD_Y( idx ) 				( -125 + ( CARD_HEIGHT + 5 ) * CARD_ROW( idx ) )
+	#define CARD_ORIGIN( idx )			CARD_X( idx ) CARD_Y( idx )
+	#define CARD_RECT( idx )			CARD_ORIGIN( idx ) CARD_WIDTH CARD_HEIGHT 2 2
+
+	#define MAP_VOTE_CARD( idx, vote_fix ) \
+			PREPROC_SHADER( CARD_RECT( idx ), "loadscreen_" + dvarString( "map_vote_name_" + idx ), 1 1 1 1 ) \
+			itemDef \
+			{ \
+				rect 					CARD_RECT( idx ) \
+				forecolor 				1 1 1 0 \
+				border					1 \
+				bordersize				0.1 \
+				bordercolor				1 1 1 0.5 \
+				exp 					material ( "white" ) \
+				style 					3 \
+				type					1 \
+				visible 				1 \
+				onFocus \
+				{ \
+					play 					"mouse_over"; \
+					setItemColor 			self forecolor 1 1 1 0.1; \
+				} \
+				leaveFocus \
+				{ \
+					setItemColor 			self forecolor 1 1 1 0; \
+				} \
+				action \
+				{ \
+					play 					"mouse_click"; \
+					scriptMenuResponse		"cast_vote:"vote_fix \
+				} \
+			} \
+			PREPROC_TEXT( CARD_RECT( idx ), dvarString( "map_vote_name_" + idx ), 1, 0.375, 3, 12, 1 1 1 1; origin 5 -15 ) \
+			PREPROC_TEXT( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " votes", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -5 )
+			
+	MAP_VOTE_CARD( 0, "0" )
+	MAP_VOTE_CARD( 1, "1" )
+	MAP_VOTE_CARD( 2, "2" )
+	MAP_VOTE_CARD( 3, "3" )
+	MAP_VOTE_CARD( 4, "4" )
+	MAP_VOTE_CARD( 5, "5" )
+}

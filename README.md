@@ -26,8 +26,9 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
 - [x] New COD:OL Snipers
 - [ ] Loadout editor graphics
 - [ ] Map voting
-- [ ] Custom options menu
-- [ ] Last kill check
+- [ ] Custom options menu with mod binds
+- [x] Last kill check
 - [ ] Custom stripped-down Bot Warfare implementation
 - [x] Grenade Launcher direct impact damage
-- [ ] Random default classes
+- [x] Random default classes
+- [ ] Return lethal after placing Tactical Insertion

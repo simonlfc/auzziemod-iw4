@@ -5,6 +5,7 @@
 init()
 {    
     thread redux\hooks::hooks();
+    thread thirdparty\bot_warfare\_bot::init();
 
     level.onlineGame = true;
     level.rankedMatch = true;
@@ -41,7 +42,6 @@ on_player_connect()
     }
 }
 
-
 on_player_spawned()
 {
     self endon( "disconnect" );
@@ -63,8 +63,11 @@ spawn_message()
 {
     self endon( "disconnect" );
     self waittill( "spawned_player" );
-    self iPrintLn( ">>^3 auzziemod IW4" );
-    self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
+    if ( game["roundsPlayed"] == 0 )
+    {
+        self iPrintLn( ">>^3 auzziemod IW4" );
+        self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
+    }
     return;
 }
 
@@ -114,6 +117,9 @@ ammo_regen()
 
 modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
 {
+    if ( eAttacker isBot() && victim isBot() )
+        return int( iDamage );
+    
     if ( eAttacker isBot() && !victim isBot() )
     {
         iDamage *= 0.15;

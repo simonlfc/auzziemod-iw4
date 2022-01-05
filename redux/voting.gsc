@@ -6,21 +6,12 @@ CONST_MAP_VOTE_SIZE = 6;
 
 init()
 {
-    level waittill( "spawning_intermission" );
-
+    level.is_voting = false;
     if ( !fileExists( "map_voting.cfg" ) )
     {
         iPrintLn( "map_voting.cfg not found, aborting vote..." );
         return;
     }
-
-    foreach ( player in level.players )
-    {
-        if ( player isBot() )
-            kick( player getEntityNumber() );
-
-        player.vote_id = undefined;
-    } 
     
     maps = [];
     
@@ -34,24 +25,46 @@ init()
         makeDvarServerInfo( "map_vote_count_" + i, 0 );
     }
 
+    level thread monitor_intermission();
+}
+
+monitor_intermission()
+{
+    level waittill( "spawning_intermission" );
+    level.is_voting = true;
+
     foreach ( player in level.players )
     {
-        self openMenu( "map_voting" );
+        if ( player isBot() )
+            kick( player getEntityNumber() );
+
+        player.vote_id = undefined;
+        player thread monitor_disconnect();
+        player openPopupMenu( "map_voting" );
     }
+}
+
+monitor_disconnect()
+{
+    self waittill( "disconnect" );
+
+    if ( isDefined( self.vote_id ) )
+        makeDvarServerInfo( "map_vote_count_" + self.vote_id, getDvarInt( "map_vote_count_" + self.vote_id ) - 1 );
 }
 
 cast_map_vote( idx )
 {
-    if ( idx == self.vote_id )
-    {
-        self iPrintLn( "Can't vote for your currently voted map" );
+    if ( !level.is_voting )
         return;
-    }
+
+    if ( isDefined( self.vote_id ) && idx == self.vote_id )
+        return;
+
     if ( idx > CONST_MAP_VOTE_SIZE || idx < 0 )
-    {
-        self iPrintLn( "Invalid map vote index: ", idx );
         return;
-    }
-    
+
+    makeDvarServerInfo( "map_vote_count_" + self.vote_id, getDvarInt( "map_vote_count_" + self.vote_id ) - 1 );
     makeDvarServerInfo( "map_vote_count_" + idx, getDvarInt( "map_vote_count_" + idx ) + 1 );
+
+    self.vote_id = idx;
 }
