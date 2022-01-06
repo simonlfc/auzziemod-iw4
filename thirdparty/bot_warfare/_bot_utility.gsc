@@ -1,5 +1,5 @@
+//_bot_utility
 /*
-	_bot_utility
 	Author: INeedGames
 	Date: 09/26/2020
 	The shared functions for bots
@@ -9,6 +9,8 @@
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 
+// ====================================
+// 	bot var utils
 set_bot_var( var, value )
 {
 	game["bots"][var] = value;
@@ -24,59 +26,46 @@ get_bot_var( var )
 {
 	return game["bots"][var];
 }
+// ====================================
 
 
-/*
-	Bot changes to the weap
-*/
+// Bot changes to the weap
 BotChangeToWeapon( weap )
 {
 	self thirdparty\bot_warfare\_bot_internal::changeToWeap( weap );
 }
 
-/*
-	Bot presses the frag button for time.
-*/
+// Bot presses the frag button for time.
 BotPressFrag( time )
 {
 	self thirdparty\bot_warfare\_bot_internal::frag( time );
 }
 
-/*
-	Bot presses the smoke button for time.
-*/
+// Bot presses the smoke button for time.
 BotPressSmoke( time )
 {
 	self thirdparty\bot_warfare\_bot_internal::smoke( time );
 }
 
-/*
-	Bot will press the ads button for the time
-*/
+// Bot will press the ads button for the time
 BotPressADS( time )
 {
 	self thirdparty\bot_warfare\_bot_internal::pressAds( time );
 }
 
-/*
-	Bot presses the use button for time.
-*/
+// Bot presses the use button for time.
 BotPressUse( time )
 {
 	self thirdparty\bot_warfare\_bot_internal::use( time );
 }
 
-/*
-	Bots will press the attack button for a time
-*/
+// Bots will press the attack button for a time
 BotPressAttack( time )
 {
 	self thirdparty\bot_warfare\_bot_internal::pressFire( time );
 }
 
-/*
-	Returns a random number thats different everytime it changes target
-*/
+// Returns a random number thats different everytime it changes target
 BotGetTargetRandom()
 {
 	if ( !isDefined( self.bot.target ) )
@@ -85,57 +74,43 @@ BotGetTargetRandom()
 	return self.bot.target.rand;
 }
 
-/*
-	Returns the bot's random assigned number.
-*/
+// Returns the bot's random assigned number.
 BotGetRandom()
 {
 	return self.bot.rand;
 }
 
-/*
-	Returns if the bot is pressing frag button.
-*/
+// Returns if the bot is pressing frag button.
 IsBotFragging()
 {
 	return self.bot.isfraggingafter;
 }
 
-/*
-	Returns if the bot is pressing smoke button.
-*/
+// Returns if the bot is pressing smoke button.
 IsBotSmoking()
 {
 	return self.bot.issmokingafter;
 }
 
-/*
-	Returns if the bot is sprinting.
-*/
+// Returns if the bot is sprinting.
 IsBotSprinting()
 {
 	return self.bot.issprinting;
 }
 
-/*
-	Returns if the bot is reloading.
-*/
+// Returns if the bot is reloading.
 IsBotReloading()
 {
 	return self.bot.isreloading;
 }
 
-/*
-	Is bot knifing
-*/
+// Is bot knifing
 IsBotKnifing()
 {
 	return self.bot.isknifingafter;
 }
 
-/*
-	Freezes the bot's controls.
-*/
+// Freezes the bot's controls.
 BotFreezeControls( what )
 {
 	self.bot.isfrozen = what;
@@ -144,17 +119,13 @@ BotFreezeControls( what )
 		self notify( "kill_goal" );
 }
 
-/*
-	Returns if the bot is script frozen.
-*/
+// Returns if the bot is script frozen.
 BotIsFrozen()
 {
 	return self.bot.isfrozen;
 }
 
-/*
-	Bot will stop moving
-*/
+// Bot will stop moving
 BotStopMoving( what )
 {
 	self.bot.stop_move = what;
@@ -163,18 +134,13 @@ BotStopMoving( what )
 		self notify( "kill_goal" );
 }
 
-/*
-	Returns if the bot has a script goal.
-	(like t5 gsc bot)
-*/
+// Returns if the bot has a script goal. (like t5 gsc bot)
 HasScriptGoal()
 {
 	return ( isDefined( self GetScriptGoal() ) );
 }
 
-/*
-	Sets the bot's goal, will acheive it when dist away from it.
-*/
+// Sets the bot's goal, will acheive it when dist away from it.
 SetScriptGoal( goal, dist )
 {
 	if ( !isDefined( dist ) )
@@ -187,107 +153,81 @@ SetScriptGoal( goal, dist )
 	self notify( "new_goal" );
 }
 
-/*
-	Returns the pos of the bot's goal
-*/
+// Returns the pos of the bot's goal
 GetScriptGoal()
 {
 	return self.bot.script_goal;
 }
 
-/*
-	Clears the bot's goal.
-*/
+// Clears the bot's goal.
 ClearScriptGoal()
 {
 	self SetScriptGoal( undefined, 0 );
 }
 
-/*
-	Returns the location of the bot's javelin target
-*/
+// Returns the location of the bot's javelin target
 HasBotJavelinLocation()
 {
 	return isDefined( self.bot.jav_loc );
 }
 
-/*
-	Sets the aim position of the bot
-*/
+// Sets the aim position of the bot
 SetScriptAimPos( pos )
 {
 	self.bot.script_aimpos = pos;
 }
 
-/*
-	Clears the aim position of the bot
-*/
+// Clears the aim position of the bot
 ClearScriptAimPos()
 {
 	self SetScriptAimPos( undefined );
 }
 
-/*
-	Returns the aim position of the bot
-*/
+// Returns the aim position of the bot
 GetScriptAimPos()
 {
 	return self.bot.script_aimpos;
 }
 
-/*
-	Returns if the bot has a aim pos
-*/
+// Returns if the bot has a aim pos
 HasScriptAimPos()
 {
 	return isDefined( self GetScriptAimPos() );
 }
 
-/*
-	Sets the bot's javelin target location
-*/
+// Sets the bot's javelin target location
 SetBotJavelinLocation( loc )
 {
 	self.bot.jav_loc = loc;
 	self notify( "new_enemy" );
 }
 
-/*
-	Clears the bot's javelin location
-*/
+// Clears the bot's javelin location
 ClearBotJavelinLocation()
 {
 	self SetBotJavelinLocation( undefined );
 }
 
-/*
-	Sets the bot's target to be this ent.
-*/
+// Sets the bot's target to be this ent.
 SetAttacker( att )
 {
 	self.bot.target_this_frame = att;
 }
 
-/*
-	Sets the script enemy for a bot.
-*/
+// Sets the script enemy for a bot.
 SetScriptEnemy( enemy, offset )
 {
 	self.bot.script_target = enemy;
 	self.bot.script_target_offset = offset;
 }
 
-/*
-	Removes the script enemy of the bot.
-*/
+// Removes the script enemy of the bot.
 ClearScriptEnemy()
 {
 	self SetScriptEnemy( undefined, undefined );
 }
 
-/*
-	Returns the entity of the bot's target.
-*/
+// Returns the entity of the bot's target.
 GetThreat()
 {
 	if ( !isdefined( self.bot.target ) )
@@ -296,105 +236,79 @@ GetThreat()
 	return self.bot.target.entity;
 }
 
-/*
-	Returns if the bot has a script enemy.
-*/
+// Returns if the bot has a script enemy.
 HasScriptEnemy()
 {
 	return ( isDefined( self.bot.script_target ) );
 }
 
-/*
-	Returns if the bot has a threat.
-*/
+// Returns if the bot has a threat.
 HasThreat()
 {
 	return ( isDefined( self GetThreat() ) );
 }
 
-/*
-	If the player is defusing
-*/
+// If the player is defusing
 IsDefusing()
 {
 	return ( isDefined( self.isDefusing ) && self.isDefusing );
 }
 
-/*
-	If the play is planting
-*/
+// If the play is planting
 isPlanting()
 {
 	return ( isDefined( self.isPlanting ) && self.isPlanting );
 }
 
-/*
-	If the player is carrying a bomb
-*/
+// If the player is carrying a bomb
 isBombCarrier()
 {
 	return ( isDefined( self.isBombCarrier ) && self.isBombCarrier );
 }
 
-/*
-	If the site is in use
-*/
+// If the site is in use
 isInUse()
 {
 	return ( isDefined( self.inUse ) && self.inUse );
 }
 
-/*
-	If the player is in laststand
-*/
+// If the player is in laststand
 inLastStand()
 {
 	return ( isDefined( self.lastStand ) && self.lastStand );
 }
 
-/*
-	Is being revived
-*/
+// Is being revived
 isBeingRevived()
 {
 	return ( isDefined( self.beingRevived ) && self.beingRevived );
 }
 
-/*
-	If the player is in final stand
-*/
+// If the player is in final stand
 inFinalStand()
 {
 	return ( isDefined( self.inFinalStand ) && self.inFinalStand );
 }
 
-/*
-	If the player is the flag carrier
-*/
+// If the player is the flag carrier
 isFlagCarrier()
 {
 	return ( isDefined( self.carryFlag ) && self.carryFlag );
 }
 
-/*
-	Returns if we are stunned.
-*/
+// Returns if we are stunned.
 IsStunned()
 {
 	return ( isdefined( self.concussionEndTime ) && self.concussionEndTime > gettime() );
 }
 
-/*
-	Returns if we are beingArtilleryShellshocked
-*/
+// Returns if we are beingArtilleryShellshocked
 isArtShocked()
 {
 	return ( isDefined( self.beingArtilleryShellshocked ) && self.beingArtilleryShellshocked );
 }
 
-/*
-	Returns a valid grenade launcher weapon
-*/
+// Returns a valid grenade launcher weapon
 getValidTube()
 {
 	weaps = self getweaponslistall();
@@ -413,25 +327,7 @@ getValidTube()
 	return undefined;
 }
 
-/*
-	iw5
-*/
-allowClassChoice()
-{
-	return true;
-}
-
-/*
-	iw5
-*/
-allowTeamChoice()
-{
-	return true;
-}
-
-/*
-	helper
-*/
+//helper
 waittill_either_return_( str1, str2 )
 {
 	self endon( str1 );
@@ -439,9 +335,7 @@ waittill_either_return_( str1, str2 )
 	return true;
 }
 
-/*
-	Returns which string gets notified first
-*/
+//Returns which string gets notified first
 waittill_either_return( str1, str2 )
 {
 	if ( !isDefined( self waittill_either_return_( str1, str2 ) ) )
@@ -450,9 +344,7 @@ waittill_either_return( str1, str2 )
 	return str2;
 }
 
-/*
-	Returns a random grenade in the bot's inventory.
-*/
+//Returns a random grenade in the bot's inventory.
 getValidGrenade()
 {
 	grenadeTypes = [];
@@ -479,25 +371,19 @@ getValidGrenade()
 	return random( possibles );
 }
 
-/*
-	If the weapon is not a script weapon (bomb, killstreak, etc, grenades)
-*/
+//If the weapon is not a script weapon (bomb, killstreak, etc, grenades)
 isWeaponPrimary( weap )
 {
 	return ( maps\mp\gametypes\_weapons::isPrimaryWeapon( weap ) || maps\mp\gametypes\_weapons::isAltModeWeapon( weap ) );
 }
 
-/*
-	If the ent is a vehicle
-*/
+//If the ent is a vehicle
 entIsVehicle( ent )
 {
 	return ( ent.classname == "script_vehicle" || ent.model == "vehicle_uav_static_mp" || ent.model == "vehicle_ac130_coop" );
 }
 
-/*
-	Returns if the given weapon is full auto.
-*/
+//Returns if the given weapon is full auto.
 WeaponIsFullAuto( weap )
 {
 	weaptoks = strtok( weap, "_" );
@@ -508,25 +394,19 @@ WeaponIsFullAuto( weap )
 	return isDefined( level.bots_fullautoguns[weaptoks[0]] );
 }
 
-/*
-	If weap is a secondary gnade
-*/
+//If weap is a secondary gnade
 isSecondaryGrenade( gnade )
 {
 	return ( gnade == "concussion_grenade_mp" || gnade == "flash_grenade_mp" || gnade == "smoke_grenade_mp" );
 }
 
-/*
-	If the weapon  is allowed to be dropped
-*/
+//If the weapon  is allowed to be dropped
 isWeaponDroppable( weap )
 {
 	return ( maps\mp\gametypes\_weapons::mayDropWeapon( weap ) );
 }
 
-/*
-	Returns the height the viewpos is above the origin
-*/
+//Returns the height the viewpos is above the origin
 getEyeHeight()
 {
 	myEye = self getEye();
@@ -534,9 +414,7 @@ getEyeHeight()
 	return myEye[2] - self.origin[2];
 }
 
-/*
-	Does a notify after a delay
-*/
+//Does a notify after a delay
 notifyAfterDelay( delay, not )
 {
 	wait delay;
@@ -544,10 +422,7 @@ notifyAfterDelay( delay, not )
 }
 
 
-/*
-	Pezbot's line sphere intersection.
-	http://paulbourke.net/geometry/circlesphere/raysphere.c
-*/
+// Pezbot's line sphere intersection. http://paulbourke.net/geometry/circlesphere/raysphere.c
 RaySphereIntersect( start, end, spherePos, radius )
 {
 	// check if the start or end points are in the sphere
@@ -594,9 +469,7 @@ RaySphereIntersect( start, end, spherePos, radius )
 	return true;
 }
 
-/*
-	Returns if a smoke grenade would intersect start to end line.
-*/
+//Returns if a smoke grenade would intersect start to end line.
 SmokeTrace( start, end, rad )
 {
 	for ( i = level.bots_smokeList.count - 1; i >= 0; i-- )
@@ -615,9 +488,7 @@ SmokeTrace( start, end, rad )
 	return true;
 }
 
-/*
-	Returns the cone dot (like fov, or distance from the center of our screen).
-*/
+//Returns the cone dot (like fov, or distance from the center of our screen).
 getConeDot( to, from, dir )
 {
 	dirToTarget = VectorNormalize( to - from );
@@ -625,9 +496,7 @@ getConeDot( to, from, dir )
 	return vectordot( dirToTarget, forward );
 }
 
-/*
-	Returns the distance squared in a 2d space
-*/
+//Returns the distance squared in a 2d space
 DistanceSquared2D( to, from )
 {
 	to = ( to[0], to[1], 0 );
@@ -636,9 +505,7 @@ DistanceSquared2D( to, from )
 	return DistanceSquared( to, from );
 }
 
-/*
-	Rounds to the nearest whole number.
-*/
+//Rounds to the nearest whole number.
 Round( x )
 {
 	y = int( x );
@@ -654,9 +521,7 @@ Round( x )
 		return y;
 }
 
-/*
-	Rounds up the given value.
-*/
+//Rounds up the given value.
 RoundUp( floatVal )
 {
 	i = int( floatVal );
@@ -667,9 +532,7 @@ RoundUp( floatVal )
 		return i;
 }
 
-/*
-	converts a string into a float
-*/
+//converts a string into a float
 float( num )
 {
 	setdvar( "temp_dvar_bot_util", num );
@@ -677,9 +540,7 @@ float( num )
 	return GetDvarFloat( "temp_dvar_bot_util" );
 }
 
-/*
-	Tokenizes a string (strtok has limits...) (only one char tok)
-*/
+//Tokenizes a string (strtok has limits...) (only one char tok)
 tokenizeLine( line, tok )
 {
 	tokens = [];
@@ -705,17 +566,13 @@ tokenizeLine( line, tok )
 	return tokens;
 }
 
-/*
-	If the string starts with
-*/
+//If the string starts with
 isStrStart( string1, subStr )
 {
 	return ( getSubStr( string1, 0, subStr.size ) == subStr );
 }
 
-/*
-	Parses tokens into a waypoint obj
-*/
+//Parses tokens into a waypoint obj
 parseTokensIntoWaypoint( tokens )
 {
 	waypoint = spawnStruct();
@@ -746,9 +603,7 @@ parseTokensIntoWaypoint( tokens )
 	return waypoint;
 }
 
-/*
-	Returns an array of each line
-*/
+//Returns an array of each line
 getWaypointLinesFromFile( filename )
 {
 	result = spawnStruct();
@@ -781,9 +636,7 @@ getWaypointLinesFromFile( filename )
 	return result;
 }
 
-/*
-	Loads waypoints from file
-*/
+//Loads waypoints from file
 readWpsFromFile( mapname )
 {
 	waypoints = [];
@@ -813,9 +666,7 @@ readWpsFromFile( mapname )
 	return waypoints;
 }
 
-/*
-	Loads the waypoints. Populating everything needed for the waypoints.
-*/
+//Loads the waypoints. Populating everything needed for the waypoints.
 load_waypoints()
 {
 	level.waypointCount = 0;
@@ -851,9 +702,7 @@ load_waypoints()
 	}
 }
 
-/*
-	Is bot near any of the given waypoints
-*/
+//Is bot near any of the given waypoints
 nearAnyOfWaypoints( dist, waypoints )
 {
 	dist *= dist;
@@ -871,9 +720,7 @@ nearAnyOfWaypoints( dist, waypoints )
 	return false;
 }
 
-/*
-	Returns the waypoints that are near
-*/
+//Returns the waypoints that are near
 waypointsNear( waypoints, dist )
 {
 	dist *= dist;
@@ -893,9 +740,7 @@ waypointsNear( waypoints, dist )
 	return answer;
 }
 
-/*
-	Returns nearest waypoint of waypoints
-*/
+//Returns nearest waypoint of waypoints
 getNearestWaypointOfWaypoints( waypoints )
 {
 	answer = undefined;
@@ -916,9 +761,7 @@ getNearestWaypointOfWaypoints( waypoints )
 	return answer;
 }
 
-/*
-	Returns all waypoints of type
-*/
+//Returns all waypoints of type
 getWaypointsOfType( type )
 {
 	answer = [];
@@ -944,9 +787,7 @@ getWaypointsOfType( type )
 	return answer;
 }
 
-/*
-	Returns the waypoint for index
-*/
+//Returns the waypoint for index
 getWaypointForIndex( i )
 {
 	if ( !isDefined( i ) )
@@ -955,446 +796,7 @@ getWaypointForIndex( i )
 	return level.waypoints[i];
 }
 
-/*
-	Returns the friendly user name for a given map's codename
-*/
-getMapName( mapname )
-{
-	switch ( mapname )
-	{
-		case "mp_abandon":
-			return "Carnival";
-
-		case "mp_rundown":
-			return "Rundown";
-
-		case "mp_afghan":
-			return "Afghan";
-
-		case "mp_boneyard":
-			return "Scrapyard";
-
-		case "mp_brecourt":
-			return "Wasteland";
-
-		case "mp_cargoship":
-			return "Wetwork";
-
-		case "mp_checkpoint":
-			return "Karachi";
-
-		case "mp_compact":
-			return "Salvage";
-
-		case "mp_complex":
-			return "Bailout";
-
-		case "mp_crash":
-			return "Crash";
-
-		case "mp_cross_fire":
-			return "Crossfire";
-
-		case "mp_derail":
-			return "Derail";
-
-		case "mp_estate":
-			return "Estate";
-
-		case "mp_favela":
-			return "Favela";
-
-		case "mp_fuel2":
-			return "Fuel";
-
-		case "mp_highrise":
-			return "Highrise";
-
-		case "mp_invasion":
-			return "Invasion";
-
-		case "mp_killhouse":
-			return "Killhouse";
-
-		case "mp_nightshift":
-			return "Skidrow";
-
-		case "mp_nuked":
-			return "Nuketown";
-
-		case "oilrig":
-			return "Oilrig";
-
-		case "mp_quarry":
-			return "Quarry";
-
-		case "mp_rust":
-			return "Rust";
-
-		case "mp_storm":
-			return "Storm";
-
-		case "mp_strike":
-			return "Strike";
-
-		case "mp_subbase":
-			return "Subbase";
-
-		case "mp_terminal":
-			return "Terminal";
-
-		case "mp_trailerpark":
-			return "Trailer Park";
-
-		case "mp_overgrown":
-			return "Overgrown";
-
-		case "mp_underpass":
-			return "Underpass";
-
-		case "mp_vacant":
-			return "Vacant";
-
-		case "iw4_credits":
-			return "IW4 Test Map";
-
-		case "airport":
-			return "Airport";
-
-		case "co_hunted":
-			return "Hunted";
-
-		case "invasion":
-			return "Burgertown";
-
-		case "mp_bloc":
-			return "Bloc";
-
-		case "mp_bog_sh":
-			return "Bog";
-
-		case "contingency":
-			return "Contingency";
-
-		case "gulag":
-			return "Gulag";
-
-		case "so_ghillies":
-			return "Pripyat";
-
-		case "ending":
-			return "Museum";
-
-		case "af_chase":
-			return "Afghan Chase";
-
-		case "af_caves":
-			return "Afghan Caves";
-
-		case "arcadia":
-			return "Arcadia";
-
-		case "boneyard":
-			return "Boneyard";
-
-		case "cliffhanger":
-			return "Cliffhanger";
-
-		case "dcburning":
-			return "DCBurning";
-
-		case "dcemp":
-			return "DCEMP";
-
-		case "downtown":
-			return "Downtown";
-
-		case "estate":
-			return "EstateSP";
-
-		case "favela":
-			return "FavelaSP";
-
-		case "favela_escape":
-			return "Favela Escape";
-
-		case "roadkill":
-			return "Roadkill";
-
-		case "trainer":
-			return "TH3 PIT";
-
-		case "so_bridge":
-			return "Bridge";
-
-		case "dc_whitehouse":
-			return "Whitehouse";
-
-		case "mp_shipment_long":
-			return "ShipmentLong";
-
-		case "mp_shipment":
-			return "Shipment";
-
-		case "mp_firingrange":
-			return "Firing Range";
-
-		case "mp_rust_long":
-			return "RustLong";
-
-		case "mp_cargoship_sh":
-			return "Freighter";
-
-		case "mp_storm_spring":
-			return "Chemical Plant";
-
-		case "mp_crash_trop":
-		case "mp_crash_tropical":
-			return "Crash Tropical";
-
-		case "mp_fav_tropical":
-			return "Favela Tropical";
-
-		case "mp_estate_trop":
-		case "mp_estate_tropical":
-			return "Estate Tropical";
-
-		case "mp_bloc_sh":
-			return "Forgotten City";
-
-		default:
-			return mapname;
-	}
-}
-
-/*
-	Returns a good amount of players.
-*/
-getGoodMapAmount()
-{
-	switch ( getdvar( "mapname" ) )
-	{
-		case "mp_rust":
-		case "iw4_credits":
-		case "mp_nuked":
-		case "oilrig":
-		case "mp_killhouse":
-		case "invasion":
-		case "mp_bog_sh":
-		case "co_hunted":
-		case "contingency":
-		case "gulag":
-		case "so_ghillies":
-		case "ending":
-		case "af_chase":
-		case "af_caves":
-		case "arcadia":
-		case "boneyard":
-		case "cliffhanger":
-		case "dcburning":
-		case "dcemp":
-		case "downtown":
-		case "estate":
-		case "favela":
-		case "favela_escape":
-		case "roadkill":
-		case "so_bridge":
-		case "trainer":
-		case "dc_whitehouse":
-		case "mp_shipment":
-			if ( level.teambased )
-				return 8;
-			else
-				return 4;
-
-		case "mp_vacant":
-		case "mp_terminal":
-		case "mp_nightshift":
-		case "mp_favela":
-		case "mp_highrise":
-		case "mp_boneyard":
-		case "mp_subbase":
-		case "mp_firingrange":
-		case "mp_fav_tropical":
-		case "mp_shipment_long":
-		case "mp_rust_long":
-			if ( level.teambased )
-				return 12;
-			else
-				return 8;
-
-		case "mp_afghan":
-		case "mp_crash":
-		case "mp_brecourt":
-		case "mp_cross_fire":
-		case "mp_overgrown":
-		case "mp_trailerpark":
-		case "mp_underpass":
-		case "mp_checkpoint":
-		case "mp_quarry":
-		case "mp_rundown":
-		case "mp_cargoship":
-		case "mp_estate":
-		case "mp_bloc":
-		case "mp_storm":
-		case "mp_strike":
-		case "mp_abandon":
-		case "mp_complex":
-		case "airport":
-		case "mp_storm_spring":
-		case "mp_crash_trop":
-		case "mp_cargoship_sh":
-		case "mp_estate_trop":
-		case "mp_compact":
-		case "mp_crash_tropical":
-		case "mp_estate_tropical":
-		case "mp_bloc_sh":
-			if ( level.teambased )
-				return 14;
-			else
-				return 9;
-
-		case "mp_fuel2":
-		case "mp_invasion":
-		case "mp_derail":
-			if ( level.teambased )
-				return 16;
-			else
-				return 10;
-
-		default:
-			return 2;
-	}
-}
-
-/*
-	Matches a num to a char
-*/
-keyCodeToString( a )
-{
-	b = "";
-
-	switch ( a )
-	{
-		case 0:
-			b = "a";
-			break;
-
-		case 1:
-			b = "b";
-			break;
-
-		case 2:
-			b = "c";
-			break;
-
-		case 3:
-			b = "d";
-			break;
-
-		case 4:
-			b = "e";
-			break;
-
-		case 5:
-			b = "f";
-			break;
-
-		case 6:
-			b = "g";
-			break;
-
-		case 7:
-			b = "h";
-			break;
-
-		case 8:
-			b = "i";
-			break;
-
-		case 9:
-			b = "j";
-			break;
-
-		case 10:
-			b = "k";
-			break;
-
-		case 11:
-			b = "l";
-			break;
-
-		case 12:
-			b = "m";
-			break;
-
-		case 13:
-			b = "n";
-			break;
-
-		case 14:
-			b = "o";
-			break;
-
-		case 15:
-			b = "p";
-			break;
-
-		case 16:
-			b = "q";
-			break;
-
-		case 17:
-			b = "r";
-			break;
-
-		case 18:
-			b = "s";
-			break;
-
-		case 19:
-			b = "t";
-			break;
-
-		case 20:
-			b = "u";
-			break;
-
-		case 21:
-			b = "v";
-			break;
-
-		case 22:
-			b = "w";
-			break;
-
-		case 23:
-			b = "x";
-			break;
-
-		case 24:
-			b = "y";
-			break;
-
-		case 25:
-			b = "z";
-			break;
-
-		case 26:
-			b = ".";
-			break;
-
-		case 27:
-			b = " ";
-			break;
-	}
-
-	return b;
-}
-
-/*
-	Returns an array of all the bots in the game.
-*/
+//Returns an array of all the bots in the game.
 getBotArray()
 {
 	result = [];
@@ -1413,9 +815,7 @@ getBotArray()
 	return result;
 }
 
-/*
-	We return a balanced KDTree from the waypoints.
-*/
+//We return a balanced KDTree from the waypoints.
 WaypointsToKDTree()
 {
 	kdTree = KDTree();
@@ -1425,9 +825,7 @@ WaypointsToKDTree()
 	return kdTree;
 }
 
-/*
-	Recurive function. We construct a balanced KD tree by sorting the waypoints using heap sort.
-*/
+//Recurive function. We construct a balanced KD tree by sorting the waypoints using heap sort.
 _WaypointsToKDTree( waypoints, dem )
 {
 	if ( !waypoints.size )
@@ -1483,9 +881,7 @@ _WaypointsToKDTree( waypoints, dem )
 	_WaypointsToKDTree( right, ( dem + 1 ) % 3 );
 }
 
-/*
-	Returns a new list.
-*/
+//Returns a new list.
 List()
 {
 	list = spawnStruct();
@@ -1495,9 +891,7 @@ List()
 	return list;
 }
 
-/*
-	Adds a new thing to the list.
-*/
+//Adds a new thing to the list.
 ListAdd( thing )
 {
 	self.data[self.count] = thing;
@@ -1505,9 +899,7 @@ ListAdd( thing )
 	self.count++;
 }
 
-/*
-	Adds to the start of the list.
-*/
+//Adds to the start of the list.
 ListAddFirst( thing )
 {
 	for ( i = self.count - 1; i >= 0; i-- )
@@ -1519,9 +911,7 @@ ListAddFirst( thing )
 	self.count++;
 }
 
-/*
-	Removes the thing from the list.
-*/
+//Removes the thing from the list.
 ListRemove( thing )
 {
 	for ( i = 0; i < self.count; i++ )
@@ -1541,9 +931,7 @@ ListRemove( thing )
 	}
 }
 
-/*
-	Returns a new KDTree.
-*/
+//Returns a new KDTree.
 KDTree()
 {
 	kdTree = spawnStruct();
@@ -1553,17 +941,13 @@ KDTree()
 	return kdTree;
 }
 
-/*
-	Called on a KDTree. Will insert the object into the KDTree.
-*/
+//Called on a KDTree. Will insert the object into the KDTree.
 KDTreeInsert( data ) //as long as what you insert has a .origin attru, it will work.
 {
 	self.root = self _KDTreeInsert( self.root, data, 0, -2147483647, -2147483647, -2147483647, 2147483647, 2147483647, 2147483647 );
 }
 
-/*
-	Recurive function that insert the object into the KDTree.
-*/
+//Recurive function that insert the object into the KDTree.
 _KDTreeInsert( node, data, dem, x0, y0, z0, x1, y1, z1 )
 {
 	if ( !isDefined( node ) )
@@ -1614,9 +998,7 @@ _KDTreeInsert( node, data, dem, x0, y0, z0, x1, y1, z1 )
 	return node;
 }
 
-/*
-	Called on a KDTree, will return the nearest object to the given origin.
-*/
+//Called on a KDTree, will return the nearest object to the given origin.
 KDTreeNearest( origin )
 {
 	if ( !isDefined( self.root ) )
@@ -1625,9 +1007,7 @@ KDTreeNearest( origin )
 	return self _KDTreeNearest( self.root, origin, self.root.data, DistanceSquared( self.root.data.origin, origin ), 0 );
 }
 
-/*
-	Recurive function that will retrieve the closest object to the query.
-*/
+//Recurive function that will retrieve the closest object to the query.
 _KDTreeNearest( node, point, closest, closestdist, dem )
 {
 	if ( !isDefined( node ) )
@@ -1662,9 +1042,7 @@ _KDTreeNearest( node, point, closest, closestdist, dem )
 	return closest;
 }
 
-/*
-	Called on a rectangle, returns the distance from origin to the rectangle.
-*/
+//Called on a rectangle, returns the distance from origin to the rectangle.
 RectDistanceSquared( origin )
 {
 	dx = 0;
@@ -1690,57 +1068,43 @@ RectDistanceSquared( origin )
 	return dx * dx + dy * dy + dz * dz;
 }
 
-/*
-	A heap invarient comparitor, used for objects, objects with a higher X coord will be first in the heap.
-*/
+//A heap invarient comparitor, used for objects, objects with a higher X coord will be first in the heap.
 HeapSortCoordX( item, item2 )
 {
 	return item.origin[0] > item2.origin[0];
 }
 
-/*
-	A heap invarient comparitor, used for objects, objects with a higher Y coord will be first in the heap.
-*/
+//A heap invarient comparitor, used for objects, objects with a higher Y coord will be first in the heap.
 HeapSortCoordY( item, item2 )
 {
 	return item.origin[1] > item2.origin[1];
 }
 
-/*
-	A heap invarient comparitor, used for objects, objects with a higher Z coord will be first in the heap.
-*/
+//A heap invarient comparitor, used for objects, objects with a higher Z coord will be first in the heap.
 HeapSortCoordZ( item, item2 )
 {
 	return item.origin[2] > item2.origin[2];
 }
 
-/*
-	A heap invarient comparitor, used for numbers, numbers with the highest number will be first in the heap.
-*/
+//A heap invarient comparitor, used for numbers, numbers with the highest number will be first in the heap.
 Heap( item, item2 )
 {
 	return item > item2;
 }
 
-/*
-	A heap invarient comparitor, used for numbers, numbers with the lowest number will be first in the heap.
-*/
+//A heap invarient comparitor, used for numbers, numbers with the lowest number will be first in the heap.
 ReverseHeap( item, item2 )
 {
 	return item < item2;
 }
 
-/*
-	A heap invarient comparitor, used for traces. Wanting the trace with the largest length first in the heap.
-*/
+//A heap invarient comparitor, used for traces. Wanting the trace with the largest length first in the heap.
 HeapTraceFraction( item, item2 )
 {
 	return item["fraction"] > item2["fraction"];
 }
 
-/*
-	Returns a new heap.
-*/
+//Returns a new heap.
 NewHeap( compare )
 {
 	heap_node = spawnStruct();
@@ -1750,9 +1114,7 @@ NewHeap( compare )
 	return heap_node;
 }
 
-/*
-	Inserts the item into the heap. Called on a heap.
-*/
+//Inserts the item into the heap. Called on a heap.
 HeapInsert( item )
 {
 	insert = self.data.size;
@@ -1773,9 +1135,7 @@ HeapInsert( item )
 	}
 }
 
-/*
-	Helper function to determine what is the next child of the bst.
-*/
+//Helper function to determine what is the next child of the bst.
 _HeapNextChild( node, hsize )
 {
 	left = node * 2;
@@ -1793,9 +1153,7 @@ _HeapNextChild( node, hsize )
 		return right;
 }
 
-/*
-	Removes an item from the heap. Called on a heap.
-*/
+//Removes an item from the heap. Called on a heap.
 HeapRemove()
 {
 	remove = self.data.size;
@@ -1829,17 +1187,13 @@ HeapRemove()
 	return remove;
 }
 
-/*
-	A heap invarient comparitor, used for the astar's nodes, wanting the node with the lowest f to be first in the heap.
-*/
+//A heap invarient comparitor, used for the astar's nodes, wanting the node with the lowest f to be first in the heap.
 ReverseHeapAStar( item, item2 )
 {
 	return item.f < item2.f;
 }
 
-/*
-	Removes the waypoint usage
-*/
+//Removes the waypoint usage
 RemoveWaypointUsage( wp, team )
 {
 	if ( !isDefined( level.waypointUsage ) )
@@ -1854,9 +1208,7 @@ RemoveWaypointUsage( wp, team )
 		level.waypointUsage[team][wp + ""] = undefined;
 }
 
-/*
-	Will linearly search for the nearest waypoint to pos that has a direct line of sight.
-*/
+//Will linearly search for the nearest waypoint to pos that has a direct line of sight.
 GetNearestWaypointWithSight( pos )
 {
 	candidate = undefined;
@@ -1879,9 +1231,7 @@ GetNearestWaypointWithSight( pos )
 	return candidate;
 }
 
-/*
-	Will linearly search for the nearest waypoint
-*/
+//Will linearly search for the nearest waypoint
 GetNearestWaypoint( pos )
 {
 	candidate = undefined;
@@ -1901,9 +1251,9 @@ GetNearestWaypoint( pos )
 	return candidate;
 }
 
-/*
+/*	
 	Modified Pezbot astar search.
-	This makes use of sets for quick look up and a heap for a priority queue instead of simple lists which require to linearly search for elements everytime.
+	is makes use of sets for quick look up and a heap for a priority queue instead of simple lists which require to linearly search for elements everytime.
 	It is also modified to make paths with bots already on more expensive and will try a less congested path first. Thus spliting up the bots onto more paths instead of just one (the smallest).
 */
 AStarSearch( start, goal, team, greedy_path )
@@ -2056,10 +1406,7 @@ AStarSearch( start, goal, team, greedy_path )
 	return [];
 }
 
-/*
-	Taken from t5 gsc.
-	Returns an array of number's average.
-*/
+//turns an array of number's average.
 array_average( array )
 {
 	assert( array.size > 0 );
@@ -2073,10 +1420,7 @@ array_average( array )
 	return ( total / array.size );
 }
 
-/*
-	Taken from t5 gsc.
-	Returns an array of number's standard deviation.
-*/
+//turns an array of number's standard deviation.
 array_std_deviation( array, mean )
 {
 	assert( array.size > 0 );
@@ -2097,10 +1441,7 @@ array_std_deviation( array, mean )
 	return Sqrt( total / array.size );
 }
 
-/*
-	Taken from t5 gsc.
-	Will produce a random number between lower_bound and upper_bound but with a bell curve distribution (more likely to be close to the mean).
-*/
+//will produce a random number between lower_bound and upper_bound but with a bell curve distribution (more likely to be close to the mean).
 random_normal_distribution( mean, std_deviation, lower_bound, upper_bound )
 {
 	x1 = 0;
@@ -2130,164 +1471,4 @@ random_normal_distribution( mean, std_deviation, lower_bound, upper_bound )
 	}
 
 	return ( number );
-}
-
-/*
-	Patches the plant sites so it exposes the defuseObject
-*/
-onUsePlantObjectFix( player )
-{
-	// planted the bomb
-	if ( !self maps\mp\gametypes\_gameobjects::isFriendlyTeam( player.pers["team"] ) )
-	{
-		level thread bombPlantedFix( self, player );
-		//player logString( "bomb planted: " + self.label );
-
-		// disable all bomb zones except this one
-		for ( index = 0; index < level.bombZones.size; index++ )
-		{
-			if ( level.bombZones[index] == self )
-				continue;
-
-			level.bombZones[index] maps\mp\gametypes\_gameobjects::disableObject();
-		}
-
-		player playSound( "mp_bomb_plant" );
-		player notify ( "bomb_planted" );
-
-		//if ( !level.hardcoreMode )
-		//	iPrintLn( &"MP_EXPLOSIVES_PLANTED_BY", player );
-
-		leaderDialog( "bomb_planted" );
-
-		level thread teamPlayerCardSplash( "callout_bombplanted", player );
-
-		level.bombOwner = player;
-		player thread maps\mp\gametypes\_hud_message::SplashNotify( "plant", maps\mp\gametypes\_rank::getScoreInfoValue( "plant" ) );
-		player thread maps\mp\gametypes\_rank::giveRankXP( "plant" );
-		player.bombPlantedTime = getTime();
-		maps\mp\gametypes\_gamescore::givePlayerScore( "plant", player );
-		player incPlayerStat( "bombsplanted", 1 );
-		player thread maps\mp\_matchdata::logGameEvent( "plant", player.origin );
-	}
-}
-
-/*
-	Patches the plant sites so it exposes the defuseObject
-*/
-bombPlantedFix( destroyedObj, player )
-{
-	maps\mp\gametypes\_gamelogic::pauseTimer();
-	level.bombPlanted = true;
-
-	destroyedObj.visuals[0] thread maps\mp\gametypes\_gamelogic::playTickingSound();
-	level.tickingObject = destroyedObj.visuals[0];
-
-	level.timeLimitOverride = true;
-	setGameEndTime( int( gettime() + ( level.bombTimer * 1000 ) ) );
-	setDvar( "ui_bomb_timer", 1 );
-
-	if ( !level.multiBomb )
-	{
-		level.sdBomb maps\mp\gametypes\_gameobjects::allowCarry( "none" );
-		level.sdBomb maps\mp\gametypes\_gameobjects::setVisibleTeam( "none" );
-		level.sdBomb maps\mp\gametypes\_gameobjects::setDropped();
-		level.sdBombModel = level.sdBomb.visuals[0];
-	}
-	else
-	{
-
-		for ( index = 0; index < level.players.size; index++ )
-		{
-			if ( isDefined( level.players[index].carryIcon ) )
-				level.players[index].carryIcon destroyElem();
-		}
-
-		trace = bulletTrace( player.origin + ( 0, 0, 20 ), player.origin - ( 0, 0, 2000 ), false, player );
-
-		tempAngle = randomfloat( 360 );
-		forward = ( cos( tempAngle ), sin( tempAngle ), 0 );
-		forward = vectornormalize( forward - common_scripts\utility::vector_multiply( trace["normal"], vectordot( forward, trace["normal"] ) ) );
-		dropAngles = vectortoangles( forward );
-
-		level.sdBombModel = spawn( "script_model", trace["position"] );
-		level.sdBombModel.angles = dropAngles;
-		level.sdBombModel setModel( "prop_suitcase_bomb" );
-	}
-
-	destroyedObj maps\mp\gametypes\_gameobjects::allowUse( "none" );
-	destroyedObj maps\mp\gametypes\_gameobjects::setVisibleTeam( "none" );
-	/*
-	    destroyedObj maps\mp\gametypes\_gameobjects::set2DIcon( "friendly", undefined );
-	    destroyedObj maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", undefined );
-	    destroyedObj maps\mp\gametypes\_gameobjects::set3DIcon( "friendly", undefined );
-	    destroyedObj maps\mp\gametypes\_gameobjects::set3DIcon( "enemy", undefined );
-	*/
-	label = destroyedObj maps\mp\gametypes\_gameobjects::getLabel();
-
-	// create a new object to defuse with.
-	trigger = destroyedObj.bombDefuseTrig;
-	trigger.origin = level.sdBombModel.origin;
-	visuals = [];
-	defuseObject = maps\mp\gametypes\_gameobjects::createUseObject( game["defenders"], trigger, visuals, ( 0, 0, 32 ) );
-	defuseObject maps\mp\gametypes\_gameobjects::allowUse( "friendly" );
-	defuseObject maps\mp\gametypes\_gameobjects::setUseTime( level.defuseTime );
-	defuseObject maps\mp\gametypes\_gameobjects::setUseText( &"MP_DEFUSING_EXPLOSIVE" );
-	defuseObject maps\mp\gametypes\_gameobjects::setUseHintText( &"PLATFORM_HOLD_TO_DEFUSE_EXPLOSIVES" );
-	defuseObject maps\mp\gametypes\_gameobjects::setVisibleTeam( "any" );
-	defuseObject maps\mp\gametypes\_gameobjects::set2DIcon( "friendly", "waypoint_defuse" + label );
-	defuseObject maps\mp\gametypes\_gameobjects::set2DIcon( "enemy", "waypoint_defend" + label );
-	defuseObject maps\mp\gametypes\_gameobjects::set3DIcon( "friendly", "waypoint_defuse" + label );
-	defuseObject maps\mp\gametypes\_gameobjects::set3DIcon( "enemy", "waypoint_defend" + label );
-	defuseObject.label = label;
-	defuseObject.onBeginUse = maps\mp\gametypes\sd::onBeginUse;
-	defuseObject.onEndUse = maps\mp\gametypes\sd::onEndUse;
-	defuseObject.onUse = maps\mp\gametypes\sd::onUseDefuseObject;
-	defuseObject.useWeapon = "briefcase_bomb_defuse_mp";
-
-	level.defuseObject = defuseObject;
-
-	maps\mp\gametypes\sd::BombTimerWait();
-	setDvar( "ui_bomb_timer", 0 );
-
-	destroyedObj.visuals[0] maps\mp\gametypes\_gamelogic::stopTickingSound();
-
-	if ( level.gameEnded || level.bombDefused )
-		return;
-
-	level.bombExploded = true;
-
-	explosionOrigin = level.sdBombModel.origin;
-	level.sdBombModel hide();
-
-	if ( isdefined( player ) )
-	{
-		destroyedObj.visuals[0] radiusDamage( explosionOrigin, 512, 200, 20, player );
-		player incPlayerStat( "targetsdestroyed", 1 );
-	}
-	else
-		destroyedObj.visuals[0] radiusDamage( explosionOrigin, 512, 200, 20 );
-
-	rot = randomfloat( 360 );
-	explosionEffect = spawnFx( level._effect["bombexplosion"], explosionOrigin + ( 0, 0, 50 ), ( 0, 0, 1 ), ( cos( rot ), sin( rot ), 0 ) );
-	triggerFx( explosionEffect );
-
-	PlayRumbleOnPosition( "grenade_rumble", explosionOrigin );
-	earthquake( 0.75, 2.0, explosionOrigin, 2000 );
-
-	thread playSoundinSpace( "exp_suitcase_bomb_main", explosionOrigin );
-
-	if ( isDefined( destroyedObj.exploderIndex ) )
-		exploder( destroyedObj.exploderIndex );
-
-	for ( index = 0; index < level.bombZones.size; index++ )
-		level.bombZones[index] maps\mp\gametypes\_gameobjects::disableObject();
-
-	defuseObject maps\mp\gametypes\_gameobjects::disableObject();
-
-	setGameEndTime( 0 );
-
-	wait 3;
-
-	maps\mp\gametypes\sd::sd_endGame( game["attackers"], game["strings"]["target_destroyed"] );
 }

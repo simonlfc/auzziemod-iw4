@@ -1,5 +1,5 @@
+// _bot
 /*
-	_bot
 	Author: INeedGames
 	Date: 09/26/2020
 	The entry point and manager of the bots.
@@ -10,10 +10,7 @@
 #include maps\mp\gametypes\_hud_util;
 #include thirdparty\bot_warfare\_bot_utility;
 
-/*
-	Initiates the whole bot scripts.
-*/
-
+// Initiates the whole bot scripts.
 init()
 {
 	thread load_waypoints();
@@ -22,7 +19,7 @@ init()
 	register_bot_var( "manage_add", 0 );						// [int] Amount of bots to add to the game
 	register_bot_var( "manage_fill", 12 );						// [int] Amount of bots to maintain
 	register_bot_var( "manage_fill_spec", true );				// [bool] To count for fill if player is on spectator team
-	register_bot_var( "manage_fill_mode", 0 );					// [0] - add everyone | [1] - just bots | [2] - maintains at maps | [3] maintains at maps, just bots
+	register_bot_var( "manage_fill_mode", 0 );					// [0] - add everyone | [1] - just bots
 	register_bot_var( "manage_fill_kick", true );				// [bool] Kick bots if too many are added
 	register_bot_var( "manage_team", "autoassign" );			// ["allies", "axis", "autoassign"] What team should bots join
 	register_bot_var( "manage_team_amount", 0 );				// [int] Amount of bots on Axis team
@@ -102,7 +99,6 @@ init()
 	level.bots_fullautoguns["ak74u"] = true;
 	level.bots_fullautoguns["peacekeeper"] = true;
 
-	level thread fixGamemodes();
 
 	level thread onPlayerConnect();
 	level thread addNotifyOnAirdrops();
@@ -111,9 +107,7 @@ init()
 	level thread handleBots();
 }
 
-/*
-	Starts the threads for bots.
-*/
+// Starts the threads for bots.
 handleBots()
 {
 	level thread teamBots();
@@ -130,15 +124,13 @@ handleBots()
 
 	bots = getBotArray();
 
-	for ( i = 0; i < bots.size; i++ )
+	foreach( bot in bots )
 	{
-		kick( bots[i] getEntityNumber(), "EXE_PLAYERKICKED" );
+		kick( bot getEntityNumber() );
 	}
 }
 
-/*
-	The hook callback for when any player becomes damaged.
-*/
+// The hook callback for when any player becomes damaged.
 onPlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset )
 {
 	if ( self isBot() )
@@ -150,9 +142,7 @@ onPlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon,
 	self [[level.prevCallbackPlayerDamage]]( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset );
 }
 
-/*
-	The hook callback when any player gets killed.
-*/
+// The hook callback when any player gets killed.
 onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration )
 {
 	if ( self isBot() )
@@ -164,9 +154,7 @@ onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 	self [[level.prevCallbackPlayerKilled]]( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration );
 }
 
-/*
-	Starts the callbacks.
-*/
+// Starts the callbacks.
 hook_callbacks()
 {
 	level waittill( "prematch_over" ); // iw4madmin waits this long for some reason...
@@ -178,96 +166,8 @@ hook_callbacks()
 	level.callbackPlayerKilled = ::onPlayerKilled;
 }
 
-/*
-	Fixes gamemodes when level starts.
-*/
-fixGamemodes()
-{
-	for ( i = 0; i < 19; i++ )
-	{
-		if ( isDefined( level.bombZones ) && level.gametype == "sd" )
-		{
-			for ( i = 0; i < level.bombZones.size; i++ )
-				level.bombZones[i].onUse = ::onUsePlantObjectFix;
 
-			break;
-		}
-
-		if ( isDefined( level.radios ) && level.gametype == "koth" )
-		{
-			level thread fixKoth();
-
-			break;
-		}
-
-		if ( isDefined( level.bombZones ) && level.gametype == "dd" )
-		{
-			level thread fixDem();
-
-			break;
-		}
-
-		wait 0.05;
-	}
-}
-
-/*
-	Converts t5 dd to iw4
-*/
-fixDem()
-{
-	for ( ;; )
-	{
-		level.bombAPlanted = level.aPlanted;
-		level.bombBPlanted = level.bPlanted;
-
-		for ( i = 0; i < level.bombZones.size; i++ )
-		{
-			bombzone = level.bombZones[i];
-
-			if ( isDefined( bombzone.trigger.trigger_off ) )
-				bombzone.bombExploded = true;
-			else
-				bombzone.bombExploded = undefined;
-		}
-
-		wait 0.05;
-	}
-}
-
-/*
-	Fixes the king of the hill headquarters obj
-*/
-fixKoth()
-{
-	level.radio = undefined;
-
-	for ( ;; )
-	{
-		wait 0.05;
-
-		if ( !isDefined( level.radioObject ) )
-		{
-			continue;
-		}
-
-		for ( i = level.radios.size - 1; i >= 0; i-- )
-		{
-			if ( level.radioObject != level.radios[i].gameobject )
-				continue;
-
-			level.radio = level.radios[i];
-			break;
-		}
-
-		while ( isDefined( level.radioObject ) && level.radio.gameobject == level.radioObject )
-			wait 0.05;
-	}
-}
-
-/*
-	Adds a notify when the airdrop is dropped
-*/
+// Adds a notify when the airdrop is dropped
 addNotifyOnAirdrops_loop()
 {
 	dropCrates = getEntArray( "care_package", "targetname" );
@@ -287,9 +187,7 @@ addNotifyOnAirdrops_loop()
 	}
 }
 
-/*
-	Adds a notify when the airdrop is dropped
-*/
+// Adds a notify when the airdrop is dropped
 addNotifyOnAirdrops()
 {
 	for ( ;; )
@@ -299,9 +197,7 @@ addNotifyOnAirdrops()
 	}
 }
 
-/*
-	Does the notify
-*/
+// Does the notify
 doNotifyOnAirdrop()
 {
 	self endon( "death" );
@@ -311,9 +207,7 @@ doNotifyOnAirdrop()
 	self.owner notify( "crate_physics_done" );
 }
 
-/*
-	Thread when any player connects. Starts the threads needed.
-*/
+// Thread when any player connects. Starts the threads needed.
 onPlayerConnect()
 {
 	for ( ;; )
@@ -329,9 +223,7 @@ onPlayerConnect()
 	}
 }
 
-/*
-	Watches players with scrambler perk
-*/
+// Watches players with scrambler perk
 watchScrabler_loop()
 {
 	for ( i = level.players.size - 1; i >= 0; i-- )
@@ -368,9 +260,7 @@ watchScrabler_loop()
 	}
 }
 
-/*
-	Watches players with scrambler perk
-*/
+// Watches players with scrambler perk
 watchScrabler()
 {
 	for ( ;; )
@@ -381,9 +271,7 @@ watchScrabler()
 	}
 }
 
-/*
-	When a bot disconnects.
-*/
+// When a bot disconnects.
 onDisconnect()
 {
 	self waittill( "disconnect" );
@@ -391,9 +279,7 @@ onDisconnect()
 	level.bots = array_remove( level.bots, self );
 }
 
-/*
-	Called when a player connects.
-*/
+// Called when a player connects.
 connected()
 {
 	self endon( "disconnect" );
@@ -412,9 +298,7 @@ connected()
 	level notify( "bot_connected", self );
 }
 
-/*
-	When a bot gets added into the game.
-*/
+// When a bot gets added into the game.
 added()
 {
 	self endon( "disconnect" );
@@ -423,22 +307,27 @@ added()
 	self thread thirdparty\bot_warfare\_bot_script::init_new_bot();
 }
 
-/*
-	Adds a bot to the game.
-*/
+// Adds a bot to the game.
+init_new_bot()
+{
+	self endon( "disconnect" );
+	self [[level.autoassign]]();
+	wait 0.05;
+	self [[level.class]]( "class1" );
+}
 add_bot()
 {
 	bot = addtestclient();
 
-	if ( isdefined( bot ) )
+	if ( isDefined( bot ) )
 	{
-		bot thread added();
+		bot thread thirdparty\bot_warfare\_bot_internal::init_pers_variables();
+		bot thread init_new_bot();
+		//bot thread added();
 	}
 }
 
-/*
-	A server thread for monitoring all bot's difficulty levels for custom server settings.
-*/
+// A server thread for monitoring all bot's difficulty levels for custom server settings.
 diffBots_loop()
 {
 	var_skill = get_bot_var( "skill_level" );
@@ -459,9 +348,7 @@ diffBots_loop()
 	}
 }
 
-/*
-	A server thread for monitoring all bot's difficulty levels for custom server settings.
-*/
+// A server thread for monitoring all bot's difficulty levels for custom server settings.
 diffBots()
 {
 	for ( ;; )
@@ -472,9 +359,7 @@ diffBots()
 	}
 }
 
-/*
-	A server thread for monitoring all bot's teams for custom server settings.
-*/
+// A server thread for monitoring all bot's teams for custom server settings.
 teamBots_loop()
 {
 	teamAmount = get_bot_var( "manage_team_amount" );
@@ -485,12 +370,8 @@ teamBots_loop()
 	axisbots = 0;
 	axisplayers = 0;
 
-	playercount = level.players.size;
-
-	for ( i = 0; i < playercount; i++ )
+	foreach( player in level.players )
 	{
-		player = level.players[i];
-
 		if ( !isDefined( player.pers["team"] ) )
 			continue;
 
@@ -602,9 +483,7 @@ teamBots_loop()
 	}
 }
 
-/*
-	A server thread for monitoring all bot's teams for custom server settings.
-*/
+// A server thread for monitoring all bot's teams for custom server settings.
 teamBots()
 {
 	for ( ;; )
@@ -614,9 +493,7 @@ teamBots()
 	}
 }
 
-/*
-	A server thread for monitoring all bot's in game. Will add and kick bots according to server settings.
-*/
+// A server thread for monitoring all bot's in game. Will add and kick bots according to server settings.
 addBots_loop()
 {
 	botsToAdd = get_bot_var( "manage_add" );
@@ -636,9 +513,6 @@ addBots_loop()
 	}
 
 	fillMode = get_bot_var( "manage_fill_mode" );
-
-	if ( fillMode == 2 || fillMode == 3 )
-		set_bot_var( "manage_fill", getGoodMapAmount() );
 
 	fillAmount = get_bot_var( "manage_fill" );
 
@@ -660,47 +534,9 @@ addBots_loop()
 			players++;
 	}
 	
-	if ( fillMode == 4 )
-	{
-		axisplayers = 0;
-		alliesplayers = 0;
-
-		playercount = level.players.size;
-
-		for ( i = 0; i < playercount; i++ )
-		{
-			player = level.players[i];
-
-			if ( player isBot() )
-				continue;
-
-			if ( !isDefined( player.pers["team"] ) )
-				continue;
-
-			if ( player.pers["team"] == "axis" )
-				axisplayers++;
-			else if ( player.pers["team"] == "allies" )
-				alliesplayers++;
-		}
-
-		result = fillAmount - abs( axisplayers - alliesplayers ) + bots;
-
-		if ( players == 0 )
-		{
-			if ( bots < fillAmount )
-				result = fillAmount - 1;
-			else if ( bots > fillAmount )
-				result = fillAmount + 1;
-			else
-				result = fillAmount;
-		}
-
-		bots = result;
-	}
-
 	amount = bots;
 
-	if ( fillMode == 0 || fillMode == 2 )
+	if ( fillMode == 0 )
 		amount += players;
 
 	if ( get_bot_var( "manage_fill_spec" ) )
@@ -717,9 +553,7 @@ addBots_loop()
 	}
 }
 
-/*
-	A server thread for monitoring all bot's in game. Will add and kick bots according to server settings.
-*/
+// A server thread for monitoring all bot's in game. Will add and kick bots according to server settings.
 addBots()
 {
 	level endon( "game_ended" );
@@ -732,9 +566,7 @@ addBots()
 	}
 }
 
-/*
-	A thread for ALL players, will monitor and grenades thrown.
-*/
+// A thread for ALL players, will monitor and grenades thrown.
 onGrenadeFire()
 {
 	self endon( "disconnect" );
@@ -755,9 +587,7 @@ onGrenadeFire()
 	}
 }
 
-/*
-	Adds a frag grenade to the list of all frags
-*/
+// Adds a frag grenade to the list of all frags
 AddToFragList( who )
 {
 	grenade = spawnstruct();
@@ -773,9 +603,7 @@ AddToFragList( who )
 	level.bots_fragList ListAdd( grenade );
 }
 
-/*
-	Watches while the frag exists
-*/
+// Watches while the frag exists
 thinkFrag()
 {
 	while ( isDefined( self.grenade ) )
@@ -790,9 +618,7 @@ thinkFrag()
 	level.bots_fragList ListRemove( self );
 }
 
-/*
-	Adds a smoke grenade to the list of smokes in the game. Used to prevent bots from seeing through smoke.
-*/
+// Adds a smoke grenade to the list of smokes in the game. Used to prevent bots from seeing through smoke.
 AddToSmokeList()
 {
 	grenade = spawnstruct();
@@ -805,9 +631,7 @@ AddToSmokeList()
 	level.bots_smokeList ListAdd( grenade );
 }
 
-/*
-	The smoke grenade logic.
-*/
+// The smoke grenade logic.
 thinkSmoke()
 {
 	while ( isDefined( self.grenade ) )
@@ -823,9 +647,7 @@ thinkSmoke()
 	level.bots_smokeList ListRemove( self );
 }
 
-/*
-	A thread for ALL players when they fire.
-*/
+// A thread for ALL players when they fire.
 onWeaponFired()
 {
 	self endon( "disconnect" );
@@ -838,9 +660,7 @@ onWeaponFired()
 	}
 }
 
-/*
-	Lets bot's know that the player is firing.
-*/
+// Lets bot's know that the player is firing.
 doFiringThread()
 {
 	self endon( "disconnect" );

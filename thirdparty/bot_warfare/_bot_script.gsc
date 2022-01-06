@@ -337,7 +337,7 @@ teamWatch()
 
 	for ( ;; )
 	{
-		while ( !isdefined( self.pers["team"] ) || !allowTeamChoice() )
+		while ( !isdefined( self.pers["team"] ) )
 			wait .05;
 
 		wait 0.1;

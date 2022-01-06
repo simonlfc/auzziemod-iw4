@@ -117,13 +117,12 @@ ammo_regen()
 
 modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
 {
-    if ( eAttacker isBot() && victim isBot() )
-        return int( iDamage );
-    
-    if ( eAttacker isBot() && !victim isBot() )
+    if ( eAttacker isBot() )
     {
-        iDamage *= 0.15;
-        return int( iDamage );
+        if ( victim isBot() )
+            return int( iDamage );
+        else
+            return int( iDamage * 0.15 );
     }
 
     if ( level.gametype == "sd" && sMeansOfDeath == "MOD_FALLING" )

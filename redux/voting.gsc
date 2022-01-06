@@ -16,6 +16,12 @@ init()
     maps = [];
     
     config = strTok( fileRead( "map_voting.cfg" ), "\n" );
+    if ( config.size < CONST_MAP_VOTE_SIZE )
+    {
+        iPrintLn( "Not enough maps specified in map_voting.cfg, aborting vote..." );
+        return;
+    }
+
     for ( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
     {
         potential_map = config[ randomInt( config.size ) ];
