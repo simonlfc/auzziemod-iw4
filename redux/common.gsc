@@ -5,7 +5,6 @@
 init()
 {    
     thread redux\hooks::hooks();
-    thread thirdparty\bot_warfare\_bot::init();
 
     level.onlineGame = true;
     level.rankedMatch = true;

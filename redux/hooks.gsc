@@ -6,10 +6,10 @@
 
 hooks()
 {
-    replaceFunc( maps\mp\_utility::rankingEnabled, ::is_ranked ); // Force ranked
-    replaceFunc( maps\mp\_utility::matchMakingGame, ::is_ranked ); // Force ranked
-    replaceFunc( maps\mp\_utility::privateMatch, ::is_unranked ); // Force ranked
-    replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, ::match_start_timer_hook ); // Disable pre-match timer
+    replaceFunc( maps\mp\_utility::rankingEnabled, true ); // Force ranked
+    replaceFunc( maps\mp\_utility::matchMakingGame, true ); // Force ranked
+    replaceFunc( maps\mp\_utility::privateMatch, false ); // Force ranked
+    replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); // Disable pre-match timer
     replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::is_valid_deathstreak_hook ); // Disable deathstreaks
     replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); // Disable Riot Shield
     replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); // Disable Last Stand
@@ -115,7 +115,6 @@ give_loadout_hook( team, class, allowCopycat )
 		{
 		case 0:
 			loadoutPrimary = "cheytac";
-			loadoutPrimaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutPrimary, randomIntRange( 11, 17 ) ); // iron sight attachment
 			break;	
 		case 1:
 			loadoutPrimary = "barrett";
@@ -127,7 +126,8 @@ give_loadout_hook( team, class, allowCopycat )
 			loadoutPrimary = "m21";
 			break;
 		}
-		loadoutPrimaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutPrimary, randomIntRange( 11, 16 ) );
+
+		loadoutPrimaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutPrimary, randomIntRange( 11, 17 ) );
 		loadoutPrimaryAttachment2 = "none";
 		loadoutPrimaryCamo = tableLookup( "mp/camoTable.csv", 0, randomInt( 8 ), 1 );
 
@@ -142,15 +142,12 @@ give_loadout_hook( team, class, allowCopycat )
 		random_secondaries[7] = "tmp";
 		random_secondaries[8] = "m79";
 		random_secondaries[9] = "rpg";
-		random_secondaries[10] = "at4";
-		random_secondaries[11] = "stinger";
-		random_secondaries[12] = "javelin";
-		random_secondaries[13] = "ranger";
-		random_secondaries[14] = "model1887";
-		random_secondaries[15] = "striker";
-		random_secondaries[16] = "aa12";
-		random_secondaries[17] = "m1014";
-		random_secondaries[18] = "spas12";
+		random_secondaries[10] = "ranger";
+		random_secondaries[11] = "model1887";
+		random_secondaries[12] = "striker";
+		random_secondaries[13] = "aa12";
+		random_secondaries[14] = "m1014";
+		random_secondaries[15] = "spas12";
 
 		loadoutSecondary = random_secondaries[ randomInt( random_secondaries.size ) ];
 		loadoutSecondaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutSecondary, randomIntRange( 11, 16 ) );
@@ -467,20 +464,6 @@ is_valid_perk3_hook( refString )
 	}
 }
 
-match_start_timer_hook()
-{
-    maps\mp\gametypes\_gamelogic::matchStartTimerSkip();
-}
-
-is_unranked()
-{
-    return false;
-}
-
-is_ranked()
-{
-    return true;
-}
 
 player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime )
 {	

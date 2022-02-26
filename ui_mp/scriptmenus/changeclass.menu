@@ -13,15 +13,7 @@ menudef
 	forecolor 						1 1 1 1
 	IW4_INGAME
 	IW4_LOADOUT( "loadout" )
-	// Team Display
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 0.275, localvarstring( "ui_team" ) == "marines" )
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Axis" ), 1 1 1 0.275, localvarstring( "ui_team" ) == "opfor" )
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 0.275, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "marines" )
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Axis" ), 1 1 1 0.275, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Allies" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_ALLIES" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Allies" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "marines" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_AXIS" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
+	IW4_TEAM_DISPLAY
 	
 	// Classes
 	CHOICE_DEFAULT_CLASS( 0, "Random Intervention", "class0" )

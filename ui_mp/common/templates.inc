@@ -5,6 +5,16 @@
         PREPROC_SHADER( -64 0 280 480 1 0, "gradient_fadein_fadebottom", 0 0 0 0.25 ) \
         IW4_TITLE( MENU_TITLE )
 
+#define IW4_TEAM_DISPLAY \
+		PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 0.275, localvarstring( "ui_team" ) == "marines" ) \
+		PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Axis" ), 1 1 1 0.275, localvarstring( "ui_team" ) == "opfor" ) \
+		PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 0.275, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "marines" ) \
+		PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Axis" ), 1 1 1 0.275, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" ) \
+		PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Allies" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_ALLIES" ) \
+		PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Allies" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "marines" ) \
+		PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_AXIS" ) \
+		PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
+
 #define C_OFF_Y 0
 #define C_OFF_X 0
 #define CONST_CAC_ITEM_NUM 10
