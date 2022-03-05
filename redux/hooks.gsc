@@ -6,17 +6,17 @@
 
 hooks()
 {
-    replaceFunc( maps\mp\_utility::rankingEnabled, true ); // Force ranked
-    replaceFunc( maps\mp\_utility::matchMakingGame, true ); // Force ranked
-    replaceFunc( maps\mp\_utility::privateMatch, false ); // Force ranked
-    replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); // Disable pre-match timer
-    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::is_valid_deathstreak_hook ); // Disable deathstreaks
-    replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); // Disable Riot Shield
-    replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); // Disable Last Stand
-    replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); // Intercept valid weapon check to allow for our custom attachments
-	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::give_loadout_hook ); // Intercept loadout functions with our own
-	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); // Allow class changing at any time
-	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); // Add damage callback and disable assisted suicides
+    replaceFunc( maps\mp\_utility::rankingEnabled, true ); 																// Force ranked
+    replaceFunc( maps\mp\_utility::matchMakingGame, true ); 															// Force ranked
+    replaceFunc( maps\mp\_utility::privateMatch, false ); 																// Force ranked
+    replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
+    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, false ); 												// Disable Deathstreaks
+    replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); 									// Disable Riot Shield
+    replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); 										// Disable Last Stand
+    replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); 									// Intercept valid weapon check to allow for our custom attachments
+	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::give_loadout_hook ); 											// Add support for in-game loadout
+	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); 												// Allow class changing at any time
+	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback and disable assisted suicides
 }
 
 is_valid_weapon_hook( refString )
@@ -43,12 +43,6 @@ is_valid_weapon_hook( refString )
 
 give_loadout_hook( team, class, allowCopycat )
 {
-	if ( class == "class4" )
-	{
-		self redux\loadout::give_loadout();
-		return;
-	}
-	
 	self takeAllWeapons();
 	
 	primaryIndex = 0;
@@ -217,6 +211,27 @@ give_loadout_hook( team, class, allowCopycat )
 			loadoutDeathstreak = table_getDeathstreak( level.classTableName, 10 );
 	}
 
+	if ( class == "class4" )
+	{
+		class_num 						= getClassIndex( class );
+		self.class_num 					= class_num;
+
+		loadoutPrimary 					= redux\ui_callbacks::get_loadout_stat( "primary_weapon" );
+		loadoutPrimaryAttachment 		= redux\ui_callbacks::get_loadout_stat( "primary_attachment" );
+		loadoutPrimaryAttachment2 		= "none"; // i am not implementing bling in menus bro get fookt make a pr
+		loadoutPrimaryCamo 				= redux\ui_callbacks::get_loadout_stat( "primary_camo" );
+		loadoutSecondary 				= redux\ui_callbacks::get_loadout_stat( "secondary_weapon" );
+		loadoutSecondaryAttachment 		= redux\ui_callbacks::get_loadout_stat( "secondary_attachment" );
+		loadoutSecondaryAttachment2 	= "none"; // i am not implementing bling in menus bro get fookt make a pr
+		loadoutSecondaryCamo 			= redux\ui_callbacks::get_loadout_stat( "secondary_camo" );
+		loadoutEquipment 				= redux\ui_callbacks::get_loadout_stat( "lethal" );
+		loadoutPerk1 					= redux\ui_callbacks::get_loadout_stat( "perk1" );
+		loadoutPerk2 					= redux\ui_callbacks::get_loadout_stat( "perk2" );
+		loadoutPerk3 					= redux\ui_callbacks::get_loadout_stat( "perk3" );
+		loadoutOffhand 					= redux\ui_callbacks::get_loadout_stat( "tactical" );
+		loadoutDeathStreak 				= "specialty_null"; // we disable these
+	}
+
 	if ( loadoutPerk1 != "specialty_bling" )
 	{
 		loadoutPrimaryAttachment2 = "none";
@@ -242,18 +257,18 @@ give_loadout_hook( team, class, allowCopycat )
 	secondaryName = buildWeaponName( loadoutSecondary, loadoutSecondaryAttachment, loadoutSecondaryAttachment2 );
 	self _giveWeapon( secondaryName, int(tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ) ) );
 
-	self.loadoutPrimaryCamo = int(tableLookup( "mp/camoTable.csv", 1, loadoutPrimaryCamo, 0 ));
+	self.loadoutPrimaryCamo = int( tableLookup( "mp/camoTable.csv", 1, loadoutPrimaryCamo, 0 ) );
 	self.loadoutPrimary = loadoutPrimary;
 	self.loadoutSecondary = loadoutSecondary;
-	self.loadoutSecondaryCamo = int(tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ));
+	self.loadoutSecondaryCamo = int( tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ) );
 	
-	self SetOffhandPrimaryClass( "other" );
+	self setOffhandPrimaryClass( "other" );
 	
 	// Action Slots
-	self _SetActionSlot( 1, "" );
-	self _SetActionSlot( 1, "nightvision" );
-	self _SetActionSlot( 3, "altMode" );
-	self _SetActionSlot( 4, "" );
+	self _setActionSlot( 1, "" );
+	self _setActionSlot( 1, "nightvision" );
+	self _setActionSlot( 3, "altMode" );
+	self _setActionSlot( 4, "" );
 
 	// Perks
 	self _clearPerks();
@@ -311,9 +326,9 @@ give_loadout_hook( team, class, allowCopycat )
 	// Secondary Offhand
 	offhandSecondaryWeapon = loadoutOffhand + "_mp";
 	if ( loadoutOffhand == "flash_grenade" )
-		self SetOffhandSecondaryClass( "flash" );
+		self setOffhandSecondaryClass( "flash" );
 	else
-		self SetOffhandSecondaryClass( "smoke" );
+		self setOffhandSecondaryClass( "smoke" );
 	
 	self giveWeapon( offhandSecondaryWeapon );
 	if( loadOutOffhand == "smoke_grenade" )
@@ -331,7 +346,7 @@ give_loadout_hook( team, class, allowCopycat )
 
 	self maps\mp\gametypes\_teams::playerModelForWeapon( self.pers["primaryWeapon"], getBaseWeaponName( secondaryName ) );
 		
-	self.isSniper = (weaponClass( self.primaryWeapon ) == "sniper");
+	self.isSniper = weaponClass( self.primaryWeapon ) == "sniper";
 	
 	self maps\mp\gametypes\_weapons::updateMoveSpeedScale( "primary" );
 
@@ -402,11 +417,6 @@ menu_class_hook( response )
 	}
 
 	self thread maps\mp\gametypes\_spectating::setSpectatePermissions();
-}
-
-is_valid_deathstreak_hook()
-{
-    return false;
 }
 
 is_valid_primary_hook( refString )
