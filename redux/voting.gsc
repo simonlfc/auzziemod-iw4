@@ -39,15 +39,45 @@ monitor_intermission()
     level waittill( "spawning_intermission" );
     level.is_voting = true;
 
+    level.timerDisplayText                  = createServerTimer( "bold", 1.5 );
+	level.timerDisplayText.horzAlign        = "center";
+	level.timerDisplayText.vertAlign        = "middle";
+	level.timerDisplayText.alignX           = "center";
+	level.timerDisplayText.alignY           = "middle";
+	level.timerDisplayText.x                = 0;
+	level.timerDisplayText.y                = -140;
+	level.timerDisplayText.alpha            = 1;
+	level.timerDisplayText.hideWhenInMenu   = false;
+	level.timerDisplayText.sort             = 32;
+	level.timerDisplayText.color            = ( 1, 1, 1 );
+
     foreach ( player in level.players )
     {
         if ( player isBot() )
             kick( player getEntityNumber() );
 
         player.vote_id = undefined;
+        player.sessionstate = "spectator";
         player thread monitor_disconnect();
         player openPopupMenu( "map_voting" );
     }
+
+    level.timerDisplayText setTenthsTimer( 10 );
+    wait 10;
+    map( get_winning_map() );
+}
+
+get_winning_map()
+{
+    winner = 0;
+    for( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
+    {
+        if ( getDvarInt( "map_vote_count_" + i ) > winner )
+            winner = getDvarInt( "map_vote_count_" + i );
+    }
+
+    level.is_voting = false;
+    return getDvar( "map_vote_name_" + winner );
 }
 
 monitor_disconnect()

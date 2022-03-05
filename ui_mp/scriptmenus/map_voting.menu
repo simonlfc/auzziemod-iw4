@@ -12,6 +12,7 @@ menudef
 	blurWorld						7
 	onOpen
 	{
+		setLocalVarInt "map_vote_id" 999;
 		exec "-scores";
 	}
 	onEsc
@@ -33,15 +34,15 @@ menudef
 			PREPROC_SHADER( CARD_RECT( idx ), "loadscreen_" + dvarString( "map_vote_name_" + idx ), 1 1 1 1 ) \
 			itemDef \
 			{ \
-				rect 					CARD_RECT( idx ) \
-				forecolor 				1 1 1 0 \
-				border					1 \
-				bordersize				0.1 \
-				bordercolor				1 1 1 0.5 \
-				exp 					material ( "white" ) \
-				style 					3 \
-				type					1 \
-				visible 				1 \
+				rect 						CARD_RECT( idx ) \
+				forecolor 					1 1 1 0 \
+				border						1 \
+				bordersize					0.1 \
+				bordercolor					1 1 1 0.5 \
+				exp 						material ( "white" ) \
+				style 						3 \
+				type						1 \
+				visible 					1 \
 				onFocus \
 				{ \
 					play 					"mouse_over"; \
@@ -54,9 +55,11 @@ menudef
 				action \
 				{ \
 					play 					"mouse_click"; \
+					setLocalVarInt			"map_vote_id" idx; \
 					scriptMenuResponse		"cast_vote:"vote_fix \
 				} \
 			} \
+			PREPROC_SHADER_ALL( CARD_RECT( idx ), "white", 1 1 1 0.1, localVarInt( "map_vote_id" ) == idx, border 1; bordersize 0.5; bordercolor 1 0.823 0 1 ) \
 			PREPROC_TEXT( CARD_RECT( idx ), dvarString( "map_vote_name_" + idx ), 1, 0.375, 3, 12, 1 1 1 1; origin 5 -15 ) \
 			PREPROC_TEXT( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " votes", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -5 )
 			
