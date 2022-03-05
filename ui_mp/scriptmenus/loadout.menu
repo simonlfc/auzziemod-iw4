@@ -121,7 +121,7 @@ menudef
 #define CAC_ATTACHMENT( idx, fixed_idx ) \
 		CHOICE_BUTTON_VIS( idx, "@" + tablelookup( "redux/attachmentTable.csv", 4, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ), 3 ), CAC_SELECT_ATTACHMENT( fixed_idx );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ) != "" && localVarString( "cac_type" ) == "attachments" )
 
-#define CAC_CAMO( idx, fixed_idx, name ) \
+#define CAC_CAMO( idx, name ) \
 		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/camoTable.csv", 1, name, 2 ), CAC_SELECT_CAMO( name );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 0 ) < 52 && localVarString( "cac_type" ) == "camos" )
 
 #define CAC_PERK( idx, name, slot ) \
@@ -159,14 +159,14 @@ menudef
 
 	// scriptmenuresponse didn't work when the index int is passed through, even when converted to a string, so this is a hacky fix
 	CHOICE_BUTTON_VIS( 0, "@MPUI_NONE", CAC_SELECT_CAMO( "0" ), localVarString( "cac_type" ) == "camos" )
-	CAC_CAMO( 1, "1", "desert" )
-	CAC_CAMO( 2, "2", "arctic" )
-	CAC_CAMO( 3, "3", "woodland" )
-	CAC_CAMO( 4, "4", "digital" )
-	CAC_CAMO( 5, "5", "red_urban" )
-	CAC_CAMO( 6, "6", "red_tiger" )
-	CAC_CAMO( 7, "7", "blue_tiger" )
-	CAC_CAMO( 8, "8", "orange_fall" )
+	CAC_CAMO( 1, "desert" )
+	CAC_CAMO( 2, "arctic" )
+	CAC_CAMO( 3, "woodland" )
+	CAC_CAMO( 4, "digital" )
+	CAC_CAMO( 5, "red_urban" )
+	CAC_CAMO( 6, "red_tiger" )
+	CAC_CAMO( 7, "blue_tiger" )
+	CAC_CAMO( 8, "orange_fall" )
 
 	CHOICE_BUTTON_VIS( 0, "@MPUI_NO_ATTACHMENT", CAC_SELECT_ATTACHMENT( "0" ), localVarString( "cac_type" ) == "attachments" )
 	CAC_ATTACHMENT( 1, "1" )

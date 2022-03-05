@@ -59,7 +59,6 @@ on_script_menu_response()
             case "loadout_perk1":                   init_loadout_stat( "perk1", response );                          break;
             case "loadout_perk2":                   init_loadout_stat( "perk2", response );                          break;
             case "loadout_perk3":                   init_loadout_stat( "perk3", response );                          break;
-            case "loadout_give":                    self [[level.class]]( "class4" );                                break;
             }
         }
     }
