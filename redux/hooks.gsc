@@ -17,6 +17,37 @@ hooks()
 	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::give_loadout_hook ); 											// Add support for in-game loadout
 	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); 												// Allow class changing at any time
 	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback and disable assisted suicides
+	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
+}
+
+process_lobby_data_hook()
+{
+	curPlayer = 0;
+	foreach ( player in level.players )
+	{
+		if ( !isDefined( player ) )
+			continue;
+
+		player.clientMatchDataId = curPlayer;
+		curPlayer++;
+		
+		setClientMatchData( "players", player.clientMatchDataId, "xuid", player.name );		
+	}
+	
+	maps\mp\_awards::assignAwards();
+	maps\mp\_scoreboard::processLobbyScoreboards();
+	
+	sendClientMatchData();
+	waitframe();
+
+	if ( matchMakingGame() )
+		sendMatchData();
+
+	foreach ( player in level.players )
+		player.pers["stats"] = player.stats;
+
+	if ( !gameFlag( "disable_map_voting" ) )
+		redux\voting::start_map_vote();
 }
 
 is_valid_weapon_hook( refString )

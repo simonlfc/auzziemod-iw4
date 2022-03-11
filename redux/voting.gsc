@@ -6,78 +6,73 @@ CONST_MAP_VOTE_SIZE = 6;
 
 init()
 {
-    level.is_voting = false;
+    level.is_voting             = false;
+    level.votemaps              = [];
+
     if ( !fileExists( "map_voting.cfg" ) )
     {
         iPrintLn( "map_voting.cfg not found, aborting vote..." );
+        gameFlagSet( "disable_map_voting" );
         return;
     }
     
-    maps = [];
-    
     config = strTok( fileRead( "map_voting.cfg" ), "\n" );
+
     if ( config.size < CONST_MAP_VOTE_SIZE )
     {
         iPrintLn( "Not enough maps specified in map_voting.cfg, aborting vote..." );
+        gameFlagSet( "disable_map_voting" );
         return;
     }
 
     for ( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
     {
-        potential_map = config[ randomInt( config.size ) ];
-        config[ config.size ] -= potential_map;
-        maps[ maps.size ] = potential_map;
+        potential_map           = config[ randomInt( config.size ) ];
+        level.votemaps[i]       = spawnStruct();
+        level.votemaps[i].name  = potential_map;
+        level.votemaps[i].votes = 0;
+        array_remove( config, potential_map );
         makeDvarServerInfo( "map_vote_name_" + i, potential_map );
         makeDvarServerInfo( "map_vote_count_" + i, 0 );
     }
-
-    level thread monitor_intermission();
 }
 
-monitor_intermission()
+start_map_vote()
 {
-    level waittill( "spawning_intermission" );
     level.is_voting = true;
-
-    level.timerDisplayText                  = createServerTimer( "bold", 1.5 );
-	level.timerDisplayText.horzAlign        = "center";
-	level.timerDisplayText.vertAlign        = "middle";
-	level.timerDisplayText.alignX           = "center";
-	level.timerDisplayText.alignY           = "middle";
-	level.timerDisplayText.x                = 0;
-	level.timerDisplayText.y                = -140;
-	level.timerDisplayText.alpha            = 1;
-	level.timerDisplayText.hideWhenInMenu   = false;
-	level.timerDisplayText.sort             = 32;
-	level.timerDisplayText.color            = ( 1, 1, 1 );
 
     foreach ( player in level.players )
     {
         if ( player isBot() )
             kick( player getEntityNumber() );
 
-        player.vote_id = undefined;
+        player.vote_id      = undefined;
         player.sessionstate = "spectator";
         player thread monitor_disconnect();
+
+        waitframe();
+
         player openPopupMenu( "map_voting" );
     }
 
-    level.timerDisplayText setTenthsTimer( 10 );
     wait 10;
     map( get_winning_map() );
 }
 
 get_winning_map()
 {
-    winner = 0;
-    for( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
+    level.is_voting = false;
+    winner          = level.votemaps[0];
+
+    for( i = 1; i < CONST_MAP_VOTE_SIZE; i++ )
     {
-        if ( getDvarInt( "map_vote_count_" + i ) > winner )
-            winner = getDvarInt( "map_vote_count_" + i );
+        if ( isDefined( level.votemaps[i] ) && level.votemaps[i].votes > winner.votes )
+            winner = level.votemaps[i];
     }
 
-    level.is_voting = false;
-    return getDvar( "map_vote_name_" + winner );
+    setDvar( "sv_mapRotation", "map " + winner.name );
+	setDvar( "sv_mapRotationCurrent", "map " + winner.name );
+    return winner.name;
 }
 
 monitor_disconnect()
@@ -85,7 +80,10 @@ monitor_disconnect()
     self waittill( "disconnect" );
 
     if ( isDefined( self.vote_id ) )
-        makeDvarServerInfo( "map_vote_count_" + self.vote_id, getDvarInt( "map_vote_count_" + self.vote_id ) - 1 );
+    {
+        level.votemaps[self.vote_id].votes--;
+        makeDvarServerInfo( "map_vote_count_" + self.vote_id, level.votemaps[self.vote_id].votes );
+    }
 }
 
 cast_map_vote( idx )
@@ -99,8 +97,11 @@ cast_map_vote( idx )
     if ( idx > CONST_MAP_VOTE_SIZE || idx < 0 )
         return;
 
-    makeDvarServerInfo( "map_vote_count_" + self.vote_id, getDvarInt( "map_vote_count_" + self.vote_id ) - 1 );
-    makeDvarServerInfo( "map_vote_count_" + idx, getDvarInt( "map_vote_count_" + idx ) + 1 );
+    level.votemaps[self.vote_id].votes--;
+    level.votemaps[idx].votes++;
+
+    makeDvarServerInfo( "map_vote_count_" + self.vote_id, level.votemaps[self.vote_id].votes );
+    makeDvarServerInfo( "map_vote_count_" + idx, level.votemaps[idx].votes );
 
     self.vote_id = idx;
 }
