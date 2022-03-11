@@ -1,7 +1,7 @@
 auzziemod IW4
 ==========
 
-auzziemod IW4 is a minimalistic open-source rewrite of 71st Recon's decade old Modern Warfare 2 sniping mod.
+auzziemod IW4 is a open-source rewrite of 71st Recon's decade old Modern Warfare 2 sniping mod.
 
 Previously always closed-source, I decided to open-source this one because there isn't much point keeping a trickshotting mod private anymore.
 
