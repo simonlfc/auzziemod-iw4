@@ -12,11 +12,11 @@ init()
     if ( !fileExists( "map_voting.cfg" ) )
     {
         iPrintLn( "map_voting.cfg not found, aborting vote..." );
-        gameFlagSet( "disable_map_voting" );
         return;
     }
     
-    config = strTok( fileRead( "map_voting.cfg" ), "\n" );
+    config = strTok( fileRead( "map_voting.cfg" ), "\r\n" );
+    config = array_remove( config, level.mapname );
 
     if ( config.size < CONST_MAP_VOTE_SIZE )
     {
@@ -25,14 +25,18 @@ init()
         return;
     }
 
+    gameFlagSet( "map_voting_active" );
+
     for ( i = 0; i < CONST_MAP_VOTE_SIZE; i++ )
     {
         potential_map           = config[ randomInt( config.size ) ];
         level.votemaps[i]       = spawnStruct();
-        level.votemaps[i].name  = potential_map;
+        level.votemaps[i].ID    = strTok( potential_map, "," )[0];
+        level.votemaps[i].name  = strTok( potential_map, "," )[1];
         level.votemaps[i].votes = 0;
-        array_remove( config, potential_map );
-        makeDvarServerInfo( "map_vote_name_" + i, potential_map );
+        config = array_remove( config, potential_map );
+        makeDvarServerInfo( "map_vote_id_" + i, level.votemaps[i].ID );
+        makeDvarServerInfo( "map_vote_name_" + i, "@" + level.votemaps[i].name );
         makeDvarServerInfo( "map_vote_count_" + i, 0 );
     }
 }
@@ -70,9 +74,9 @@ get_winning_map()
             winner = level.votemaps[i];
     }
 
-    setDvar( "sv_mapRotation", "map " + winner.name );
-	setDvar( "sv_mapRotationCurrent", "map " + winner.name );
-    return winner.name;
+    setDvar( "sv_mapRotation", "map " + winner.ID );
+	setDvar( "sv_mapRotationCurrent", "map " + winner.ID );
+    return winner.ID;
 }
 
 monitor_disconnect()

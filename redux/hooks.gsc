@@ -40,14 +40,16 @@ process_lobby_data_hook()
 	sendClientMatchData();
 	waitframe();
 
-	if ( matchMakingGame() )
-		sendMatchData();
+	if ( gameFlag( "map_voting_active" ) )
+	{
+		if ( matchMakingGame() )
+			sendMatchData();
 
-	foreach ( player in level.players )
-		player.pers["stats"] = player.stats;
+		foreach ( player in level.players )
+			player.pers["stats"] = player.stats;
 
-	if ( !gameFlag( "disable_map_voting" ) )
 		redux\voting::start_map_vote();
+	}
 }
 
 is_valid_weapon_hook( refString )

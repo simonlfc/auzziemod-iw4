@@ -20,18 +20,20 @@ menudef
 		open "popup_leavegame";
 	}
 
-	#define CARD_WIDTH					160
-	#define CARD_HEIGHT					90
-	#define CARD_ROW( idx )				( ( idx - 0 ) % 2 )
-	#define CARD_COL( idx )				( ( idx - 0 - ( ( idx - 0 ) % 2 ) ) / 2 )
+	#define CARD_WIDTH					175.5
+	#define CARD_HEIGHT					98.71875
+	#define CARD_ROW( idx )				( ( idx - 0 ) % 3 )
+	#define CARD_COL( idx )				( ( idx - 0 - ( ( idx - 0 ) % 3 ) ) / 3 )
 
-	#define CARD_X( idx ) 				( -262.5 + ( CARD_WIDTH + 5 ) * CARD_COL( idx ) )
-	#define CARD_Y( idx ) 				( -125 + ( CARD_HEIGHT + 5 ) * CARD_ROW( idx ) )
+	#define CARD_X( idx ) 				( 0 + ( CARD_WIDTH + 5 ) * CARD_COL( idx ) )
+	#define CARD_Y( idx ) 				( 55 + ( CARD_HEIGHT + 5 ) * CARD_ROW( idx ) )
 	#define CARD_ORIGIN( idx )			CARD_X( idx ) CARD_Y( idx )
-	#define CARD_RECT( idx )			CARD_ORIGIN( idx ) CARD_WIDTH CARD_HEIGHT 2 2
+	#define CARD_RECT( idx )			CARD_ORIGIN( idx ) CARD_WIDTH CARD_HEIGHT 1 1
 
 	#define MAP_VOTE_CARD( idx, vote_fix ) \
-			PREPROC_SHADER( CARD_RECT( idx ), "loadscreen_" + dvarString( "map_vote_name_" + idx ), 1 1 1 1 ) \
+			PREPROC_SHADER( CARD_RECT( idx ), "white", 0 0 0 1 ) \
+			PREPROC_SHADER( CARD_RECT( idx ), "map_vote_" + dvarString( "map_vote_id_" + idx ), 1 1 1 0.65 ) \
+			PREPROC_SHADER( CARD_RECT( idx ), "gradient_bottom", 0 0 0 0.35 ) \
 			itemDef \
 			{ \
 				rect 						CARD_RECT( idx ) \
@@ -60,8 +62,9 @@ menudef
 				} \
 			} \
 			PREPROC_SHADER_ALL( CARD_RECT( idx ), "white", 1 1 1 0.1, localVarInt( "map_vote_id" ) == idx, border 1; bordersize 0.5; bordercolor 1 0.823 0 1 ) \
-			PREPROC_TEXT( CARD_RECT( idx ), dvarString( "map_vote_name_" + idx ), 1, 0.375, 3, 12, 1 1 1 1; origin 5 -15 ) \
-			PREPROC_TEXT( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " votes", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -5 )
+			PREPROC_TEXT( CARD_RECT( idx ), locString( dvarString( "map_vote_name_" + idx ) ), 1, 0.375, 3, 12, 1 1 1 1; origin 5 -15 ) \
+			PREPROC_TEXT_VIS( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " vote", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -4.5, dvarInt( "map_vote_count_" + idx ) == 1 ) \
+			PREPROC_TEXT_VIS( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " votes", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -4.5, dvarInt( "map_vote_count_" + idx ) != 1 )
 			
 	MAP_VOTE_CARD( 0, "0" )
 	MAP_VOTE_CARD( 1, "1" )
@@ -69,4 +72,41 @@ menudef
 	MAP_VOTE_CARD( 3, "3" )
 	MAP_VOTE_CARD( 4, "4" )
 	MAP_VOTE_CARD( 5, "5" )
+
+	PREPROC_SHADER( 45 55 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 72 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 89 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 106 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 123 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 140 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 157 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 174 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 191 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 208 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 225 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 242 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 259 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 276 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 293 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 310 275 17 2 1, "white", 0 0 0 0.3 )
+	PREPROC_SHADER( 45 327 275 17 2 1, "white", 0 0 0 0.15 )
+	PREPROC_SHADER( 45 344 275 17 2 1, "white", 0 0 0 0.3 )
+	itemDef
+	{
+		rect 			0 55 1000 380 2 1
+		visible 		1
+		decoration
+		style 			1
+		forecolor 		1 1 1 1
+		type 			6
+		textfont 		2
+		textaligny 		-3
+		textscale 		0.3
+		textstyle 		3
+		feeder 			20
+		elementWidth 	1000
+		elementHeight 	17
+		columns 2		2		62		10		  0
+						64		172		25		  0
+	}
 }
