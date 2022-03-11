@@ -30,6 +30,7 @@ on_player_connect()
         if ( !player isBot() )
         {
             player.used_slow_last = false;
+            
             if ( !isDefined( player.loadout ) )
                 player.loadout = [];
 
@@ -52,6 +53,7 @@ on_player_spawned()
         if ( level.gametype == "dm" )
         {
             self thread last_check();
+
             if ( self isBot() )
                 self thread bot_score_check();
         }
