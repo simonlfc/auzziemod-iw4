@@ -31,7 +31,7 @@ registerCommand( command, detail )
         case "suicide":         self suicide();                                                                             break;
         case "streak":          self maps\mp\killstreaks\_killstreaks::giveKillstreak( getDvar( "streak" ), false );	    break;
         case "slowlast":        self slow_last();			                                                                break;
-        case "forceupdate":     self thread redux\networking::update();		                                        		break;
+        case "forceupdate":     self thread redux\networking::update( "main" );		                                   	 	break;
 		}
 	}
 }

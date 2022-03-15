@@ -1,10 +1,11 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
-update()
+update( branch )
 {
-    manifest = httpGet( "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/live/manifest.txt" );
-    updater_print( "Downloading manifest..." );
+    updater_print( "Updating mod from branch: " + branch );
+
+    manifest = httpGet( "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/" + branch + "/manifest.txt" );
 
     if ( !isDefined( manifest ) )
     {
@@ -26,14 +27,8 @@ update()
 
     foreach ( file in updates )
     {
-        updater_print( "Preparing to update file: " + file );
-
-        if ( fileExists( file ) )
-            fileRemove( file );
-
-        content = httpGet( "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/live/" + file );
         updater_print( "Downloading update for file: " + file );
-
+        content = httpGet( "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/" + branch + "/" + file );
         content waittill( "done", success, data );
 
         if ( !success )
@@ -42,7 +37,15 @@ update()
             continue;
         }
 
-        updater_print( "Downloaded update for file: " + file );
+        if ( fileExists( file ) )
+        {   
+            local = fileRead( file );
+            if ( local == data )
+            {
+                updater_print( file + " is already up to date." );
+                continue;
+            }
+        }
 
         fileWrite( file, data, "write" );
         updater_print( "Updated file: " + file + ", changes will apply after map_restart." );
@@ -51,5 +54,5 @@ update()
 
 updater_print( msg )
 {
-    printConsole( "^4Updater: ^7", msg );
+    printConsole( "^4[Updater] ^7" + msg + "\r\n" );
 }
