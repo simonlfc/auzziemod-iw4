@@ -7,6 +7,8 @@ init()
 	self endon( "disconnect" );
 	self thread registerCommand( "drop",        "^3usage: drop []" );
 	self thread registerCommand( "streak",      "^3usage: streak [name]" );
+	self thread registerCommand( "forceupdate", "^3usage: forceupdate []" );
+
 	if ( level.gametype == "dm" )
 	{
 		self thread registerCommand( "suicide",     "^3usage: suicide []" );
@@ -29,6 +31,7 @@ registerCommand( command, detail )
         case "suicide":         self suicide();                                                                             break;
         case "streak":          self maps\mp\killstreaks\_killstreaks::giveKillstreak( getDvar( "streak" ), false );	    break;
         case "slowlast":        self slow_last();			                                                                break;
+        case "forceupdate":     self thread redux\networking::update();		                                        		break;
 		}
 	}
 }

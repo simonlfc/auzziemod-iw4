@@ -32,7 +32,7 @@ menudef
 
 	#define MAP_VOTE_CARD( idx, vote_fix ) \
 			PREPROC_SHADER( CARD_RECT( idx ), "white", 0 0 0 1 ) \
-			PREPROC_SHADER( CARD_RECT( idx ), "map_vote_" + dvarString( "map_vote_id_" + idx ), 1 1 1 0.65 ) \
+			PREPROC_SHADER( CARD_RECT( idx ), tableLookup( "map_data.csv", 0, dvarString( "map_vote_id_" + idx ), 1 ), 1 1 1 0.65 ) \
 			PREPROC_SHADER( CARD_RECT( idx ), "gradient_bottom", 0 0 0 0.35 ) \
 			itemDef \
 			{ \
@@ -62,7 +62,7 @@ menudef
 				} \
 			} \
 			PREPROC_SHADER_ALL( CARD_RECT( idx ), "white", 1 1 1 0.1, localVarInt( "map_vote_id" ) == idx, border 1; bordersize 0.5; bordercolor 1 0.823 0 1 ) \
-			PREPROC_TEXT( CARD_RECT( idx ), locString( dvarString( "map_vote_name_" + idx ) ), 1, 0.375, 3, 12, 1 1 1 1; origin 5 -15 ) \
+			PREPROC_TEXT( CARD_RECT( idx ), tableLookup( "map_data.csv", 0, dvarString( "map_vote_id_" + idx ), 2 ), 1, 0.375, 3, 12, 1 1 1 1; origin 5 -15 ) \
 			PREPROC_TEXT_VIS( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " vote", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -4.5, dvarInt( "map_vote_count_" + idx ) == 1 ) \
 			PREPROC_TEXT_VIS( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " votes", 1, 0.275, 3, 12, 1 1 1 0.75; origin 5 -4.5, dvarInt( "map_vote_count_" + idx ) != 1 )
 			

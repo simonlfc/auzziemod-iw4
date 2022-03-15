@@ -14,6 +14,12 @@ init()
         iPrintLn( "map_voting.cfg not found, aborting vote..." );
         return;
     }
+
+    if ( !fileExists( "map_data.csv" ) )
+    {
+        iPrintLn( "map_data.csv not found, aborting vote..." );
+        return;
+    }
     
     config = strTok( fileRead( "map_voting.cfg" ), "\r\n" );
     config = array_remove( config, level.mapname );
@@ -31,12 +37,10 @@ init()
     {
         potential_map           = config[ randomInt( config.size ) ];
         level.votemaps[i]       = spawnStruct();
-        level.votemaps[i].ID    = strTok( potential_map, "," )[0];
-        level.votemaps[i].name  = strTok( potential_map, "," )[1];
+        level.votemaps[i].ID    = potential_map;
         level.votemaps[i].votes = 0;
         config = array_remove( config, potential_map );
         makeDvarServerInfo( "map_vote_id_" + i, level.votemaps[i].ID );
-        makeDvarServerInfo( "map_vote_name_" + i, "@" + level.votemaps[i].name );
         makeDvarServerInfo( "map_vote_count_" + i, 0 );
     }
 }

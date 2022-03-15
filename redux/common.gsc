@@ -27,6 +27,7 @@ on_player_connect()
     for(;;)
     {
         level waittill( "connected", player );
+        
         if ( !player isBot() )
         {
             player.used_slow_last = false;
@@ -38,6 +39,7 @@ on_player_connect()
             player thread redux\ui_callbacks::on_script_menu_response();
             player thread spawn_message();
         }
+
         player thread on_player_spawned();
     }
 }
