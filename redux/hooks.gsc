@@ -9,6 +9,7 @@ hooks()
     replaceFunc( maps\mp\_utility::rankingEnabled, true ); 																// Force ranked
     replaceFunc( maps\mp\_utility::matchMakingGame, true ); 															// Force ranked
     replaceFunc( maps\mp\_utility::privateMatch, false ); 																// Force ranked
+
     replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
     replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, false ); 												// Disable Deathstreaks
     replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); 									// Disable Riot Shield
@@ -18,7 +19,68 @@ hooks()
 	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); 												// Allow class changing at any time
 	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback and disable assisted suicides
 	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
+
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, false );										// Disable tac insert enemy listener
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, false );										// Disable tac insert damage
+	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitor_ti_use_hook );									// Give player Throwing Knife after placing TI
+	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
 }
+
+set_ti_hook()
+{
+	self setOffhandPrimaryClass( "other" );
+	self takeWeapon( "throwingknife_mp" );
+	self unsetPerk( "throwingknife_mp" );
+
+	self _giveWeapon( "flare_mp", 0 );
+	self giveStartAmmo( "flare_mp" );
+ 
+	self thread monitor_ti_use_hook();
+}
+
+monitor_ti_use_hook()
+{
+	self endon ( "death" );
+	self endon ( "disconnect" );
+	level endon ( "game_ended" );
+	self endon ( "end_monitorTIUse" );
+
+	self thread maps\mp\perks\_perkfunctions::updateTISpawnPosition();
+	self thread maps\mp\perks\_perkfunctions::clearPreviousTISpawnpoint();
+	
+	for ( ;; )
+	{
+		self waittill( "grenade_fire", lightstick, weapName );
+				
+		if ( weapName != "flare_mp" )
+			continue;
+		
+		if ( isDefined( self.setSpawnPoint ) )
+			self maps\mp\perks\_perkfunctions::deleteTI( self.setSpawnPoint );
+
+		if ( !isDefined( self.TISpawnPosition ) )
+			continue;
+
+		if ( self touchingBadTrigger() )
+			continue;
+
+		TIGroundPosition = playerPhysicsTrace( self.TISpawnPosition + (0,0,16), self.TISpawnPosition - (0,0,2048) ) + (0,0,1);
+		
+		glowStick = spawn( "script_model", TIGroundPosition );
+		glowStick.angles = self.angles;
+		glowStick.team = self.team;
+		glowStick.enemyTrigger = spawn( "script_origin", TIGroundPosition );
+		glowStick thread maps\mp\perks\_perkfunctions::GlowStickSetupAndWaitForDeath( self );
+		glowStick.playerSpawnPos = self.TISpawnPosition;
+		
+		glowStick thread maps\mp\gametypes\_weapons::createBombSquadModel( "weapon_light_stick_tactical_bombsquad", "tag_fire_fx", level.otherTeam[self.team], self );
+		
+		self maps\mp\perks\_perks::givePerk( "throwingknife_mp" );
+		self.setSpawnPoint = glowStick;		
+		return;
+	}
+}
+
 
 process_lobby_data_hook()
 {

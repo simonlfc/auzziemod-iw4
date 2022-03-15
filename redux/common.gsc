@@ -4,11 +4,9 @@
 
 init()
 {    
-    thread redux\hooks::hooks();
-
     level.onlineGame = true;
     level.rankedMatch = true;
-    level.modifyPlayerDamage = redux\common::modify_player_damage;
+    level.modifyPlayerDamage = ::modify_player_damage;
 
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );

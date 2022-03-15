@@ -133,13 +133,10 @@
 		}
 
 #define CHOICE_FRIENDS \
-		CHOICE_BUTTON_ALL( 17, "@PLATFORM_FRIENDS_CAPS", open "popup_friends";, ;, ;, 1, ; )
-
-#define CHOICE_BACK_ALL( offset, extraArgs ) \
-		CHOICE_BUTTON_ALL( ( 18 + offset ), "@PLATFORM_BACK_CAPS", close "self"; extraArgs, ;, ;, 1, ; )
+		CHOICE_BUTTON( 17, "@PLATFORM_FRIENDS_CAPS", open "popup_friends"; )
 
 #define CHOICE_BACK \
-		CHOICE_BACK_ALL( 0, ; )
+		CHOICE_BUTTON( 18, "@PLATFORM_BACK_CAPS", scriptMenuResponse "back"; )
 
 #define CHOICE_SCRIPTS( itemIndex, actionArg, onFocusArg, leaveFocusArg ) \
 		onFocus \
