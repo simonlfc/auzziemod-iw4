@@ -91,6 +91,7 @@ menudef
 	PREPROC_SHADER( 45 310 275 17 2 1, "white", 0 0 0 0.3 )
 	PREPROC_SHADER( 45 327 275 17 2 1, "white", 0 0 0 0.15 )
 	PREPROC_SHADER( 45 344 275 17 2 1, "white", 0 0 0 0.3 )
+	
 	itemDef
 	{
 		rect 			0 55 1000 380 2 1
