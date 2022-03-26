@@ -20,6 +20,9 @@
 #define PREPROC_CAC_TEXT( prect, ptext, pfont, pscale, pcolour ) \
 		PREPROC_TEXT_ALL( prect, ptext, pfont, pscale, 0, 4, 0, 4, pcolour, 1 )
 
+#define PREPROC_CAC_TEXT_VIS( prect, ptext, pfont, pscale, pcolour, vis ) \
+		PREPROC_TEXT_ALL( prect, ptext, pfont, pscale, 0, 4, 0, 4, pcolour, vis )
+
 #define PREPROC_TEXT( prect, ptext, pfont, pscale, pstyle, palign, pcolour ) \
 		PREPROC_TEXT_VIS( prect, ptext, pfont, pscale, pstyle, palign, pcolour, 1 )
 

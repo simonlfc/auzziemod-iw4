@@ -34,8 +34,12 @@
 		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 248 + C_OFF_Y ) -272 20 3 1, "gradient_fadein", 1 1 1 0.1 ) \
 		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 248 + C_OFF_Y ) -272 20 3 1, "gradient_fadein", 0 0 0 0.35 ) \
 		PREPROC_CAC_TEXT( ( -248 + C_OFF_X ) ( 248 + C_OFF_Y ) 272 20 3 1, "@" + tablelookup( "mp/perkTable.csv", 1, localvarstring( var + "Equipment" ), 2 ), 2, .375, 1 1 1 1 ) \
-		PREPROC_CAC_TEXT( ( -116 + C_OFF_X ) ( 248 + C_OFF_Y ) 272 20 3 1, locstring( "@MPUI_N_XN", "@" + tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "OffhandSecondary" ), 3 ), int( tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "OffhandSecondary" ), 5 ) ) ), 2, .375, 1 1 1 1 ) \
-		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 268 + C_OFF_Y ) -272 1 3 1, "gradient_fadein", 0 0 0 0.5 )
+		PREPROC_CAC_TEXT_VIS( ( -116 + C_OFF_X ) ( 248 + C_OFF_Y ) 272 20 3 1, locstring( "@MPUI_N_XN", "@" + tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "OffhandSecondary" ), 3 ), int( tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "OffhandSecondary" ), 5 ) ) ), 2, .375, 1 1 1 1, localvarstring( var + "OffhandSecondary" ) != "" ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 268 + C_OFF_Y ) -272 1 3 1, "gradient_fadein", 0 0 0 0.5 ) \
+		PREPROC_SHADER_VIS( ( -272 + C_OFF_X ) ( 48 + C_OFF_Y ) 272 100 3 1, tablelookup( "mp/camoTable.csv", 1, localvarstring( var + "PrimaryCamo" ), 4 ), 1 1 1 0.5, localVarString( var + "PrimaryCamo" ) != "" ) \
+		PREPROC_SHADER_VIS( ( -200 + C_OFF_X ) ( 48 + C_OFF_Y ) 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Primary" ), 6 ), 1 1 1 1, localVarString( var + "Primary" ) != "" ) \
+		PREPROC_SHADER_VIS( ( -272 + C_OFF_X ) ( 148 + C_OFF_Y ) 272 100 3 1, tablelookup( "mp/camoTable.csv", 1, localvarstring( var + "SecondaryCamo" ), 4 ), 1 1 1 0.5, localVarString( var + "SecondaryCamo" ) != "" ) \
+		PREPROC_SHADER_VIS( ( -200 + C_OFF_X ) ( 148 + C_OFF_Y ) 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Secondary" ), 6 ), 1 1 1 1, localVarString( var + "Secondary" ) != "" )
 
 #define CAC_POPUP \
 		focuscolor 1 1 1 1 \
