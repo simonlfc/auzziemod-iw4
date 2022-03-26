@@ -4,9 +4,9 @@
 
 init()
 {    
-    level.onlineGame = true;
-    level.rankedMatch = true;
-    level.modifyPlayerDamage = ::modify_player_damage;
+    level.onlineGame            = true;
+    level.rankedMatch           = true;
+    level.modifyPlayerDamage    = ::modify_player_damage;
 
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
@@ -118,6 +118,9 @@ ammo_regen()
 
 modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
 {
+    if ( !isPlayer( eAttacker ) || !isPlayer( victim ) || isKillstreakWeapon( sWeapon ) )
+        return int( iDamage * 0.01 );
+        
     if ( eAttacker isBot() )
     {
         if ( victim isBot() )
