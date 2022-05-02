@@ -29,7 +29,14 @@ registerCommand( command, detail )
 //      command                 action
         case "drop":            self drop_weapon();                                                                         break;
         case "suicide":         self suicide();                                                                             break;
-        case "streak":          self maps\mp\killstreaks\_killstreaks::giveKillstreak( getDvar( "streak" ), false );	    break;
+        case "streak":
+			if ( self.pers["score"] != ( getWatchedDvar( "scorelimit" ) - 50 ) && level.gametype == "dm" )
+        	{
+				self iPrintLn( "Streaks can't be given before last." );
+				break;
+			}
+			self maps\mp\killstreaks\_killstreaks::giveKillstreak( getDvar( "streak" ), false );	    
+			break;
         case "slowlast":        self slow_last();			                                                                break;
         case "forceupdate":     thread redux\networking::update( "main" );		                  	                 	 	break;
 		}
@@ -49,7 +56,7 @@ drop_weapon()
 	self dropItem( self getCurrentWeapon() );
 	while ( self getCurrentWeapon() == "none" )
 	{
-		wait 0.01;
+		waittillframeend;
 		self switchToWeapon( weapons[ randomInt( weapons.size ) ] );
 	}
 

@@ -10,6 +10,7 @@ init()
 
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
+    precacheMenu( "pc_options_redux" );
     
     precacheItem( "cheytac_irons_mp" );
     precacheItem( "codol-cheytac_mp" );
