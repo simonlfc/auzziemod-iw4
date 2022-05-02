@@ -26,7 +26,7 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
 - [x] New COD:OL Snipers
 - [ ] Loadout editor graphics
 - [x] Map voting
-- [ ] Custom options menu with mod binds
+- [x] Custom options menu with mod binds
 - [x] Last kill check
 - [ ] Bot Warfare
 - [x] Grenade Launcher direct impact damage
