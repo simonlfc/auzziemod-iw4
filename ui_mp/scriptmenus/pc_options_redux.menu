@@ -81,12 +81,14 @@ menuDef
 	PC_OPTIONS_KEYBINDING(2, "Suicide", "suicide")
 	PC_OPTIONS_KEYBINDING(3, "Drop Weapon", "drop")
 	PC_OPTIONS_KEYBINDING(4, "Slow Last", "slowlast")
+	PC_OPTIONS_DVARSLIDER(5, "Horizontal Safe Area", "safearea_adjusted_horizontal", 0.85, 1, 1, ;, ;, exec "resetViewport";, when(0))
+	PC_OPTIONS_DVARSLIDER(6, "Vertical Safe Area", "safearea_adjusted_vertical", 0.85, 1, 1, ;, ;, exec "resetViewport";, when(0))
 
-	PC_OPTIONS_SEPERATOR(4)
+	PC_OPTIONS_SEPERATOR(6)
 
 	itemDef
 	{
-		rect										260 CHOICE_Y(5) 225 20 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+		rect										260 CHOICE_Y(7) 225 20 HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
 		style										WINDOW_STYLE_FILLED
 		foreColor									CHOICE_TEXTCOLOR
 		disablecolor								0.6 0.55 0.55 1
@@ -118,17 +120,24 @@ menuDef
 	}
 }
 
-
+// clear defines of last menu
+#undef BACKGROUND_PC_OPTIONS
+#undef BACKGROUND_IW4
+#undef BACKGROUND_IMAGE
+#undef SIDEBAR_RIGHT
 #undef MENU_NAME
-#define MENU_NAME									"pc_options_redux_streaks"
-
 #undef MENU_TITLE
+#undef CHOICE_GROUP
+#undef CLOSE_MENUS
+#undef ON_MENU_OPEN
+#undef ON_MENU_CLOSE
+#undef ON_MENU_ESC
+
+#define MENU_NAME									"pc_options_redux_streaks"
 #define MENU_TITLE									"Killstreak Binds"
 
-#undef CHOICE_GROUP
 #define CHOICE_GROUP								MENU_NAME
 
-#undef CLOSE_MENUS
 #define CLOSE_MENUS \
 	close "controls_multi"; \
 	close "main_controls"; \
@@ -150,19 +159,17 @@ menuDef
 	close "pc_options_voice"; \
 	close "pc_options_redux";
 
-#undef ON_MENU_OPEN
 #define ON_MENU_OPEN \
 	CLOSE_MENUS										\
 	execnow											"profile_menuDvarsSetup; resetViewport"; \
 	setLocalVarBool									"ui_hideBack" (1);
 
-#undef ON_MENU_CLOSE
+
 #define ON_MENU_CLOSE \
 	execnow											"profile_menuDvarsFinish; resetViewport"; \
 	setLocalVarBool									"ui_hideBack" (0); \
 	open											"pc_options_redux";
 
-#undef ON_MENU_ESC
 #define ON_MENU_ESC \
 	close											self;
 

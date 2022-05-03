@@ -68,6 +68,7 @@ spawn_message()
 
     if ( game["roundsPlayed"] == 0 )
     {
+        self openPopupMenu( "advertisement" );
         self iPrintLn( ">>^3 auzziemod IW4" );
         self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
     }
@@ -78,7 +79,7 @@ spawn_message()
 last_check()
 {
     self endon( "death" );
-    
+
     for(;;)
     {
         self waittill( "killed_enemy" );
