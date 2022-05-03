@@ -116,7 +116,8 @@ PC_OPTIONS_BUTTON(2, "buttonControls", "@MENU_CONTROLS", PC_OPTIONS_BUTTON_LEFT_
 PC_OPTIONS_BUTTON(3, "buttonMulti", "@MENU_MULTIPLAYER", PC_OPTIONS_BUTTON_LEFT_ACTION(open "pc_options_multi";))
 PC_OPTIONS_BUTTON(4, "buttonGame", "@MENU_GAME", PC_OPTIONS_BUTTON_LEFT_ACTION(open "pc_options_game";))
 PC_OPTIONS_BUTTON(5, "buttonGamepad", "@MENU_GAMEPAD", PC_OPTIONS_BUTTON_LEFT_ACTION(open "pc_options_gamepad";))
-PC_OPTIONS_BUTTON(6, "buttonRedux", "^3auzziemod";, PC_OPTIONS_BUTTON_LEFT_ACTION(open "pc_options_redux";))
+PC_OPTIONS_BUTTON_RAW(6, "buttonRedux", "^3auzziemod";, PC_OPTIONS_BUTTON_LEFT_ACTION(open "pc_options_redux";), "@NULL_EMPTY", when (0), when (dvarBool("cl_ingame")))
+PC_OPTIONS_BUTTON_RAW(6, "buttonRedux", "auzziemod";, PC_OPTIONS_BUTTON_LEFT_ACTION(open "pc_options_redux";), "@NULL_EMPTY", when (!dvarbool("cl_ingame")), when (!dvarBool("cl_ingame")))
 
 MENU_CHOICE_HORIZONTAL_LINE(7)
 PC_OPTIONS_BUTTON_RAW(7, "buttonDefaults", "@MENU_RESET_SYSTEM_DEFAULTS", open "options_graphics_defaults";, "@NULL_EMPTY", when (dvarBool("cl_ingame") || dvarBool("sv_running") || inlobby()), 1)

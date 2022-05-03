@@ -11,7 +11,7 @@ init()
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
     precacheMenu( "pc_options_redux" );
-    
+
     precacheItem( "cheytac_irons_mp" );
     precacheItem( "codol-cheytac_mp" );
     precacheItem( "codol-l115a3_mp" );
@@ -65,20 +65,24 @@ spawn_message()
 {
     self endon( "disconnect" );
     self waittill( "spawned_player" );
+
     if ( game["roundsPlayed"] == 0 )
     {
         self iPrintLn( ">>^3 auzziemod IW4" );
         self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
     }
+
     return;
 }
 
 last_check()
 {
     self endon( "death" );
+    
     for(;;)
     {
         self waittill( "killed_enemy" );
+
         if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
         {
             self iPrintlnBold( "^1YOU'RE AT LAST. TRICKSHOT OR BE KICKED." );
@@ -90,9 +94,11 @@ last_check()
 bot_score_check()
 {
     self endon( "death" );
+
     for(;;)
     {
         self waittill( "killed_enemy" );
+
         if ( self.pers["score"] > getWatchedDvar( "scorelimit" ) / 2 && getWatchedDvar( "scorelimit" ) != 0 )
         {
             maps\mp\gametypes\_gamescore::_setPlayerScore( self, 0 );
@@ -104,6 +110,7 @@ bot_score_check()
 ammo_regen()
 {
     self endon( "death" );
+
     for(;;)
     {
         foreach ( weapon in self getWeaponsListAll() )
