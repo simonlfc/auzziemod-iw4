@@ -19,6 +19,11 @@ init()
 
     level thread redux\voting::init();
     level thread on_player_connect();
+
+    // ever so slightly hacky
+    level waittill( "update_scorelimit" );
+    if ( level.gametype == "sd" )
+        setDvar( "ui_allow_teamchange", 0 );
 }
 
 on_player_connect()
@@ -27,7 +32,7 @@ on_player_connect()
     {
         level waittill( "connected", player );
         
-        if ( !player isBot() )
+        if ( !player isTestClient() )
         {
             player.used_slow_last = false;
             
@@ -39,6 +44,7 @@ on_player_connect()
             player thread spawn_message();
         }
 
+        player thread on_joined_team();
         player thread on_player_spawned();
     }
 }
@@ -46,6 +52,7 @@ on_player_connect()
 on_player_spawned()
 {
     self endon( "disconnect" );
+
     for(;;)
     {
         self waittill( "spawned_player" );
@@ -55,11 +62,43 @@ on_player_spawned()
         {
             self thread last_check();
 
-            if ( self isBot() )
+            if ( self isTestClient() )
                 self thread bot_score_check();
         }
     }
 }
+
+on_joined_team()
+{
+	self endon( "disconnect" );
+    
+    if ( level.gametype == "sd" )
+    {
+        if ( self isTestClient() )
+            self [[level.axis]]();
+        else
+            self [[level.allies]]();
+    }
+    else
+    {
+        self [[level.autoassign]]();
+    }
+
+	for(;;)
+	{
+		self waittill( "joined_team" );
+
+        if ( level.gametype == "sd" )
+        {
+            if ( self isTestClient() && self.pers["team"] != "axis" )
+                self [[level.axis]]();
+
+            if ( !self isTestClient() && self.pers["team"] != "allies" )
+                self [[level.allies]]();
+        }
+	}
+}
+
 
 spawn_message()
 {
@@ -130,9 +169,9 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
     if ( !isPlayer( eAttacker ) || !isPlayer( victim ) || isKillstreakWeapon( sWeapon ) )
         return int( iDamage * 0.01 );
         
-    if ( eAttacker isBot() )
+    if ( eAttacker isTestClient() )
     {
-        if ( victim isBot() )
+        if ( victim isTestClient() )
             return int( iDamage );
         else
             return int( iDamage * 0.15 );

@@ -51,7 +51,7 @@ start_map_vote()
 
     foreach ( player in level.players )
     {
-        if ( player isBot() )
+        if ( player isTestClient() )
             kick( player getEntityNumber() );
 
         player.vote_id      = undefined;
