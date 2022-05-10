@@ -177,12 +177,6 @@
 			decoration 				\
 		}
 
-#define CHOICE_DEFAULT_CLASS( itemIndex, textArg, classArg ) \
-		CHOICE_BUTTON_ALL( itemIndex, textArg, scriptmenuresponse classArg, UPDATE_DEFAULT_CLASS_FOCUS( itemIndex, textArg ), ;, 1, ; )
-		
-#define CHOICE_CUSTOM_CLASS( itemIndex, classArg ) \
-		CHOICE_BUTTON_ALL( itemIndex, getplayerdata( "customClasses", ( itemIndex - 5 ), "name" ), scriptmenuresponse classArg, UPDATE_CLASS_FOCUS( itemIndex ), ;, 1, ; )
-
 #define UPDATE_CAC_FOCUS \
 		setLocalVarString "loadoutPrimaryAttachment2" ( "none" ); \
 		setLocalVarString "loadoutSecondaryAttachment2" ( "none" ); \
@@ -204,7 +198,7 @@
 		setLocalVarString "loadoutClassName" ( "Created Class" );
 
 #define UPDATE_CLASS_FOCUS( itemIndex ) \
-		setLocalVarInt "classIndex" ( itemIndex - 5 ); \
+		setLocalVarInt "classIndex" itemIndex; \
 		setLocalVarString "loadoutPrimary" ( getplayerdata( "customClasses", localvarint( "classIndex" ), "weaponSetups", 0, "weapon" ) ); \
 		setLocalVarString "loadoutPrimaryAttachment" ( getplayerdata( "customClasses", localvarint( "classIndex" ), "weaponSetups", 0, "attachment", 0 ) ); \
 		setLocalVarString "loadoutPrimaryAttachment2" ( getplayerdata( "customClasses", localvarint( "classIndex" ), "weaponSetups", 0, "attachment", 1 ) ); \

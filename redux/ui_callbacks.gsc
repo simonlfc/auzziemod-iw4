@@ -35,13 +35,13 @@ on_script_menu_response()
         if ( isSubStr( response, "cast_vote" ) )
             self redux\voting::cast_map_vote( int( strTok( response, ":" )[1] ) );
         
-        if ( response == "class4" )
+        if ( response == "class0" )
         {
             self closepopupMenu();
 			self closeInGameMenu();
 
 			self.selectedClass = true;
-			self [[level.class]]( "class4" );
+			self [[level.class]]( "class0" );
         }
 
         if ( isSubStr( response, "loadout_" ) )

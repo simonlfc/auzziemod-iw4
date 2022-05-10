@@ -16,12 +16,12 @@ hook_return_false()
 
 hooks()
 {
-    replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 																// Force ranked
-    replaceFunc( maps\mp\_utility::matchMakingGame, ::hook_return_true ); 															// Force ranked
-    replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 																// Force ranked
+    replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 												// Force ranked
+    replaceFunc( maps\mp\_utility::matchMakingGame, ::hook_return_true ); 												// Force ranked
+    replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 												// Force ranked
 
     replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
-    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hook_return_false ); 												// Disable Deathstreaks
+    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hook_return_false ); 									// Disable Deathstreaks
     replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); 									// Disable Riot Shield
     replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); 										// Disable Last Stand
     replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); 									// Intercept valid weapon check to allow for our custom attachments
@@ -30,8 +30,8 @@ hooks()
 	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback and disable assisted suicides
 	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
 
-	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, ::hook_return_false );										// Disable tac insert enemy listener
-	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hook_return_false );										// Disable tac insert damage
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, ::hook_return_false );						// Disable tac insert enemy listener
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hook_return_false );							// Disable tac insert damage
 	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitor_ti_use_hook );									// Give player Throwing Knife after placing TI
 	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
 }
@@ -316,7 +316,7 @@ give_loadout_hook( team, class, allowCopycat )
 			loadoutDeathstreak = table_getDeathstreak( level.classTableName, 10 );
 	}
 
-	if ( class == "class4" )
+	if ( class == "class0" )
 	{
 		class_num 						= getClassIndex( class );
 		self.class_num 					= class_num;
@@ -489,7 +489,7 @@ menu_class_hook( response )
 		return;
 	}
 
-	if ( response != "class4" && ( isDefined( self.pers["class"] ) && self.pers["class"] == class ) && 
+	if ( response != "class0" && ( isDefined( self.pers["class"] ) && self.pers["class"] == class ) && 
 		( isDefined( self.pers["primary"] ) && self.pers["primary"] == primary ) )
 		return;
 

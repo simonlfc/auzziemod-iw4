@@ -40,7 +40,7 @@ menudef
 	CHOICE_BUTTON( 5, "@MENU_PERK2_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 1 ) )
 	CHOICE_BUTTON( 6, "@MENU_PERK3_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 2 ) )
 	CHOICE_SEPARATOR( 7 )
-	CHOICE_BUTTON( 7, "PLAY", scriptmenuresponse "class4"; )
+	CHOICE_BUTTON( 7, "PLAY", scriptmenuresponse "class0"; )
 
 	CHOICE_FRIENDS
 	CHOICE_BACK

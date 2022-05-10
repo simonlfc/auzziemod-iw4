@@ -1,0 +1,224 @@
+#include "ui_mp/common/macros.inc"
+#include "ui_mp/common/templates.inc"
+#include "ui_mp/common/redux.inc"
+#include "ui/menudef.h"
+
+#define MENU_NAME					"class"
+#define MENU_TITLE					"auzziemod"
+
+menudef
+{
+	name 							MENU_NAME
+	rect 							0 0 640 480 4 4
+	forecolor 						1 1 1 1
+	REDUX_INGAME_MENU
+	onOpen
+	{
+		open MENU_NAME"_r";
+		lerp x "from" -200 "to" 0 "over" 0.1;
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+	}
+	onRequestClose
+	{
+		lerp alpha "from" 1 "to" 0 "over" 0.1;
+		lerp x "from" 0 "to" -200 "over" 0.1;
+	}
+
+	REDUX_BUTTON( 0, "CHANGE CLASS", CHANGE_CLASS_ACTION; )
+	REDUX_BUTTON( 1, "CHANGE TEAM", scriptmenuresponse "changeteam"; )
+	REDUX_SEPARATOR( 2 )
+	REDUX_BUTTON( 2.25, "GAME OPTIONS", ; )
+	REDUX_BUTTON( 3.25, "MOD OPTIONS", ; )
+	REDUX_SEPARATOR( 4.25 )
+	REDUX_BUTTON_VIS( 4.5, "END GAME", open "popup_endgame";, dvarBool( "sv_running" ) )
+	REDUX_BUTTON_VIS( 4.5, "LEAVE GAME", open "popup_leavegame";, !dvarBool( "sv_running" ) )
+	REDUX_BUTTON( 5.5, "QUIT TO DESKTOP", open "quit_popmenu"; )
+}
+
+menudef
+{
+	name 							MENU_NAME"_r"
+	rect 							0 0 640 480 4 4
+	forecolor 						1 1 1 1
+	visible 						when ( menuisopen( MENU_NAME ) )
+	decoration
+	onOpen
+	{
+		lerp x "from" 200 "to" 0 "over" 0.1;
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+	}
+	onRequestClose
+	{
+		lerp alpha "from" 1 "to" 0 "over" 0.1;
+		lerp x "from" 0 "to" 200 "over" 0.1;
+	}
+
+	PREPROC_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+
+	// copy paste cancer that i refuse to clean up
+	itemDef
+	{
+		name "fullmap_border"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		border 1
+		bordersize 0.666667
+		forecolor 1 1 1 1
+		bordercolor 1 1 1 0.35
+		textscale 0.55
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		style 3
+		forecolor 0.89 0.98 0.95 0.05
+		background "minimap_scanlines"
+		textscale 0.55
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		name "fullmap_map"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		ownerdraw 181
+		forecolor 1 1 1 1
+		background "compass_map_default"
+		type 8
+		textscale 0.55
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		name "fullmap_friendlies"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		ownerdraw 185
+		forecolor 1 1 1 1
+		type 8
+		textscale 0.55
+		exp forecolor a ( 1 - radarjamintensity( ) )
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		name "fullmap_enemies"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		ownerdraw 188
+		forecolor 1 1 1 1
+		type 8
+		textscale 0.55
+		exp forecolor a ( 1 - radarjamintensity( ) )
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		name "fullmap_objectives"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		ownerdraw 182
+		forecolor 1 1 1 1
+		background "objective_line"
+		type 8
+		textscale 0.55
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		name "fullmap_sentries"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		ownerdraw 189
+		forecolor 1 1 1 1
+		type 8
+		textscale 0.55
+		exp forecolor a ( 1 - radarjamintensity( ) )
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		name "fullmap_player"
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		ownerdraw 183
+		forecolor 1 1 1 1
+		background "compassping_player"
+		type 8
+		textscale 0.55
+		exp forecolor a ( 1 - radarjamintensity( ) )
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		style 3
+		forecolor 0.64 0.74 0.71 1
+		background "white"
+		textscale 0.55
+		exp forecolor a ( radarjamintensity( ) )
+		visible when ( radarisjammed( ) && ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		style 3
+		forecolor 0.89 0.98 0.95 1
+		background "ac130_overlay_grain"
+		textscale 0.55
+		exp forecolor a ( radarjamintensity( ) )
+		visible when ( radarisjammed( ) && ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		style 3
+		forecolor 1 1 1 1
+		background "stencil_base"
+		textscale 0.55
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		style 3
+		forecolor 1 1 1 1
+		background "scanlines_stencil"
+		textscale 0.55
+		exp rect y ( ( 135 - 240 ) + ( ( 240 * 2 ) * ( 1 - ( ( milliseconds( ) % 4000 ) / 4000 ) ) ) )
+		visible when ( ( !isempjammed( ) ) )
+	}
+	itemDef
+	{
+		rect -260 135 240 240 3 1
+		decoration
+		visible 1
+		style 3
+		forecolor 0.89 0.98 0.95 1
+		background "stencil_fill"
+		textscale 0.55
+		visible when ( ( !isempjammed( ) ) )
+	}
+	
+	CREATE_TEXT( 0 -2 640 480 2 0, getmapname(), 1 1 1 1, 1, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
+	CREATE_TEXT( 0 0 640 480 2 0, gametypename(), 1 1 1 1, 1, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
+	CREATE_TEXT( 0 20 640 480 2 0, gametypedescription(), 1 1 1 1, 1, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
+}

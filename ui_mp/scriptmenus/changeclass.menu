@@ -1,44 +1,97 @@
 #include "ui_mp/common/macros.inc"
 #include "ui_mp/common/templates.inc"
+#include "ui_mp/common/redux.inc"
 #include "ui/menudef.h"
 
 #define MENU_NAME					"changeclass"
 #define MENU_TITLE					"@MPUI_CHOOSE_CLASS_CAP"
 
+#define REDUX_DEFAULT_CLASS( idx, string, class ) \
+		REDUX_BUTTON_ALL( idx, string, scriptmenuresponse class, 1, UPDATE_DEFAULT_CLASS_FOCUS( idx, string ), ;, ; )
+		
+#define REDUX_CUSTOM_CLASS( idx, class ) \
+		REDUX_BUTTON_ALL( idx, getplayerdata( "customClasses", ( idx - 1.25 ), "name" ), scriptmenuresponse class, 1, UPDATE_CLASS_FOCUS( idx - 1.25 ), ;, ; )
 
 menudef
 {
 	name 							MENU_NAME
-	rect 							0 0 640 480 0 0
+	rect 							0 0 640 480 4 4
 	forecolor 						1 1 1 1
-	IW4_INGAME
+	REDUX_INGAME_MENU
+	onOpen
+	{
+		open MENU_NAME"_r";
+		lerp x "from" -200 "to" 0 "over" 0.1;
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+	}
+	onRequestClose
+	{
+		lerp alpha "from" 1 "to" 0 "over" 0.1;
+		lerp x "from" 0 "to" -200 "over" 0.1;
+	}
+
+	#undef _CHOICE_GAMEPAD_Y	#define _CHOICE_GAMEPAD_Y			3.5
+	#undef _CHOICE_Y_SIZE		#define _CHOICE_Y_SIZE				23
+	#undef _CHOICE_Y_SPACING	#define _CHOICE_Y_SPACING			( _CHOICE_Y_SIZE + 2 )
+
+	REDUX_BUTTON_ALL( 0, "Create New Loadout", open "loadout";, 1, UPDATE_CAC_FOCUS;, ;, ; )
+	REDUX_SEPARATOR( 1 )
+	REDUX_CUSTOM_CLASS( 1.25, "custom1" )
+	REDUX_CUSTOM_CLASS( 2.25, "custom2" )
+	REDUX_CUSTOM_CLASS( 3.25, "custom3" )
+	REDUX_CUSTOM_CLASS( 4.25, "custom4" )
+	REDUX_CUSTOM_CLASS( 5.25, "custom5" )
+	REDUX_CUSTOM_CLASS( 6.25, "custom6" )
+	REDUX_CUSTOM_CLASS( 7.25, "custom7" )
+	REDUX_CUSTOM_CLASS( 8.25, "custom8" )
+	REDUX_CUSTOM_CLASS( 9.25, "custom9" )
+	REDUX_CUSTOM_CLASS( 10.25, "custom10" )
+	REDUX_CUSTOM_CLASS( 11.25, "custom11" )
+	REDUX_CUSTOM_CLASS( 12.25, "custom12" )
+	REDUX_CUSTOM_CLASS( 13.25, "custom13" )
+	REDUX_CUSTOM_CLASS( 14.25, "custom14" )
+	REDUX_CUSTOM_CLASS( 15.25, "custom15" )
+}
+
+#define REDUX_LOADOUT( var ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 48 + C_OFF_Y ) -272 100 3 1, "gradient_fadein", 1 1 1 0.1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 48 + C_OFF_Y ) -272 18 3 1, "gradient_fadein", 0 0 0 0.35 ) \
+		PREPROC_CAC_TEXT( ( -272 + C_OFF_X ) ( 48 + C_OFF_Y ) 272 18 3 1, "@" + tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Primary" ), 3 ), 9, .375, 1 1 1 1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 148 + C_OFF_Y ) -272 100 3 1, "gradient_fadein", 1 1 1 0.1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 148 + C_OFF_Y ) -272 18 3 1, "gradient_fadein", 0 0 0 0.35 ) \
+		PREPROC_CAC_TEXT( ( -272 + C_OFF_X ) ( 148 + C_OFF_Y ) 272 18 3 1, "@" + tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Secondary" ), 3 ), 9, .375, 1 1 1 1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 268 + C_OFF_Y ) -272 36 3 1, "gradient_fadein", 1 1 1 0.1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 304 + C_OFF_Y ) -272 36 3 1, "gradient_fadein", 1 1 1 0.1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 340 + C_OFF_Y ) -272 36 3 1, "gradient_fadein", 1 1 1 0.1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 248 + C_OFF_Y ) -272 20 3 1, "gradient_fadein", 1 1 1 0.1 ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 248 + C_OFF_Y ) -272 20 3 1, "gradient_fadein", 0 0 0 0.35 ) \
+		PREPROC_CAC_TEXT( ( -248 + C_OFF_X ) ( 248 + C_OFF_Y ) 272 20 3 1, "@" + tablelookup( "mp/perkTable.csv", 1, localvarstring( var + "Equipment" ), 2 ), 2, .375, 1 1 1 1 ) \
+		PREPROC_CAC_TEXT_VIS( ( -116 + C_OFF_X ) ( 248 + C_OFF_Y ) 272 20 3 1, locstring( "@MPUI_N_XN", "@" + tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "OffhandSecondary" ), 3 ), int( tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "OffhandSecondary" ), 5 ) ) ), 2, .375, 1 1 1 1, localvarstring( var + "OffhandSecondary" ) != "" ) \
+		PREPROC_SHADER( ( -272 + C_OFF_X ) ( 268 + C_OFF_Y ) -272 1 3 1, "gradient_fadein", 0 0 0 0.5 ) \
+		PREPROC_SHADER_VIS( ( -272 + C_OFF_X ) ( 48 + C_OFF_Y ) 272 100 3 1, tablelookup( "mp/camoTable.csv", 1, localvarstring( var + "PrimaryCamo" ), 4 ), 1 1 1 0.5, localVarString( var + "PrimaryCamo" ) != "" ) \
+		PREPROC_SHADER_VIS( ( -200 + C_OFF_X ) ( 48 + C_OFF_Y ) 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Primary" ), 6 ), 1 1 1 1, localVarString( var + "Primary" ) != "" ) \
+		PREPROC_SHADER_VIS( ( -272 + C_OFF_X ) ( 148 + C_OFF_Y ) 272 100 3 1, tablelookup( "mp/camoTable.csv", 1, localvarstring( var + "SecondaryCamo" ), 4 ), 1 1 1 0.5, localVarString( var + "SecondaryCamo" ) != "" ) \
+		PREPROC_SHADER_VIS( ( -200 + C_OFF_X ) ( 148 + C_OFF_Y ) 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Secondary" ), 6 ), 1 1 1 1, localVarString( var + "Secondary" ) != "" )
+
+
+menudef
+{
+	name 							MENU_NAME"_r"
+	rect 							0 0 640 480 4 4
+	forecolor 						1 1 1 1
+	visible 						when ( menuisopen( MENU_NAME ) )
+	decoration
+	onOpen
+	{
+		lerp x "from" 200 "to" 0 "over" 0.1;
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+	}
+	onRequestClose
+	{
+		lerp alpha "from" 1 "to" 0 "over" 0.1;
+		lerp x "from" 0 "to" 200 "over" 0.1;
+	}
+
+	PREPROC_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
 	IW4_LOADOUT( "loadout" )
-	IW4_TEAM_DISPLAY
-	
-	// Classes
-	CHOICE_DEFAULT_CLASS( 0, "Random Intervention", "class0" )
-	CHOICE_DEFAULT_CLASS( 1, "Random Barrett", "class1" )
-	CHOICE_DEFAULT_CLASS( 2, "Random WA2000", "class2" )
-	CHOICE_DEFAULT_CLASS( 3, "Random M21 EBR", "class3" )
-	CHOICE_SEPARATOR( 4 )
-	CHOICE_BUTTON_FOCUS( 4, 		"Create New Class", 				open "loadout";
-																		close "self";, 
-																		setLocalVarString "loadoutClassName" ( "Created Class" ); 
-																		UPDATE_CAC_FOCUS;, ; )
-	CHOICE_SEPARATOR( 5 )
-	CHOICE_CUSTOM_CLASS( 5, "custom1" )
-	CHOICE_CUSTOM_CLASS( 6, "custom2" )
-	CHOICE_CUSTOM_CLASS( 7, "custom3" )
-	CHOICE_CUSTOM_CLASS( 8, "custom4" )
-	CHOICE_CUSTOM_CLASS( 9, "custom5" )
-	CHOICE_CUSTOM_CLASS( 10, "custom6" )
-	CHOICE_CUSTOM_CLASS( 11, "custom7" )
-	CHOICE_CUSTOM_CLASS( 12, "custom8" )
-	CHOICE_CUSTOM_CLASS( 13, "custom9" )
-	CHOICE_CUSTOM_CLASS( 14, "custom10" )
-	CHOICE_CUSTOM_CLASS( 15, "custom11" )
-	CHOICE_CUSTOM_CLASS( 16, "custom12" )
-	CHOICE_CUSTOM_CLASS( 17, "custom13" )
-	CHOICE_CUSTOM_CLASS( 18, "custom14" )
-	CHOICE_CUSTOM_CLASS( 19, "custom15" )
 }
