@@ -42,13 +42,6 @@
 		PREPROC_SHADER_VIS( ( -200 + C_OFF_X ) ( 148 + C_OFF_Y ) 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( var + "Secondary" ), 6 ), 1 1 1 1, localVarString( var + "Secondary" ) != "" )
 
 #define CAC_POPUP \
-		focuscolor 1 1 1 1 \
-		fullscreen 0 \
-		popup \
-		onEsc \
-		{ \
-			close "loadout_select"; \
-		} \
 		itemDef \
 		{ \
 			rect -1004 -584 1708 960 2 2 \

@@ -1,274 +1,63 @@
 #include "ui_mp/common/macros.inc"
 #include "ui_mp/common/templates.inc"
+#include "ui_mp/common/redux.inc"
+#include "ui_mp/common/cac.inc"
 #include "ui/menudef.h"
 
 #define MENU_NAME					"loadout"
-#define MENU_TITLE					"LOADOUT"
-
-#define CAC_OPEN( type, extra ) \
-		setLocalVarString "cac_type" ( type ); \
-		extra; \
-		open "loadout_select";
-
-#define CAC_SUB_OPEN( type ) \
-		setLocalVarString "cac_type" ( type );
+#define MENU_TITLE					"CREATE NEW LOADOUT"
 
 menudef
 {
-	name	 						MENU_NAME
-	rect 							0 0 640 480 0 0
+	name 							MENU_NAME
+	rect 							0 0 640 480 4 4
 	forecolor 						1 1 1 1
-	IW4_INGAME
-	IW4_LOADOUT( "loadout" )
-	// Team Display
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 0.275, localvarstring( "ui_team" ) == "marines" )
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Axis" ), 1 1 1 0.275, localvarstring( "ui_team" ) == "opfor" )
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 0.275, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "marines" )
-	PREPROC_SHADER_VIS( 10 58 128 128 1 1, dvarstring( "g_TeamIcon_Axis" ), 1 1 1 0.275, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Allies" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_ALLIES" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Allies" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "marines" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_AXIS" )
-	PREPROC_TEXT_VIS( 10 131.5 128 128 1 1, "@" + dvarstring( "g_TeamName_Axis" ), 6, 0.4583, 6, 9, 1 1 1 0.2, team( "name" ) == "TEAM_FREE" && localvarstring( "ui_team" ) == "opfor" )
+	REDUX_INGAME_MENU
+	onOpen
+	{
+		close "changeclass";
+		open MENU_NAME"_r";
+		lerp x "from" -200 "to" 0 "over" 0.1;
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+	}
+	onRequestClose
+	{
+		close MENU_NAME"_r";
+		lerp alpha "from" 1 "to" 0 "over" 0.1;
+		lerp x "from" 0 "to" -200 "over" 0.1;
+	}
 	
-	CHOICE_BUTTON( 0, "@MENU_PRIMARY_CAPS", CAC_OPEN( "weapon_select", setLocalVarInt "weapon_slot" 0 ) )
-	CHOICE_BUTTON( 1, "@MENU_SECONDARY_CAPS", CAC_OPEN( "weapon_select", setLocalVarInt "weapon_slot" 1 ) )
-	CHOICE_SEPARATOR( 2 )
-	CHOICE_BUTTON( 2, "@MENU_EQUIPMENT_CAPS", CAC_OPEN( "lethal_select", ; ) )
-	CHOICE_BUTTON( 3, "@MENU_SPECIAL_GRENADE_CAPS", CAC_OPEN( "tactical_select", ; ) )
-	CHOICE_SEPARATOR( 4 )
-	CHOICE_BUTTON( 4, "@MENU_PERK1_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 0 ) )
-	CHOICE_BUTTON( 5, "@MENU_PERK2_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 1 ) )
-	CHOICE_BUTTON( 6, "@MENU_PERK3_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 2 ) )
-	CHOICE_SEPARATOR( 7 )
-	CHOICE_BUTTON( 7, "PLAY", scriptmenuresponse "class0"; )
-
-	CHOICE_FRIENDS
-	CHOICE_BACK
+	REDUX_BUTTON( 0, "@MENU_PRIMARY_CAPS", CAC_OPEN( "weapon_select", setLocalVarInt "weapon_slot" 0 ) )
+	REDUX_BUTTON( 1, "@MENU_SECONDARY_CAPS", CAC_OPEN( "weapon_select", setLocalVarInt "weapon_slot" 1 ) )
+	REDUX_SEPARATOR( 2 )
+	REDUX_BUTTON( 2.25, "@MENU_EQUIPMENT_CAPS", CAC_OPEN( "lethal_select", ; ) )
+	REDUX_BUTTON( 3.25, "@MENU_SPECIAL_GRENADE_CAPS", CAC_OPEN( "tactical_select", ; ) )
+	REDUX_SEPARATOR( 4.25 )
+	REDUX_BUTTON( 4.5, "@MENU_PERK1_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 0 ) )
+	REDUX_BUTTON( 5.5, "@MENU_PERK2_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 1 ) )
+	REDUX_BUTTON( 6.5, "@MENU_PERK3_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 2 ) )
+	REDUX_SEPARATOR( 7.75 )
+	REDUX_BUTTON( 8, "PLAY", scriptmenuresponse "class0"; )
 }
 
-#define CAC_BUTTON( idx, text, action_, vis ) \
-		CHOICE_BUTTON_VIS( idx, text, action_, localVarString( "cac_type" ) == vis )
-
-#define CAC_SELECT_WEAPON( weapon ) \
-		setLocalVarString "cac_current_weapon" ( weapon ); \
-		if ( localVarInt( "weapon_slot" ) == 0 ) \
-		{ \
-			setLocalVarString "loadout_primary" ( weapon ); \
-			scriptmenuresponse "loadout_primary:"weapon; \
-		} \
-		else \
-		{ \
-			setLocalVarString "loadout_secondary" ( weapon ); \
-			scriptmenuresponse "loadout_secondary:"weapon; \
-		} \
-		setLocalVarString "cac_type" ( "attachments" ); \
-
-#define CAC_SELECT_ATTACHMENT( idx ) \
-		if ( localVarInt( "weapon_slot" ) == 0 ) \
-		{ \
-			setLocalVarString "loadout_primary_attachment" ( idx ); \
-			scriptmenuresponse "loadout_primary_attachment:"idx; \
-		} \
-		else \
-		{ \
-			setLocalVarString "loadout_secondary_attachment" ( idx ); \
-			scriptmenuresponse "loadout_secondary_attachment:"idx; \
-		} \
-		setLocalVarString "cac_type" ( "camos" );
-
-#define CAC_SELECT_CAMO( idx ) \
-		if ( localVarInt( "weapon_slot" ) == 0 ) \
-		{ \
-			setLocalVarString "loadout_primary_camo" ( idx ); \
-			scriptmenuresponse "loadout_primary_camo:"idx; \
-		} \
-		else \
-		{ \
-			setLocalVarString "loadout_secondary_camo" ( idx ); \
-			scriptmenuresponse "loadout_secondary_camo:"idx; \
-		} \
-		close "loadout_select";
-
-#define CAC_SELECT_PERK( name ) \
-		if ( localVarInt( "perk_slot" ) == 0 ) \
-		{ \
-			setLocalVarString "loadout_perk1" ( name ); \
-			scriptmenuresponse "loadout_perk1:"name; \
-		} \
-		if ( localVarInt( "perk_slot" ) == 1 ) \
-		{ \
-			setLocalVarString "loadout_perk2" ( name ); \
-			scriptmenuresponse "loadout_perk2:"name; \
-		} \
-		if ( localVarInt( "perk_slot" ) == 2 ) \
-		{ \
-			setLocalVarString "loadout_perk3" ( name ); \
-			scriptmenuresponse "loadout_perk3:"name; \
-		} \
-		close "loadout_select";
-		
-#define IS_WEAPON \
-		( localVarString( "cac_type" ) == "weapon_assault" \
-		|| localVarString( "cac_type" ) == "weapon_smg" \
-		|| localVarString( "cac_type" ) == "weapon_lmg" \
-		|| localVarString( "cac_type" ) == "weapon_sniper" \
-		|| localVarString( "cac_type" ) == "weapon_machine_pistol" \
-		|| localVarString( "cac_type" ) == "weapon_shotgun" \
-		|| localVarString( "cac_type" ) == "weapon_pistol" \
-		|| localVarString( "cac_type" ) == "weapon_projectile" )
-
-// add disable param when it = an existing weapon in your loadout
-#define CAC_WEAPON( idx, weapon ) \
-		CHOICE_BUTTON_FOCUS_VIS( idx, "@" + tablelookup( "redux/statsTable.csv", 4, weapon, 3 ), CAC_SELECT_WEAPON( weapon );, setLocalVarString "cac_current_focus" ( weapon );, ;, tablelookup( "redux/statsTable.csv", 4, weapon, 2 ) == localVarString( "cac_type" ) )
-		
-#define CAC_ATTACHMENT( idx, fixed_idx ) \
-		CHOICE_BUTTON_VIS( idx, "@" + tablelookup( "redux/attachmentTable.csv", 4, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ), 3 ), CAC_SELECT_ATTACHMENT( fixed_idx );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ) != "" && localVarString( "cac_type" ) == "attachments" )
-
-#define CAC_CAMO( idx, name ) \
-		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/camoTable.csv", 1, name, 2 ), CAC_SELECT_CAMO( name );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 0 ) < 52 && localVarString( "cac_type" ) == "camos" )
-
-#define CAC_PERK( idx, name, slot ) \
-		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/perkTable.csv", 1, name, 9 ), CAC_SELECT_PERK( name );, localVarString( "cac_type" ) == "perk_select" && localVarInt( "perk_slot" ) == slot )
-
-#define CAC_LETHAL( idx, name ) \
-		CHOICE_BUTTON_VIS( idx, "@" + tableLookup( "mp/perkTable.csv", 1, name, 2 ), setLocalVarString "loadout_lethal" ( name ); scriptmenuresponse "loadout_lethal:"name; close "loadout_select";, localVarString( "cac_type" ) == "lethal_select" )
-
-#define GET_TACTICAL_LOCNAME( name )	locstring( "@MPUI_N_XN", "@" + tablelookup( "redux/statsTable.csv", 4, name, 3 ) , int( tablelookup( "redux/statsTable.csv", 4, name, 5 ) ) )
-
-#define CAC_TACTICAL( idx, name ) \
-		CHOICE_BUTTON_VIS( idx, GET_TACTICAL_LOCNAME( name ), setLocalVarString "loadout_tactical" ( name ); scriptmenuresponse "loadout_tactical:"name; close "loadout_select";, localVarString( "cac_type" ) == "tactical_select" )
-
-#undef CHOICE_X_START					#define CHOICE_X_START				0			
-#undef CHOICE_Y_START					#define CHOICE_Y_START				2		
-#undef CHOICE_TEXTALIGN					#define CHOICE_TEXTALIGN			4
-#undef CHOICE_TEXTALIGN_X				#define CHOICE_TEXTALIGN_X			68
-
 menudef
 {
-	name "loadout_select"
-	rect -64 40 640 480 0 0
-	forecolor 1 1 1 1
-	CAC_POPUP
-	
-	CAC_BUTTON( 0, "@MENU_ASSAULT_RIFLES_CAPS", CAC_SUB_OPEN( "weapon_assault" );, "weapon_select" )
-	CAC_BUTTON( 1, "@MENU_SMGS_CAPS", CAC_SUB_OPEN( "weapon_smg" );, "weapon_select" )
-	CAC_BUTTON( 2, "@MENU_LMGS_CAPS", CAC_SUB_OPEN( "weapon_lmg" );, "weapon_select" )
-	CAC_BUTTON( 3, "@MENU_SNIPER_RIFLES_CAPS", CAC_SUB_OPEN( "weapon_sniper" );, "weapon_select" )
-	CHOICE_SEPARATOR_VIS( 4, localVarString( "cac_type" ) == "weapon_select" )
-	CAC_BUTTON( 4, "@MENU_MACHINE_PISTOLS_CAPS", CAC_SUB_OPEN( "weapon_machine_pistol" );, "weapon_select" )
-	CAC_BUTTON( 5, "@MENU_SHOTGUNS_CAPS", CAC_SUB_OPEN( "weapon_shotgun" );, "weapon_select" )
-	CAC_BUTTON( 6, "@MENU_HANDGUNS_CAPS", CAC_SUB_OPEN( "weapon_pistol" );, "weapon_select" )
-	CAC_BUTTON( 7, "@MENU_ROCKETS_CAPS", CAC_SUB_OPEN( "weapon_projectile" );, "weapon_select" )
+	name 							MENU_NAME"_r"
+	rect 							0 0 640 480 4 4
+	forecolor 						1 1 1 1
+	visible 						when ( menuisopen( MENU_NAME ) )
+	decoration
+	onOpen
+	{
+		lerp x "from" 200 "to" 0 "over" 0.1;
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+	}
+	onRequestClose
+	{
+		lerp alpha "from" 1 "to" 0 "over" 0.1;
+		lerp x "from" 0 "to" 200 "over" 0.1;
+	}
 
-	// scriptmenuresponse didn't work when the index int is passed through, even when converted to a string, so this is a hacky fix
-	CHOICE_BUTTON_VIS( 0, "@MPUI_NONE", CAC_SELECT_CAMO( "0" ), localVarString( "cac_type" ) == "camos" )
-	CAC_CAMO( 1, "desert" )
-	CAC_CAMO( 2, "arctic" )
-	CAC_CAMO( 3, "woodland" )
-	CAC_CAMO( 4, "digital" )
-	CAC_CAMO( 5, "red_urban" )
-	CAC_CAMO( 6, "red_tiger" )
-	CAC_CAMO( 7, "blue_tiger" )
-	CAC_CAMO( 8, "orange_fall" )
-
-	CHOICE_BUTTON_VIS( 0, "@MPUI_NO_ATTACHMENT", CAC_SELECT_ATTACHMENT( "0" ), localVarString( "cac_type" ) == "attachments" )
-	CAC_ATTACHMENT( 1, "1" )
-	CAC_ATTACHMENT( 2, "2" )
-	CAC_ATTACHMENT( 3, "3" )
-	CAC_ATTACHMENT( 4, "4" )
-	CAC_ATTACHMENT( 5, "5" )
-	CAC_ATTACHMENT( 6, "6" )
-	CAC_ATTACHMENT( 7, "7" )
-	CAC_ATTACHMENT( 8, "8" )
-	CAC_ATTACHMENT( 9, "9" )
-
-	PREPROC_SHADER_VIS( -375 12 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
-	CAC_WEAPON( 0, "m4" )
-	CAC_WEAPON( 1, "famas" )
-	CAC_WEAPON( 2, "scar" )
-	CAC_WEAPON( 3, "tavor" )
-	CAC_WEAPON( 4, "fal" )
-	CAC_WEAPON( 5, "m16" )
-	CAC_WEAPON( 6, "masada" )
-	CAC_WEAPON( 7, "fn2000" )
-	CAC_WEAPON( 8, "ak47" )
-	CAC_WEAPON( 9, "ak47classic" )
-
-	CAC_WEAPON( 0, "mp5k" )
-	CAC_WEAPON( 1, "ump45" )
-	CAC_WEAPON( 2, "kriss" )
-	CAC_WEAPON( 3, "p90" )
-	CAC_WEAPON( 4, "uzi" )
-	CAC_WEAPON( 5, "ak74u" )
-	CAC_WEAPON( 6, "peacekeeper" )
-
-	CAC_WEAPON( 0, "sa80" )
-	CAC_WEAPON( 1, "rpd" )
-	CAC_WEAPON( 2, "mg4" )
-	CAC_WEAPON( 3, "aug" )
-	CAC_WEAPON( 4, "m240" )
-
-	CAC_WEAPON( 0, "cheytac" )
-	CAC_WEAPON( 1, "barrett" )
-	CAC_WEAPON( 2, "wa2000" )
-	CAC_WEAPON( 3, "m21" )
-	CAC_WEAPON( 4, "m40a3" )
-	CAC_WEAPON( 5, "dragunov" )
-	CAC_WEAPON( 6, "codol-cheytac" )
-	CAC_WEAPON( 7, "codol-l115a3" )
-	CAC_WEAPON( 8, "codol-msr" )
-
-	CAC_WEAPON( 0, "pp2000" )
-	CAC_WEAPON( 1, "glock" )
-	CAC_WEAPON( 2, "beretta393" )
-	CAC_WEAPON( 3, "tmp" )
-
-	CAC_WEAPON( 0, "spas12" )
-	CAC_WEAPON( 1, "aa12" )
-	CAC_WEAPON( 2, "striker" )
-	CAC_WEAPON( 3, "ranger" )
-	CAC_WEAPON( 4, "m1014" )
-	CAC_WEAPON( 5, "model1887" )
-
-	CAC_WEAPON( 0, "usp" )
-	CAC_WEAPON( 1, "coltanaconda" )
-	CAC_WEAPON( 2, "beretta" )
-	CAC_WEAPON( 3, "deserteagle" )
-	CAC_WEAPON( 4, "deserteaglegold" )
-
-	CAC_WEAPON( 0, "gl" )
-	CAC_WEAPON( 1, "m79" )
-	CAC_WEAPON( 2, "rpg" )
-	CAC_WEAPON( 3, "at4" )
-	CAC_WEAPON( 4, "stinger" )
-	CAC_WEAPON( 5, "javelin" )
-
-	CAC_PERK( 0, "specialty_marathon", 0 )
-	CAC_PERK( 1, "specialty_fastreload", 0 )
-	CAC_PERK( 2, "specialty_scavenger", 0 )
-	CAC_PERK( 3, "specialty_onemanarmy", 0 )
-
-	CAC_PERK( 0, "specialty_bulletdamage", 1 )
-	CAC_PERK( 1, "specialty_lightweight", 1 )
-	CAC_PERK( 2, "specialty_hardline", 1 )
-	CAC_PERK( 3, "specialty_coldblooded", 1 )
-	CAC_PERK( 4, "specialty_explosivedamage", 1 )
-
-	CAC_PERK( 0, "specialty_extendedmelee", 2 )
-	CAC_PERK( 1, "specialty_bulletaccuracy", 2 )
-	CAC_PERK( 2, "specialty_localjammer", 2 )
-	CAC_PERK( 3, "specialty_heartbreaker", 2 )
-	CAC_PERK( 4, "specialty_detectexplosive", 2 )
-
-	CAC_LETHAL( 0, "frag_grenade_mp" )
-	CAC_LETHAL( 1, "semtex_mp" )
-	CAC_LETHAL( 2, "throwingknife_mp" )
-	CAC_LETHAL( 3, "specialty_tacticalinsertion" )
-	CAC_LETHAL( 4, "specialty_blastshield" )
-	CAC_LETHAL( 5, "claymore_mp" )
-	CAC_LETHAL( 6, "c4_mp" )
-
-	CAC_TACTICAL( 0, "flash_grenade" )
-	CAC_TACTICAL( 1, "concussion_grenade" )
-	CAC_TACTICAL( 2, "smoke_grenade" )
+	PREPROC_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	IW4_LOADOUT( "loadout" )
 }

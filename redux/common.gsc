@@ -10,6 +10,7 @@ init()
 
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
+    precacheMenu( "loadout_select" );
     precacheMenu( "pc_options_redux" );
 
     precacheItem( "cheytac_irons_mp" );

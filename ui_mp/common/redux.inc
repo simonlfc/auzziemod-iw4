@@ -5,10 +5,6 @@
 		{ \
 			open "popup_friends"; \
 		} \
-		onEsc \
-		{ \
-			scriptmenuresponse "back"; \
-		} \
 		PREPROC_SHADER( 215 -4 -40 640 1 0, "gradient_fadein", 0 0 0 0.5 ) \
 		PREPROC_SHADER( -68 -4 284 640 1 0, "white", 0 0 0 0.8; border 1; bordersize 0.5; bordercolor 1 1 1 0.1 ) \
 		CREATE_TEXT( -50 ( _CHOICE_Y_START - 17 ) 0 0 1 1, MENU_TITLE, 1 1 1 1, 1, textfont 9; textscale 0.35; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT ) \
@@ -92,6 +88,12 @@
 			bordercolor				1 1 1 0.05 \
 			bordersize				0.25 \
 			backcolor				1 1 1 0.01 \
+			textfont 				0 \
+			textalignx 				8 \
+			textscale 				0.275 \
+			textstyle 				3 \
+			textalign 				ITEM_ALIGN_MIDDLE_LEFT \
+			exp text				( string ) \
 			extras;					\
 			onFocus \
 			{ \
@@ -113,11 +115,13 @@
 			{ \
 				action_; \
 			} \
-		} \
-		CREATE_TEXT( _CHOICE_RECT( idx ), string, 1 1 1 1, visibility, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
+		}
 
 #define REDUX_SEPARATOR( idx ) \
-		CREATE_SHADER( _CHOICE_ORIGIN( idx ) 250 4 1 1, "gradient_center", 1 1 1 0.05; origin 0 0 )
+		REDUX_SEPARATOR_VIS( idx, 1 )
+
+#define REDUX_SEPARATOR_VIS( idx, visibility ) \
+		CREATE_SHADER_VIS( _CHOICE_ORIGIN( idx ) 250 4 1 1, "gradient_center", 1 1 1 0.05; origin 0 0, visibility )
 
 #define CHANGE_CLASS_ACTION	\
 		if ( localvarstring( "ui_team" ) == "marines" ) \

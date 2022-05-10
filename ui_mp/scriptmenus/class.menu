@@ -20,6 +20,7 @@ menudef
 	}
 	onRequestClose
 	{
+		close MENU_NAME"_r";
 		lerp alpha "from" 1 "to" 0 "over" 0.1;
 		lerp x "from" 0 "to" -200 "over" 0.1;
 	}
