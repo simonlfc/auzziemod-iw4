@@ -9,6 +9,10 @@ init()
 	self thread register_command( "streak",      "^3usage: streak [name]" );
 	self thread register_command( "forceupdate", "^3usage: forceupdate []" );
 
+	//self thread registerCommand( "savepos", 	"^3usage: savepos []" );
+	//self thread registerCommand( "loadpos", 	"^3usage: loadpos []" );
+	//self thread registerCommand( "fly", 		"^3usage: fly []" );
+
 	if ( level.gametype == "dm" )
 	{
 		self thread register_command( "suicide",     "^3usage: suicide []" );
@@ -27,7 +31,7 @@ register_command( command, detail )
 		switch( command )
 		{
 //      command                 action
-        case "drop":            self drop_weapon();                                                                         break;
+        case "drop":            self thread drop_weapon();                                                                  break;
         case "suicide":         self suicide();                                                                             break;
         case "streak":
 			if ( self.pers["score"] != ( getWatchedDvar( "scorelimit" ) - 50 ) && level.gametype == "dm" )
@@ -37,11 +41,16 @@ register_command( command, detail )
 			}
 			self maps\mp\killstreaks\_killstreaks::giveKillstreak( getDvar( "streak" ), false );	    
 			break;
-        case "slowlast":        self slow_last();			                                                                break;
+        case "slowlast":        self thread slow_last();			                                                        break;
         case "forceupdate":     thread redux\networking::update( "main" );		                  	                 	 	break;
+		//case "savepos":     	self thread redux\private::save_position();		                  	                 	 	break;
+        //case "loadpos":     	self thread redux\private::load_position();		                  	                 	 	break;
+        //case "fly":     		self noclip();																				break;
 		}
 	}
 }
+
+
 
 drop_weapon()
 {

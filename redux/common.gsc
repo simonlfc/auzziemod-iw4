@@ -44,6 +44,7 @@ on_player_connect()
 
             player thread redux\commands::init();
             player thread redux\ui_callbacks::on_script_menu_response();
+            //player thread explosive_bullets();
             player thread spawn_message();
         }
 
