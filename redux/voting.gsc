@@ -22,7 +22,7 @@ init()
     }
     
     config = strTok( fileRead( "map_voting.cfg" ), "\r\n" );
-    config = array_remove( config, level.mapname );
+    config = array_remove( config, getDvar( "mapname" ) );
 
     if ( config.size < CONST_MAP_VOTE_SIZE )
     {

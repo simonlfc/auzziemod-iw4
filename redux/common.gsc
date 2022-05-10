@@ -21,9 +21,11 @@ init()
     level thread on_player_connect();
 
     // ever so slightly hacky
-    level waittill( "update_scorelimit" );
     if ( level.gametype == "sd" )
+    {
+        level waittill( "update_scorelimit" );
         setDvar( "ui_allow_teamchange", 0 );
+    }
 }
 
 on_player_connect()
@@ -107,7 +109,6 @@ spawn_message()
 
     if ( game["roundsPlayed"] == 0 )
     {
-        self openPopupMenu( "advertisement" );
         self iPrintLn( ">>^3 auzziemod IW4" );
         self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
     }

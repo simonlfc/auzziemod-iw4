@@ -4,14 +4,24 @@
 #include maps\mp\gametypes\_damage;
 #include maps\mp\gametypes\_class;
 
+hook_return_true()
+{
+	return true;
+}
+
+hook_return_false()
+{
+	return false;
+}
+
 hooks()
 {
-    replaceFunc( maps\mp\_utility::rankingEnabled, true ); 																// Force ranked
-    replaceFunc( maps\mp\_utility::matchMakingGame, true ); 															// Force ranked
-    replaceFunc( maps\mp\_utility::privateMatch, false ); 																// Force ranked
+    replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 																// Force ranked
+    replaceFunc( maps\mp\_utility::matchMakingGame, ::hook_return_true ); 															// Force ranked
+    replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 																// Force ranked
 
     replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
-    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, false ); 												// Disable Deathstreaks
+    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hook_return_false ); 												// Disable Deathstreaks
     replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); 									// Disable Riot Shield
     replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); 										// Disable Last Stand
     replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); 									// Intercept valid weapon check to allow for our custom attachments
@@ -20,8 +30,8 @@ hooks()
 	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback and disable assisted suicides
 	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
 
-	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, false );										// Disable tac insert enemy listener
-	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, false );										// Disable tac insert damage
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, ::hook_return_false );										// Disable tac insert enemy listener
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hook_return_false );										// Disable tac insert damage
 	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitor_ti_use_hook );									// Give player Throwing Knife after placing TI
 	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
 }
@@ -30,7 +40,7 @@ set_ti_hook()
 {
 	self setOffhandPrimaryClass( "other" );
 	self takeWeapon( "throwingknife_mp" );
-	self unsetPerk( "throwingknife_mp" );
+	self unsetPerk( "throwingknife_mp", false );
 
 	self _giveWeapon( "flare_mp", 0 );
 	self giveStartAmmo( "flare_mp" );
