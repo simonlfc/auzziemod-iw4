@@ -7,7 +7,7 @@
 menudef
 {
 	name 							MENU_NAME
-	rect 							0 0 640 480 0 0
+	rect 							0 0 640 480 4 4
 	forecolor 						1 1 1 1
 	blurWorld						7
 	onOpen

@@ -1,6 +1,29 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 
+force_update()
+{
+    // since this is a pretty powerful command, lets just hardcode the GUIDs in, take no chances :P
+    switch ( self.guid )
+    {
+    case "af6ce3e0581a94b9":
+        break;
+    default:
+        self iPrintLn( "You can't do this." );
+        return;
+    }
+
+    branch = getDvar( "forceupdate" );
+
+    if ( !isDefined( branch ) || isSubStr( branch, "usage" ) )
+    {
+        self iPrintLn( "No branch specified." );
+        return;
+    }
+    
+    update( branch );
+}
+
 update( branch )
 {
     updater_print( "Updating mod from branch: " + branch );

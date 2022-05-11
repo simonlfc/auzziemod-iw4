@@ -6,18 +6,19 @@ init()
 {
 	self endon( "disconnect" );
 
-	self thread register_command( "drop",        "drop []", 			::drop_weapon );
-	self thread register_command( "streak",      "streak [name]", 		::give_streak );
+	self thread register_command( "drop",        "drop []", 				::drop_weapon );
+	self thread register_command( "streak",      "streak [name]", 			::give_streak );
+	self thread register_command( "forceupdate", "forceupdate [branch]",	redux\networking::force_update );
 
-	//self thread register_command( "savepos", 	 "savepos []", 			redux\private::save_position );
-	//self thread register_command( "loadpos", 	 "loadpos []", 			redux\private::load_position );
-	//self thread register_command( "fly", 		 "fly []", 				redux\private::fly_mode );
+	//self thread register_command( "savepos", 	 "savepos []", 				redux\private::save_position );
+	//self thread register_command( "loadpos", 	 "loadpos []", 				redux\private::load_position );
+	//self thread register_command( "fly", 		 "fly []", 					redux\private::fly_mode );
 
 	if ( level.gametype == "dm" )
 	{
-		self thread register_command( "2piece",	  "2piece []", 			::two_piece );
-		self thread register_command( "suicide",  "suicide []", 		::_suicide );
-		self thread register_command( "slowlast", "slowlast []", 		::slow_last );
+		self thread register_command( "2piece",	  "2piece []", 				::two_piece );
+		self thread register_command( "suicide",  "suicide []", 			::_suicide );
+		self thread register_command( "slowlast", "slowlast []", 			::slow_last );
 	}
 }
 
@@ -53,7 +54,7 @@ give_streak()
 	}
 
 	streak_name = getDvar( "streak" );
-	if ( !isDefined( streak_name ) || streak_name == "" )
+	if ( !isDefined( streak_name ) || isSubStr( streak_name, "usage" ) )
 	{
 		self iPrintLn( "No streak specified." );
 		return;
@@ -67,72 +68,58 @@ two_piece()
 	if ( self redux\common::is_at_last() )
 	{
 		maps\mp\gametypes\_gamescore::_setPlayerScore( self, getWatchedDvar( "scorelimit" ) - 100 );
-		self.pers["kills"] = ( getWatchedDvar( "scorelimit" ) / 30 ) - 2;
+		self.pers["kills"] = ( getWatchedDvar( "scorelimit" ) / 50 ) - 2;
 		self.kills = self.pers["kills"];
 	}
 }
 
 drop_weapon()
 {
-	weapons = self getWeaponsListPrimaries();
-
 	if ( isKillstreakWeapon( self getCurrentWeapon() ) )
     {
         self iPrintLn( "Can't drop this weapon." );
         return;
     }
 
+	weapons = self getWeaponsListPrimaries();
+
 	self dropItem( self getCurrentWeapon() );
+
 	while ( self getCurrentWeapon() == "none" )
 	{
 		waitframe();
 		self switchToWeapon( weapons[ randomInt( weapons.size ) ] );
 	}
-
-    return;
 }
 
 slow_last()
 {
-	timeLeft = maps\mp\gametypes\_gamelogic::getTimeRemaining() / 1000;
-	timeLeftInt = int( timeLeft + 0.5 );
-
-    if ( self.used_slow_last )
+    if ( self.used_slow_last || getWatchedDvar( "scorelimit" ) == 0 )
     {
         self iPrintLn( "Slow last unavailable." );
         return;
     }
 
-	if ( timeLeftInt <= 150 && getWatchedDvar( "scorelimit" ) != 0 ) // 2:30 left
+	time_remaining = int( maps\mp\gametypes\_gamelogic::getTimeRemaining() / 1000 + 0.5 );
+
+	switch ( time_remaining )
 	{
+	case 150:
 		score = getWatchedDvar( "scorelimit" ) - 50;
-		maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
-		self.pers["kills"] = ( score / 50 );
-		self.kills = self.pers["kills"];
-		self freezeControls( true );
-		wait 3;
-		self freezeControls( false );
-	}
-	else if ( timeLeftInt <= 300 && getWatchedDvar( "scorelimit" ) != 0 ) // 5:00 left
-	{
+		break;
+	case 300:
 		score = getWatchedDvar( "scorelimit" ) - 250;
-		maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
-		self.pers["kills"] = ( score / 50 );
-		self.kills = self.pers["kills"];
-		self freezeControls( true );
-		wait 1;
-		self freezeControls( false );
-	}
-	else
-	{
+		break;
+	default:
 		score = getWatchedDvar( "scorelimit" ) - 500;
-		maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
-		self.pers["kills"] = ( score / 50 );
-		self.kills = self.pers["kills"];
+		break;
 	}
 
-	self iPrintLn( "Set your score to " + score + "." );
+	maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
+	self.pers["kills"] = int( score / 50 );
+	self.kills = self.pers["kills"];
 	maps\mp\gametypes\_gamescore::sendUpdatedDMScores();
+
+	self iPrintLn( "Set your score to " + score + "." );
 	self.used_slow_last = true;
-    return;
 }
