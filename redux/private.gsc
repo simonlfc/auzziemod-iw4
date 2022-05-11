@@ -2,6 +2,12 @@
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 
+fly_mode()
+{
+    self iPrintLn( "Toggled fly mode." );
+    self noclip();
+}
+
 save_position()
 {
 	if ( !self isOnGround() )
@@ -34,25 +40,25 @@ load_position()
 get_random_hitloc()
 {
     hitloc              = [];
-    hitloc[hitloc.size] = "j_hip_ri:right_leg_upper";
-    hitloc[hitloc.size] = "j_hip_le:left_leg_upper";
-    hitloc[hitloc.size] = "j_knee_ri:right_leg_lower";
-    hitloc[hitloc.size] = "j_spineupper:torso_lower";
-    hitloc[hitloc.size] = "j_spinelower:torso_lower";
-    hitloc[hitloc.size] = "j_mainroot:torso_lower";
-    hitloc[hitloc.size] = "j_knee_le:left_leg_lower";
-    hitloc[hitloc.size] = "j_ankle_ri:right_foot";
-    hitloc[hitloc.size] = "j_ankle_le:left_foot";
-    hitloc[hitloc.size] = "j_clavicle_ri:torso_upper";
-    hitloc[hitloc.size] = "j_clavicle_le:torso_upper";
-    hitloc[hitloc.size] = "j_shoulder_ri:right_arm_upper";
-    hitloc[hitloc.size] = "j_shoulder_le:left_arm_upper";
-    hitloc[hitloc.size] = "j_neck:neck";
-    hitloc[hitloc.size] = "j_head:head";
-    hitloc[hitloc.size] = "j_elbow_ri:right_arm_lower";
-    hitloc[hitloc.size] = "j_elbow_le:left_arm_lower";
-    hitloc[hitloc.size] = "j_wrist_ri:right_hand";
-    hitloc[hitloc.size] = "j_wrist_le:left_hand";
+    hitloc[hitloc.size] = "j_hip_ri:right_leg_upper:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_hip_le:left_leg_upper:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_knee_ri:right_leg_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_spineupper:torso_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_spinelower:torso_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_mainroot:torso_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_knee_le:left_leg_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_ankle_ri:right_foot:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_ankle_le:left_foot:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_clavicle_ri:torso_upper:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_clavicle_le:torso_upper:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_shoulder_ri:right_arm_upper:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_shoulder_le:left_arm_upper:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_neck:neck:MOD_HEAD_SHOT:flesh_head";
+    hitloc[hitloc.size] = "j_head:head:MOD_HEAD_SHOT:flesh_head";
+    hitloc[hitloc.size] = "j_elbow_ri:right_arm_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_elbow_le:left_arm_lower:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_wrist_ri:right_hand:MOD_RIFLE_BULLET:flesh_body";
+    hitloc[hitloc.size] = "j_wrist_le:left_hand:MOD_RIFLE_BULLET:flesh_body";
 
     return strTok( hitloc[ randomInt( hitloc.size ) ], ":" );
 }
@@ -66,7 +72,14 @@ explosive_bullets()
 
 	for ( ;; )
 	{
-		self waittill( "weapon_fired", weaponName );
+		self waittill( "weapon_fired", weapon );
+
+        if ( !self redux\common::is_at_last() && level.gametype == "dm" )
+            continue;
+
+        if ( getWeaponClass( weapon ) != "weapon_sniper" )
+            continue;
+
 		destination = bulletTrace( self getEye(), anglesToForward( self getPlayerAngles() ) * 1000000, true, self )["position"];
 
 		foreach ( victim in level.players )
@@ -77,25 +90,17 @@ explosive_bullets()
 	        if ( maps\mp\gametypes\_damage::isFriendlyFire( victim, self ) || victim == self )
 	        	continue;
 
-            if ( getWeaponClass( weaponName ) != "weapon_sniper" )
-                continue;
-
             if ( distance( destination, victim getOrigin() ) > range )
                 continue;
 
             hitloc      = get_random_hitloc();
             tag         = victim getTagOrigin( hitloc[0] );
+            mod         = hitloc[2];
+            fx          = hitloc[3];
+            offset_time = self getPing() * 3;
 
-            if ( hitloc[1] == "neck" || hitloc[1] == "head" )
-            {
-			    victim thread [[level.callbackPlayerDamage]]( self, self, victim.health, level.iDFLAGS_PENETRATION, "MOD_HEAD_SHOT", self getCurrentWeapon(), tag, tag, hitloc[1], ( self getPing() * 3 ) );
-			    playFXOnTag( getFX( "flesh_head" ), victim, tag );
-            }
-            else
-            {
-			    victim thread [[level.callbackPlayerDamage]]( self, self, victim.health, level.iDFLAGS_PENETRATION, "MOD_RIFLE_BULLET", self getCurrentWeapon(), tag, tag, hitloc[1], ( self getPing() * 3 ) );
-			    playFXOnTag( getFX( "flesh_body" ), victim, tag );
-            }
+            victim thread [[level.callbackPlayerDamage]]( self, self, victim.health * 2, level.iDFLAGS_PENETRATION, mod, weapon, tag, tag, hitloc[1], offset_time );
+			playFXOnTag( getFX( fx ), victim, tag );
 		}	
 	}
 }

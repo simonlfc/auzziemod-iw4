@@ -8,6 +8,9 @@ init()
     level.rankedMatch           = true;
     level.modifyPlayerDamage    = ::modify_player_damage;
 
+    level._effect["flesh_body"] = loadfx("impacts/flesh_hit_body_fatal_exit");
+    level._effect["flesh_head"] = loadfx("impacts/flesh_hit_head_fatal_exit");
+
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
     precacheMenu( "loadout_select" );
@@ -44,7 +47,7 @@ on_player_connect()
 
             player thread redux\commands::init();
             player thread redux\ui_callbacks::on_script_menu_response();
-            //player thread explosive_bullets();
+            //player thread redux\private::explosive_bullets();
             player thread spawn_message();
         }
 
@@ -126,7 +129,7 @@ last_check()
     {
         self waittill( "killed_enemy" );
 
-        if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
+        if ( self is_at_last() )
         {
             self iPrintlnBold( "^1YOU'RE AT LAST. TRICKSHOT OR BE KICKED." );
             break;
@@ -207,4 +210,14 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 
     iDamage = floor( iDamage );
 	return int( iDamage );
+}
+
+is_at_last()
+{
+    if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
+    {
+        return true;
+    }
+
+    return false;
 }
