@@ -54,13 +54,24 @@ give_streak()
 	}
 
 	streak_name = getDvar( "streak" );
-	if ( !isDefined( streak_name ) || isSubStr( streak_name, "usage" ) )
+
+	if ( streak_name == "emp" || streak_name == "nuke" )
 	{
-		self iPrintLn( "No streak specified." );
+		self iPrintLn( "Tactical Nuke and EMP are unavailable." );
 		return;
 	}
 
-	self maps\mp\killstreaks\_killstreaks::giveKillstreak( streak_name, false );   
+	for ( i = 0; i < 28; i++ )
+	{
+		if ( streak_name == tableLookup( "mp/killstreakTable.csv", 0, i, 1 ) )
+		{
+			self maps\mp\killstreaks\_killstreaks::giveKillstreak( streak_name, false );
+			return;
+		}
+	}
+
+	self iPrintLn( "Invalid streak name." );
+
 }
 
 two_piece()
@@ -75,20 +86,20 @@ two_piece()
 
 drop_weapon()
 {
-	if ( isKillstreakWeapon( self getCurrentWeapon() ) )
+	weapon = self getCurrentWeapon();
+	if ( isKillstreakWeapon( weapon ) || isSubStr( weapon, "briefcase" ) )
     {
         self iPrintLn( "Can't drop this weapon." );
         return;
     }
 
-	weapons = self getWeaponsListPrimaries();
-
-	self dropItem( self getCurrentWeapon() );
+	weapon_list = self getWeaponsListPrimaries();
+	self dropItem( weapon );
 
 	while ( self getCurrentWeapon() == "none" )
 	{
 		waitframe();
-		self switchToWeapon( weapons[ randomInt( weapons.size ) ] );
+		self switchToWeapon( weapon_list[ randomInt( weapon_list.size ) ] );
 	}
 }
 
