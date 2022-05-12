@@ -101,19 +101,12 @@ slow_last()
     }
 
 	time_remaining = int( maps\mp\gametypes\_gamelogic::getTimeRemaining() / 1000 + 0.5 );
+	score = getWatchedDvar( "scorelimit" ) - 500;
 
-	switch ( time_remaining )
-	{
-	case 150:
+	if ( time_remaining <= 150 )
 		score = getWatchedDvar( "scorelimit" ) - 50;
-		break;
-	case 300:
+	else if ( time_remaining <= 300 )
 		score = getWatchedDvar( "scorelimit" ) - 250;
-		break;
-	default:
-		score = getWatchedDvar( "scorelimit" ) - 500;
-		break;
-	}
 
 	maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
 	self.pers["kills"] = int( score / 50 );
