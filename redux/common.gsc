@@ -41,6 +41,7 @@ on_player_connect()
         if ( !player isTestClient() )
         {
             player.used_slow_last = false;
+            player.spawn_message  = false;
             
             if ( !isDefined( player.loadout ) )
                 player.loadout = [];
@@ -51,7 +52,9 @@ on_player_connect()
             player thread spawn_message();
         }
 
-        player thread on_joined_team();
+        if ( level.gametype == "sd" )
+            player thread on_joined_team();
+
         player thread on_player_spawned();
     }
 }
@@ -79,30 +82,20 @@ on_joined_team()
 {
 	self endon( "disconnect" );
     
-    if ( level.gametype == "sd" )
-    {
-        if ( self isTestClient() )
-            self [[level.axis]]();
-        else
-            self [[level.allies]]();
-    }
+    if ( self isTestClient() )
+        self [[level.axis]]();
     else
-    {
-        self [[level.autoassign]]();
-    }
+        self [[level.allies]]();
 
 	for(;;)
 	{
 		self waittill( "joined_team" );
 
-        if ( level.gametype == "sd" )
-        {
-            if ( self isTestClient() && self.pers["team"] != "axis" )
-                self [[level.axis]]();
+        if ( self isTestClient() && self.pers["team"] != "axis" )
+            self [[level.axis]]();
 
-            if ( !self isTestClient() && self.pers["team"] != "allies" )
-                self [[level.allies]]();
-        }
+        if ( !self isTestClient() && self.pers["team"] != "allies" )
+            self [[level.allies]]();
 	}
 }
 
@@ -112,13 +105,12 @@ spawn_message()
     self endon( "disconnect" );
     self waittill( "spawned_player" );
 
-    if ( game["roundsPlayed"] == 0 )
+    if ( !self.spawn_message )
     {
         self iPrintLn( ">>^3 auzziemod IW4" );
         self iPrintLn( ">>^3 https://github.com/simonlfc/auzziemod-iw4" );
+        self.spawn_message = true;
     }
-
-    return;
 }
 
 last_check()

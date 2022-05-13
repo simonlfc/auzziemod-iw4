@@ -205,119 +205,6 @@ give_loadout_hook( team, class, allowCopycat )
 	}
 	else
 	{
-		class_num = getClassIndex( class );
-		self.class_num = class_num;
-
-		loadoutPrimary = "none";
-		
-		switch ( class_num )
-		{
-		case 0:
-			loadoutPrimary = "cheytac";
-			break;	
-		case 1:
-			loadoutPrimary = "barrett";
-			break;	
-		case 2:
-			loadoutPrimary = "wa2000";
-			break;	
-		case 3:
-			loadoutPrimary = "m21";
-			break;
-		}
-
-		loadoutPrimaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutPrimary, randomIntRange( 11, 17 ) );
-		loadoutPrimaryAttachment2 = "none";
-		loadoutPrimaryCamo = tableLookup( "mp/camoTable.csv", 0, randomInt( 8 ), 1 );
-
-		random_secondaries = [];
-		random_secondaries[0] = "beretta";
-		random_secondaries[1] = "usp";
-		random_secondaries[2] = "deserteagle";
-		random_secondaries[3] = "coltanaconda";
-		random_secondaries[4] = "glock";
-		random_secondaries[5] = "beretta393";
-		random_secondaries[6] = "pp2000";
-		random_secondaries[7] = "tmp";
-		random_secondaries[8] = "m79";
-		random_secondaries[9] = "rpg";
-		random_secondaries[10] = "ranger";
-		random_secondaries[11] = "model1887";
-		random_secondaries[12] = "striker";
-		random_secondaries[13] = "aa12";
-		random_secondaries[14] = "m1014";
-		random_secondaries[15] = "spas12";
-
-		loadoutSecondary = random_secondaries[ randomInt( random_secondaries.size ) ];
-		loadoutSecondaryAttachment = tableLookup( "redux/statsTable.csv", 4, loadoutSecondary, randomIntRange( 11, 16 ) );
-		loadoutSecondaryAttachment2 = "none";
-		loadoutSecondaryCamo = tableLookup( "mp/camoTable.csv", 0, randomInt( 8 ), 1 );
-		
-		if ( level.gametype == "sd" )
-			loadoutEquipment = "throwingknife_mp";
-		else
-			loadoutEquipment = "specialty_tacticalinsertion";
-
-		loadoutPerk1 = "specialty_fastreload";
-		loadoutPerk2 = "specialty_bulletdamage";
-		if ( level.gametype == "sd" )
-			loadoutPerk3 = "specialty_extendedmelee";
-		else
-			loadoutPerk3 = "specialty_bulletaccuracy";
-
-		loadoutOffhand = table_getOffhand( level.classTableName, class_num );
-		loadoutDeathstreak = table_getDeathstreak( level.classTableName, class_num );
-	}
-
-	if ( !(isDefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat) )
-	{
-		isCustomClass = isSubstr( class, "custom" );
-		
-		if ( !isValidPrimary( loadoutPrimary ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary )) )
-			loadoutPrimary = table_getWeapon( level.classTableName, 10, 0 );
-		
-		if ( !isValidAttachment( loadoutPrimaryAttachment ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryAttachment )) )
-			loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 0 , 0);
-		
-		if ( !isValidAttachment( loadoutPrimaryAttachment2 ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryAttachment2 )) )
-			loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
-		
-		if ( !isValidCamo( loadoutPrimaryCamo ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryCamo )) )
-			loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, 10, 0 );
-		
-		if ( !isValidSecondary( loadoutSecondary ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary )) )
-			loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
-		
-		if ( !isValidAttachment( loadoutSecondaryAttachment ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryAttachment )) )
-			loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 1 , 0);
-		
-		if ( !isValidAttachment( loadoutSecondaryAttachment2 ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryAttachment2 )) )
-			loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 1, 1 );;
-		
-		if ( !isValidCamo( loadoutSecondaryCamo ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryCamo )) )
-			loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, 10, 1 );
-		
-		if ( !isValidEquipment( loadoutEquipment ) || (isCustomClass && !self isItemUnlocked( loadoutEquipment )) )
-			loadoutEquipment = table_getEquipment( level.classTableName, 10, 0 );
-		
-		if ( !isValidPerk1( loadoutPerk1 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk1 )) )
-			loadoutPerk1 = table_getPerk( level.classTableName, 10, 1 );
-		
-		if ( !isValidPerk2( loadoutPerk2 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk2 )) )
-			loadoutPerk2 = table_getPerk( level.classTableName, 10, 2 );
-		
-		if ( !isValidPerk3( loadoutPerk3 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk3 )) )
-			loadoutPerk3 = table_getPerk( level.classTableName, 10, 3 );
-		
-		if ( !isValidOffhand( loadoutOffhand ) )
-			loadoutOffhand = table_getOffhand( level.classTableName, 10 );
-		
-		if ( !isValidDeathstreak( loadoutDeathstreak ) || (isCustomClass && !self isItemUnlocked( loadoutDeathstreak )) )
-			loadoutDeathstreak = table_getDeathstreak( level.classTableName, 10 );
-	}
-
-	if ( class == "class0" )
-	{
 		class_num 						= getClassIndex( class );
 		self.class_num 					= class_num;
 
@@ -335,6 +222,56 @@ give_loadout_hook( team, class, allowCopycat )
 		loadoutPerk3 					= redux\ui_callbacks::get_loadout_stat( "perk3" );
 		loadoutOffhand 					= redux\ui_callbacks::get_loadout_stat( "tactical" );
 		loadoutDeathStreak 				= "specialty_null"; // we disable these
+	}
+
+	if ( !(isDefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat) )
+	{
+		isCustomClass = isSubstr( class, "custom" );
+
+		if ( isCustomClass )
+		{
+			if ( !isValidPrimary( loadoutPrimary ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary )) )
+				loadoutPrimary = table_getWeapon( level.classTableName, 10, 0 );
+
+			if ( !isValidAttachment( loadoutPrimaryAttachment ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryAttachment )) )
+				loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 0 , 0);
+
+			if ( !isValidAttachment( loadoutPrimaryAttachment2 ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryAttachment2 )) )
+				loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
+
+			if ( !isValidCamo( loadoutPrimaryCamo ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryCamo )) )
+				loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, 10, 0 );
+
+			if ( !isValidSecondary( loadoutSecondary ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary )) )
+				loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
+
+			if ( !isValidAttachment( loadoutSecondaryAttachment ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryAttachment )) )
+				loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 1 , 0);
+
+			if ( !isValidAttachment( loadoutSecondaryAttachment2 ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryAttachment2 )) )
+				loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 1, 1 );;
+
+			if ( !isValidCamo( loadoutSecondaryCamo ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryCamo )) )
+				loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, 10, 1 );
+
+			if ( !isValidEquipment( loadoutEquipment ) || (isCustomClass && !self isItemUnlocked( loadoutEquipment )) )
+				loadoutEquipment = table_getEquipment( level.classTableName, 10, 0 );
+
+			if ( !isValidPerk1( loadoutPerk1 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk1 )) )
+				loadoutPerk1 = table_getPerk( level.classTableName, 10, 1 );
+
+			if ( !isValidPerk2( loadoutPerk2 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk2 )) )
+				loadoutPerk2 = table_getPerk( level.classTableName, 10, 2 );
+
+			if ( !isValidPerk3( loadoutPerk3 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk3 )) )
+				loadoutPerk3 = table_getPerk( level.classTableName, 10, 3 );
+
+			if ( !isValidOffhand( loadoutOffhand ) )
+				loadoutOffhand = table_getOffhand( level.classTableName, 10 );
+
+			if ( !isValidDeathstreak( loadoutDeathstreak ) || (isCustomClass && !self isItemUnlocked( loadoutDeathstreak )) )
+				loadoutDeathstreak = table_getDeathstreak( level.classTableName, 10 );
+		}
 	}
 
 	if ( loadoutPerk1 != "specialty_bling" )

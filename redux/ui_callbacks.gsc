@@ -27,6 +27,7 @@ init_loadout_stat( stat, value )
 on_script_menu_response()
 {
     self endon( "disconnect" );
+    
     for(;;)
     {
         self waittill( "menuresponse", menu, response );
@@ -34,7 +35,7 @@ on_script_menu_response()
 
         if ( isSubStr( response, "cast_vote" ) )
             self redux\voting::cast_map_vote( int( strTok( response, ":" )[1] ) );
-        
+
         if ( response == "class0" )
         {
             self closepopupMenu();
