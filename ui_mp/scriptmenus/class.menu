@@ -28,8 +28,8 @@ menudef
 	REDUX_BUTTON( 0, "CHANGE CLASS", CHANGE_CLASS_ACTION; )
 	REDUX_BUTTON( 1, "CHANGE TEAM", scriptmenuresponse "changeteam"; )
 	REDUX_SEPARATOR( 2 )
-	REDUX_BUTTON( 2.25, "GAME OPTIONS", ; )
-	REDUX_BUTTON( 3.25, "MOD OPTIONS", ; )
+	REDUX_BUTTON( 2.25, "GAME OPTIONS", close "self"; open "pc_options_video"; )
+	REDUX_BUTTON( 3.25, "MOD OPTIONS", close "self"; open "mod_options"; )
 	REDUX_SEPARATOR( 4.25 )
 	REDUX_BUTTON_VIS( 4.5, "END GAME", open "popup_endgame";, dvarBool( "sv_running" ) )
 	REDUX_BUTTON_VIS( 4.5, "LEAVE GAME", open "popup_leavegame";, !dvarBool( "sv_running" ) )
@@ -68,7 +68,7 @@ menudef
 		forecolor 1 1 1 1
 		bordercolor 1 1 1 0.35
 		textscale 0.55
-		visible when ( ( !isempjammed( ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -79,7 +79,7 @@ menudef
 		forecolor 0.89 0.98 0.95 0.05
 		background "minimap_scanlines"
 		textscale 0.55
-		visible when ( ( !isempjammed( ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -92,7 +92,7 @@ menudef
 		background "compass_map_default"
 		type 8
 		textscale 0.55
-		visible when ( ( !isempjammed( ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -104,8 +104,8 @@ menudef
 		forecolor 1 1 1 1
 		type 8
 		textscale 0.55
-		exp forecolor a ( 1 - radarjamintensity( ) )
-		visible when ( ( !isempjammed( ) ) )
+		exp forecolor a ( 1 - radarJamIntensity() )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -117,8 +117,8 @@ menudef
 		forecolor 1 1 1 1
 		type 8
 		textscale 0.55
-		exp forecolor a ( 1 - radarjamintensity( ) )
-		visible when ( ( !isempjammed( ) ) )
+		exp forecolor a ( 1 - radarJamIntensity() )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -131,7 +131,7 @@ menudef
 		background "objective_line"
 		type 8
 		textscale 0.55
-		visible when ( ( !isempjammed( ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -143,8 +143,8 @@ menudef
 		forecolor 1 1 1 1
 		type 8
 		textscale 0.55
-		exp forecolor a ( 1 - radarjamintensity( ) )
-		visible when ( ( !isempjammed( ) ) )
+		exp forecolor a ( 1 - radarJamIntensity() )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -157,8 +157,8 @@ menudef
 		background "compassping_player"
 		type 8
 		textscale 0.55
-		exp forecolor a ( 1 - radarjamintensity( ) )
-		visible when ( ( !isempjammed( ) ) )
+		exp forecolor a ( 1 - radarJamIntensity() )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -169,8 +169,8 @@ menudef
 		forecolor 0.64 0.74 0.71 1
 		background "white"
 		textscale 0.55
-		exp forecolor a ( radarjamintensity( ) )
-		visible when ( radarisjammed( ) && ( !isempjammed( ) ) )
+		exp forecolor a ( radarJamIntensity() )
+		visible when ( radarIsJammed() && !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -181,8 +181,8 @@ menudef
 		forecolor 0.89 0.98 0.95 1
 		background "ac130_overlay_grain"
 		textscale 0.55
-		exp forecolor a ( radarjamintensity( ) )
-		visible when ( radarisjammed( ) && ( !isempjammed( ) ) )
+		exp forecolor a ( radarJamIntensity() )
+		visible when ( radarIsJammed() && !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -193,7 +193,7 @@ menudef
 		forecolor 1 1 1 1
 		background "stencil_base"
 		textscale 0.55
-		visible when ( ( !isempjammed( ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -204,8 +204,8 @@ menudef
 		forecolor 1 1 1 1
 		background "scanlines_stencil"
 		textscale 0.55
-		exp rect y ( ( 135 - 240 ) + ( ( 240 * 2 ) * ( 1 - ( ( milliseconds( ) % 4000 ) / 4000 ) ) ) )
-		visible when ( ( !isempjammed( ) ) )
+		exp rect y ( ( 135 - 240 ) + ( ( 240 * 2 ) * ( 1 - ( ( milliseconds() ) % 4000 ) / 4000 ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	itemDef
 	{
@@ -216,7 +216,7 @@ menudef
 		forecolor 0.89 0.98 0.95 1
 		background "stencil_fill"
 		textscale 0.55
-		visible when ( ( !isempjammed( ) ) )
+		visible when ( !isEMPJammed() )
 	}
 	
 	CREATE_TEXT( 0 -2 640 480 2 0, getmapname(), 1 1 1 1, 1, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )

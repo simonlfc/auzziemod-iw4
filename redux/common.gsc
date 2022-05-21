@@ -8,13 +8,13 @@ init()
     level.rankedMatch           = true;
     level.modifyPlayerDamage    = ::modify_player_damage;
 
-    level._effect["flesh_body"] = loadfx("impacts/flesh_hit_body_fatal_exit");
-    level._effect["flesh_head"] = loadfx("impacts/flesh_hit_head_fatal_exit");
+    level._effect["flesh_body"] = loadFX( "impacts/flesh_hit_body_fatal_exit" );
+    level._effect["flesh_head"] = loadFX( "impacts/flesh_hit_head_fatal_exit" );
 
     precacheMenu( "map_voting" );
     precacheMenu( "loadout" );
     precacheMenu( "loadout_select" );
-    precacheMenu( "pc_options_redux" );
+    precacheMenu( "mod_options" );
 
     precacheItem( "cheytac_irons_mp" );
     precacheItem( "codol-cheytac_mp" );

@@ -1,5 +1,6 @@
 *.stat
 *.log
+*.bat
 demos/
 logs/
 missingasset.csv
