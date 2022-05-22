@@ -7,10 +7,10 @@
 #define MENU_TITLE					"@MPUI_CHOOSE_CLASS_CAP"
 
 #define REDUX_DEFAULT_CLASS( idx, string, class ) \
-		REDUX_BUTTON_ALL( idx, string, scriptmenuresponse class, 1, UPDATE_DEFAULT_CLASS_FOCUS( idx, string ), ;, ; )
+		REDUX_BUTTON_ALL( idx, string, scriptmenuresponse class, 1, UPDATE_DEFAULT_CLASS_FOCUS( idx, string ), ;, 0 )
 		
 #define REDUX_CUSTOM_CLASS( idx, class ) \
-		REDUX_BUTTON_ALL( idx, getplayerdata( "customClasses", ( idx - 1.25 ), "name" ), scriptmenuresponse class, 1, UPDATE_CLASS_FOCUS( idx - 1.25 ), ;, ; )
+		REDUX_BUTTON_ALL( idx, getplayerdata( "customClasses", ( idx - 1.25 ), "name" ), scriptmenuresponse class, 1, UPDATE_CLASS_FOCUS( idx - 1.25 ), ;, 0 )
 
 menudef
 {
@@ -32,10 +32,10 @@ menudef
 	}
 
 	#undef _CHOICE_GAMEPAD_Y	#define _CHOICE_GAMEPAD_Y			3.5
-	#undef _CHOICE_Y_SIZE		#define _CHOICE_Y_SIZE				23
+	#undef _CHOICE_Y_SIZE		#define _CHOICE_Y_SIZE				22
 	#undef _CHOICE_Y_SPACING	#define _CHOICE_Y_SPACING			( _CHOICE_Y_SIZE + 2 )
 
-	REDUX_BUTTON_ALL( 0, "Create New Loadout", open "loadout";, 1, UPDATE_CAC_FOCUS;, ;, ; )
+	REDUX_BUTTON_ALL( 0, "Create New Loadout", open "loadout";, 1, UPDATE_CAC_FOCUS;, ;, 0 )
 	REDUX_SEPARATOR( 1 )
 	REDUX_CUSTOM_CLASS( 1.25, "custom1" )
 	REDUX_CUSTOM_CLASS( 2.25, "custom2" )

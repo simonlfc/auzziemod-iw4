@@ -79,7 +79,7 @@
 
 // add disable param when it = an existing weapon in your loadout
 #define CAC_WEAPON( idx, weapon ) \
-		REDUX_BUTTON_ALL( idx, "@" + tablelookup( "redux/statsTable.csv", 4, weapon, 3 ), CAC_SELECT_WEAPON( weapon );, tablelookup( "redux/statsTable.csv", 4, weapon, 2 ) == localVarString( "cac_type" ), setLocalVarString "cac_current_focus" ( weapon );, ;, ; )
+		REDUX_BUTTON_ALL( idx, "@" + tablelookup( "redux/statsTable.csv", 4, weapon, 3 ), CAC_SELECT_WEAPON( weapon );, tablelookup( "redux/statsTable.csv", 4, weapon, 2 ) == localVarString( "cac_type" ), setLocalVarString "cac_current_focus" ( weapon );, ;, 0 )
 		
 #define CAC_ATTACHMENT( idx, fixed_idx ) \
 		REDUX_BUTTON_VIS( idx, "@" + tablelookup( "redux/attachmentTable.csv", 4, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ), 3 ), CAC_SELECT_ATTACHMENT( fixed_idx );, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_weapon" ), 10 + idx ) != "" && localVarString( "cac_type" ) == "attachments" )

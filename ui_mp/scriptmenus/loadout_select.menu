@@ -154,5 +154,5 @@ menudef
 
 	CAC_TACTICAL( 0, "flash_grenade" )
 	CAC_TACTICAL( 1, "concussion_grenade" )
-	CAC_TACTICAL( 2, "smoke_grenade" )
+	CAC_TACTICAL( 2, "smoke_grenade" )	
 }
