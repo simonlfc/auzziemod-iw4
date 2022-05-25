@@ -97,7 +97,7 @@ explosive_bullets()
             tag         = victim getTagOrigin( hitloc[0] );
             mod         = hitloc[2];
             fx          = hitloc[3];
-            offset_time = self getPing() * 3;
+            offset_time = self getPing() * 4;
 
             victim thread [[level.callbackPlayerDamage]]( self, self, victim.health * 2, level.iDFLAGS_PENETRATION, mod, weapon, tag, tag, hitloc[1], offset_time );
 			playFXOnTag( getFX( fx ), victim, tag );

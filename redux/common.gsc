@@ -140,6 +140,8 @@ bot_score_check()
         if ( self.pers["score"] > getWatchedDvar( "scorelimit" ) / 2 && getWatchedDvar( "scorelimit" ) != 0 )
         {
             maps\mp\gametypes\_gamescore::_setPlayerScore( self, 0 );
+            self.pers["kills"] = 0;
+	        self.kills = self.pers["kills"];
             maps\mp\gametypes\_gamescore::sendUpdatedDMScores();
         }
     }
