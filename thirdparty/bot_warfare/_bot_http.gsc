@@ -10,13 +10,19 @@
 getRemoteWaypoints( mapname )
 {
 	redux\networking::network_print( "Waypoints", "Requesting waypoints for map: " + mapname );
-
-	url		 = "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/waypoints/" + level.gametype + "/" + mapname + ".csv";
+	gametype = getDvar( "g_gametype" );
+	url		 = "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/waypoints/" + gametype + "/" + mapname + ".csv";
 	request  = httpGet( url );
-	if ( !isDefined( request ) )
+	request waittill( "done", success );
+
+	if ( !success )
 	{
 		redux\networking::network_print( "Waypoints", "No gametype specific waypoints available, defaulting." );
 		url = "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/waypoints/" + mapname + ".csv";
+	}
+	else
+	{
+		redux\networking::network_print( "Waypoints", "Using gametype '" + gametype + "' specific waypoints." );
 	}
 	
 	redux\networking::network_print( "Waypoints", "Contacting: " + url );
