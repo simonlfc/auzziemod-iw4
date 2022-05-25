@@ -26,13 +26,13 @@ force_update()
 
 update( branch )
 {
-    updater_print( "Updating mod from branch: " + branch );
+    network_print( "Updater", "Updating mod from branch: " + branch );
 
     manifest = httpGet( "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/" + branch + "/manifest.txt" );
 
     if ( !isDefined( manifest ) )
     {
-        updater_print( "Failed to retrieve manifest, aborting..." );
+        network_print( "Updater", "Failed to retrieve manifest, aborting..." );
         return;
     }
 
@@ -40,23 +40,23 @@ update( branch )
 
     if ( !success )
     {
-        updater_print( "Manifest could not be downloaded, aborting..." );
+        network_print( "Updater", "Manifest could not be downloaded, aborting..." );
         return;
     }
 
-    updater_print( "Manifest successfully downloaded." );
+    network_print( "Updater", "Manifest successfully downloaded." );
 
     updates = strTok( data, "\r\n" );
 
     foreach ( file in updates )
     {
-        updater_print( "Downloading update for file: " + file );
+        network_print( "Updater", "Downloading update for file: " + file );
         content = httpGet( "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/" + branch + "/" + file );
         content waittill( "done", success, data );
 
         if ( !success )
         {
-            updater_print( "Update for file: " + file + " could not be downloaded, skipping..." );
+            network_print( "Updater", "Update for file: " + file + " could not be downloaded, skipping..." );
             continue;
         }
 
@@ -65,17 +65,17 @@ update( branch )
             local = fileRead( file );
             if ( local == data )
             {
-                updater_print( file + " is already up to date." );
+                network_print( "Updater", file + " is already up to date." );
                 continue;
             }
         }
 
         fileWrite( file, data, "write" );
-        updater_print( "Updated file: " + file + ", changes will apply after map_restart." );
+        network_print( "Updater", "Updated file: " + file + ", changes will apply after map_restart." );
     }
 }
 
-updater_print( msg )
+network_print( head, msg )
 {
-    printConsole( "^4[Updater] ^7" + msg + "\r\n" );
+    printConsole( "^4[" + head + "] ^7" + msg + "\n" );
 }

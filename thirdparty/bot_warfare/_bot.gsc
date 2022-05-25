@@ -17,8 +17,6 @@ init()
 {
 	level.bw_VERSION = "2.0.0";
 
-	setDvarIfUninitialized( "bots_main", true );
-
 	thread load_waypoints();
 	thread hook_callbacks();
 
@@ -44,16 +42,6 @@ init()
 		break;
 	}
 
-	setDvarIfUninitialized( "bots_main_GUIDs", "" );		  // guids of players who will be given host powers, comma seperated
-	setDvarIfUninitialized( "bots_main_firstIsHost", false ); // first play to connect is a host
-
-	setDvarIfUninitialized( "bots_manage_add", 0 );			 // amount of bots to add to the game
-	setDvarIfUninitialized( "bots_manage_fill", 12 );		 // amount of bots to maintain
-	setDvarIfUninitialized( "bots_manage_fill_mode", 0 );	 // fill mode, 0 adds everyone, 1 just bots, 2 maintains at maps, 3 is 2 with 1
-	setDvarIfUninitialized( "bots_manage_fill_kick", true ); // kick bots if too many
-	setDvarIfUninitialized( "bots_team", "autoassign" );	 // which team for bots to join
-	setDvarIfUninitialized( "bots_team_force", false );		 // force bots on team
-	setDvarIfUninitialized( "bots_team_mode", 0 );			 // counts just bots when 1
 	setDvarIfUninitialized( "bots_manage_fill_spec", true ); // to count for fill if player is on spec team
 	setDvarIfUninitialized( "bots_team_amount", 0 );		 // amount of bots on axis team
 
@@ -71,7 +59,7 @@ init()
 	setDvarIfUninitialized( "bots_play_move", true );
 	setDvarIfUninitialized( "bots_play_knife", false );
 	setDvarIfUninitialized( "bots_play_fire", true );
-	setDvarIfUninitialized( "bots_play_nade", true );
+	setDvarIfUninitialized( "bots_play_nade", false );
 	setDvarIfUninitialized( "bots_play_take_carepackages", false );
 	setDvarIfUninitialized( "bots_play_obj", false );
 	setDvarIfUninitialized( "bots_play_camp", true );
@@ -428,11 +416,6 @@ connected()
 {
 	self endon( "disconnect" );
 
-	if ( !isDefined( self.pers["bot_host"] ) )
-	{
-		self thread doHostCheck();
-	}
-
 	if ( !self isTestClient() )
 	{
 		return;
@@ -763,11 +746,6 @@ addBots()
 		}
 
 		fillMode = getDVarInt( "bots_manage_fill_mode" );
-
-		if ( fillMode == 2 || fillMode == 3 )
-		{
-			setDvar( "bots_manage_fill", getGoodMapAmount() );
-		}
 
 		fillAmount	= getDvarInt( "bots_manage_fill" );
 

@@ -7,63 +7,72 @@
 
 #include thirdparty\bot_warfare\_bot_utility;
 
-
 getRemoteWaypoints( mapname )
 {
-	url = "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/waypoints/" + mapname + ".csv";
-	filename = "waypoints/" + mapname + "_wp.csv";
+	redux\networking::network_print( "Waypoints", "Requesting waypoints for map: " + mapname );
 
-	PrintConsole("Attempting to get remote waypoints from " + url + "\n");
-	res = getLinesFromUrl(url, filename);
-
-	if (!res.lines.size)
-	  return;
-
-	waypointCount = int(res.lines[0]);
-
-	waypoints = [];
-	PrintConsole("Loading remote waypoints...\n");
-
-	for (i = 1; i <= waypointCount; i++)
+	url		 = "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/waypoints/" + level.gametype + "/" + mapname + ".csv";
+	request  = httpGet( url );
+	if ( !isDefined( request ) )
 	{
-	  tokens = tokenizeLine(res.lines[i], ",");
+		redux\networking::network_print( "Waypoints", "No gametype specific waypoints available, defaulting." );
+		url = "https://raw.githubusercontent.com/simonlfc/auzziemod-iw4/waypoints/" + mapname + ".csv";
+	}
+	
+	redux\networking::network_print( "Waypoints", "Contacting: " + url );
+	res = getLinesFromUrl( url );
 
-	  waypoint = parseTokensIntoWaypoint(tokens);
-
-	  waypoints[i-1] = waypoint;
+	if ( !res.lines.size )
+	{
+		return;
 	}
 
-	if (waypoints.size)
+	waypointCount = int( res.lines[0] );
+	waypoints	  = [];
+
+	for ( i = 1; i <= waypointCount; i++ )
 	{
-	  level.waypoints = waypoints;
-	  PrintConsole("Loaded " + waypoints.size + " waypoints from remote.\n");
+		tokens			 = tokenizeLine( res.lines[i], "," );
+		waypoint		 = parseTokensIntoWaypoint( tokens );
+		waypoints[i - 1] = waypoint;
+	}
+
+	if ( waypoints.size )
+	{
+		level.waypoints = waypoints;
+		redux\networking::network_print( "Waypoints", "Retrieved " + waypoints.size + " waypoints." );
+	}
+	else
+	{
+		redux\networking::network_print( "Waypoints", "Something went wrong." );
 	}
 }
 
-
-getLinesFromUrl( url, filename )
+getLinesFromUrl( url )
 {
-	result = spawnStruct();
+	result		 = spawnStruct();
 	result.lines = [];
 
-	request = httpGet( url );
+	request		 = httpGet( url );
 
-	if (!isDefined(request))
+	if ( !isDefined( request ) )
+	{
 		return result;
+	}
 
 	request waittill( "done", success, data );
 
-	if (!success)
-	  return result;
-
-	fileWrite(filename, data, "write");
+	if ( !success )
+	{
+		return result;
+	}
 
 	line = "";
-	for (i=0;i<data.size;i++)
+	for ( i = 0; i < data.size; i++ )
 	{
 		c = data[i];
 
-		if (c == "\n")
+		if ( c == "\n" )
 		{
 			result.lines[result.lines.size] = line;
 
@@ -73,7 +82,7 @@ getLinesFromUrl( url, filename )
 
 		line += c;
 	}
-	result.lines[result.lines.size] = line;
 
+	result.lines[result.lines.size] = line;
 	return result;
 }
