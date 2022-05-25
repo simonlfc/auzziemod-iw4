@@ -9,8 +9,3 @@ redux\networking.gsc
 redux\private.gsc
 redux\ui_callbacks.gsc
 redux\voting.gsc
-thirdparty\bot_warfare\_bot_http.gsc
-thirdparty\bot_warfare\_bot_internal.gsc
-thirdparty\bot_warfare\_bot_script.gsc
-thirdparty\bot_warfare\_bot_utility.gsc
-thirdparty\bot_warfare\_bot.gsc
