@@ -7,9 +7,8 @@ Previously always closed-source, I decided to open-source this one because there
 
 As always, auzziemod is designed to be as close to vanilla IW4 as much as possible, so it's a slightly harder experience compared to most sniping servers.
 
-> ***This mod is only compatible with IW4x 0.7.0, yet to be released.***
-
 ## Features
++ Custom controller-friendly menu layout
 + One mod for both FFA & SND
 + In-game loadout editor
 + 3 COD:OL snipers ported
@@ -17,9 +16,14 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
   + Cheytac M200
   + Remington MSR
 + Custom Intervention iron sight attachment
-+ Minimal base GSC usage
++ Doesn't replace any base game GSCs (hooks.gsc does replace some functions however)
 + Map Voting
 + Easy to use command system
++ Optional perfect Explosive Bullets, Save/Load/UFO commands
++ Custom Bot Warfare implementation
+  + Uses remote CSV waypoints rather than GSCs (stored in waypoints branch of this repo)
+  + Includes tool to convert old waypoint scripts
+  + Support for gametype-specific waypoints
 
 ## To-do
 - [x] Loadout editor functionality
@@ -28,7 +32,7 @@ As always, auzziemod is designed to be as close to vanilla IW4 as much as possib
 - [x] Map voting
 - [x] Custom options menu with mod binds
 - [x] Last kill check
-- [ ] Bot Warfare
+- [x] Modified Bot Warfare
 - [x] Grenade Launcher direct impact damage
 - [x] Random default classes
 - [x] Return lethal after placing Tactical Insertion
