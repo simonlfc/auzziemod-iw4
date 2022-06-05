@@ -34,7 +34,39 @@ hooks()
 	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hook_return_false );							// Disable tac insert damage
 	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitor_ti_use_hook );									// Give player Throwing Knife after placing TI
 	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
+
+	replaceFunc( maps\mp\_utility::getWeaponClass, ::get_weapon_class_hook );											// Use our custom statsTable instead
 }
+
+get_weapon_class_hook( weapon )
+{
+	tokens = strTok( weapon, "_" );
+
+	weaponClass = tablelookup( "redux/statstable.csv", 4, tokens[0], 2 );
+	
+	// handle special case weapons like grenades, airdrop markers, etc...
+	if ( weaponClass == "" )
+	{
+		weaponName = strip_suffix( weapon, "_mp" );
+		weaponClass = tablelookup( "redux/statstable.csv", 4, weaponName, 2 );
+	}
+	
+	if ( isMG( weapon ) )
+		weaponClass = "weapon_mg";
+	else if ( isKillstreakWeapon( weapon ) )
+		weaponClass = "killstreak"; 
+	else if ( isDeathStreakWeapon( weapon ) )
+		weaponClass = "deathstreak";
+	else if ( weapon == "none" ) //airdrop crates
+		weaponClass = "other";
+	else if ( weaponClass == "" )
+		weaponClass = "other";
+	
+	assertEx( weaponClass != "", "ERROR: invalid weapon class for weapon " + weapon );
+	
+	return weaponClass;
+}
+
 
 set_ti_hook()
 {

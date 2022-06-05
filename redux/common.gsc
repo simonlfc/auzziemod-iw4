@@ -17,9 +17,11 @@ init()
     precacheMenu( "mod_options" );
 
     precacheItem( "cheytac_irons_mp" );
-    precacheItem( "codol-cheytac_mp" );
-    precacheItem( "codol-l115a3_mp" );
-    precacheItem( "codol-msr_mp" );
+    precacheItem( "ax50_mp" );
+    precacheItem( "hdr_mp" );
+    precacheItem( "m200_mp" );
+    precacheItem( "l115a3_mp" );
+    precacheItem( "msr_mp" );
 
     level thread redux\voting::init();
     level thread on_player_connect();
