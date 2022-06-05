@@ -240,19 +240,19 @@ give_loadout_hook( team, class, allowCopycat )
 		class_num 						= getClassIndex( class );
 		self.class_num 					= class_num;
 
-		loadoutPrimary 					= redux\ui_callbacks::get_loadout_stat( "primary_weapon" );
-		loadoutPrimaryAttachment 		= redux\ui_callbacks::get_loadout_stat( "primary_attachment" );
+		loadoutPrimary 					= redux\loadout::get_loadout_stat( "primary_weapon" );
+		loadoutPrimaryAttachment 		= redux\loadout::get_loadout_stat( "primary_attachment" );
 		loadoutPrimaryAttachment2 		= "none"; // i am not implementing bling in menus bro get fookt make a pr
-		loadoutPrimaryCamo 				= redux\ui_callbacks::get_loadout_stat( "primary_camo" );
-		loadoutSecondary 				= redux\ui_callbacks::get_loadout_stat( "secondary_weapon" );
-		loadoutSecondaryAttachment 		= redux\ui_callbacks::get_loadout_stat( "secondary_attachment" );
+		loadoutPrimaryCamo 				= redux\loadout::get_loadout_stat( "primary_camo" );
+		loadoutSecondary 				= redux\loadout::get_loadout_stat( "secondary_weapon" );
+		loadoutSecondaryAttachment 		= redux\loadout::get_loadout_stat( "secondary_attachment" );
 		loadoutSecondaryAttachment2 	= "none"; // i am not implementing bling in menus bro get fookt make a pr
-		loadoutSecondaryCamo 			= redux\ui_callbacks::get_loadout_stat( "secondary_camo" );
-		loadoutEquipment 				= redux\ui_callbacks::get_loadout_stat( "lethal" );
-		loadoutPerk1 					= redux\ui_callbacks::get_loadout_stat( "perk1" );
-		loadoutPerk2 					= redux\ui_callbacks::get_loadout_stat( "perk2" );
-		loadoutPerk3 					= redux\ui_callbacks::get_loadout_stat( "perk3" );
-		loadoutOffhand 					= redux\ui_callbacks::get_loadout_stat( "tactical" );
+		loadoutSecondaryCamo 			= redux\loadout::get_loadout_stat( "secondary_camo" );
+		loadoutEquipment 				= redux\loadout::get_loadout_stat( "lethal" );
+		loadoutPerk1 					= redux\loadout::get_loadout_stat( "perk1" );
+		loadoutPerk2 					= redux\loadout::get_loadout_stat( "perk2" );
+		loadoutPerk3 					= redux\loadout::get_loadout_stat( "perk3" );
+		loadoutOffhand 					= redux\loadout::get_loadout_stat( "tactical" );
 		loadoutDeathStreak 				= "specialty_null"; // we disable these
 	}
 

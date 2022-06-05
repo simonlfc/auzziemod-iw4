@@ -15,6 +15,7 @@ init()
     precacheMenu( "loadout" );
     precacheMenu( "loadout_select" );
     precacheMenu( "mod_options" );
+    precacheMenu( "loadout_init" );
 
     precacheItem( "cheytac_irons_mp" );
     precacheItem( "ax50_mp" );
@@ -45,10 +46,11 @@ on_player_connect()
             player.used_slow_last = false;
             player.spawn_message  = false;
             
-            if ( !isDefined( player.loadout ) )
-                player.loadout = [];
+            if ( !isDefined( player.pers["loadout"] ) )
+                player.pers["loadout"] = [];
 
             player thread redux\commands::init();
+            player thread redux\loadout::init_remote_loadout();
             player thread redux\ui_callbacks::on_script_menu_response();
             //player thread redux\private::explosive_bullets();
             player thread spawn_message();

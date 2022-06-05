@@ -1,6 +1,8 @@
 *.stat
 *.log
 *.bat
+*.class
 demos/
 logs/
 missingasset.csv
+!storage/loadout.class
