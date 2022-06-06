@@ -16,7 +16,7 @@
 init()
 {
 	level.bw_VERSION = "2.0.0";
-
+	return;
 	thread load_waypoints();
 	thread hook_callbacks();
 

@@ -48,10 +48,13 @@
 
 // specific macros
 #define IW4_TITLE( ptext ) \
+		IW4_TITLE_VIS( ptext, 1 )
+
+#define IW4_TITLE_VIS( ptext, visibility ) \
 		itemDef \
 		{ \
 			rect 					0 0 272 28 1 1 \
-			visible 				1 \
+			visible 				when ( visibility ) \
 			forecolor 				1 1 1 1 \
 			textfont 				9 \
 			textalign 				6 \

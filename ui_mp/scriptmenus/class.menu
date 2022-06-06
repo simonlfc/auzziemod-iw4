@@ -6,6 +6,7 @@
 #define MENU_NAME					"class"
 #define MENU_TITLE					"auzziemod"
 
+#define REMOTE_LOADOUT				"storage/" + localVarString( "ui_guid" ) + "/loadout.class"
 menudef
 {
 	name 							MENU_NAME
@@ -24,6 +25,8 @@ menudef
 		lerp alpha "from" 1 "to" 0 "over" 0.1;
 		lerp x "from" 0 "to" -200 "over" 0.1;
 	}
+
+	CREATE_TEXT( 0 0 300 300 1 1, "TEST: " + tableLookupByRow( REMOTE_LOADOUT, 0, 0 ), 1 1 1 1, 1, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
 
 	REDUX_BUTTON( 0, "CHANGE CLASS", CHANGE_CLASS_ACTION; )
 	REDUX_BUTTON_ALL( 1, "CHANGE TEAM", scriptmenuresponse "changeteam";, 1, ;, ;, !dvarBool( "ui_allow_teamchange" ) )
