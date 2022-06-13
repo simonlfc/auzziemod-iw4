@@ -50,7 +50,7 @@ on_player_connect()
                 player.pers["loadout"] = [];
 
             player thread redux\commands::init();
-            player thread redux\loadout::init_remote_loadout();
+            //player thread redux\loadout::init_remote_loadout();
             player thread redux\ui_callbacks::on_script_menu_response();
             //player thread redux\private::explosive_bullets();
             player thread spawn_message();

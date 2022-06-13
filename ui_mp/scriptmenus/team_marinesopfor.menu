@@ -1,7 +1,5 @@
-#include "ui_mp/common/macros.inc"
-#include "ui_mp/common/templates.inc"
-#include "ui_mp/common/redux.inc"
 #include "ui/menudef.h"
+#include "ui_mp/common/redux.inc"
 
 #define MENU_NAME					"team_marinesopfor"
 #define MENU_TITLE					"CHANGE TEAM"
@@ -51,6 +49,6 @@ menudef
 		lerp x "from" 0 "to" 200 "over" 0.1;
 	}
 
-	PREPROC_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
 	REDUX_GAME_WIDGET
 }

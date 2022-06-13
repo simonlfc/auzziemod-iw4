@@ -97,3 +97,80 @@
 
 #define CAC_TACTICAL( idx, name ) \
 		REDUX_BUTTON_VIS( idx, GET_TACTICAL_LOCNAME( name ), setLocalVarString "loadout_tactical" ( name ); scriptmenuresponse "loadout_tactical:"name; close "loadout_select";, localVarString( "cac_type" ) == "tactical_select" )
+
+#define UPDATE_CAC_FOCUS \
+		setLocalVarString "loadoutPrimaryAttachment2" ( "none" ); \
+		setLocalVarString "loadoutSecondaryAttachment2" ( "none" ); \
+		setLocalVarString "loadoutSecondaryCamo" ( "none" ); \
+		setLocalVarString "loadoutStreak1" ( "none" ); \
+		setLocalVarString "loadoutStreak2" ( "none" ); \
+		setLocalVarString "loadoutStreak3" ( "none" ); \
+		setLocalVarString "loadoutDeathStreak" ( "none" ); \
+		setLocalVarString "loadoutPrimary" ( localVarString( "cacPrimary" ) ); \
+		setLocalVarString "loadoutPrimaryAttachment" ( localVarString( "cacPrimaryAttachment" ) ); \
+		setLocalVarString "loadoutPrimaryCamo" ( localVarString( "cacPrimaryCamo" ) ); \
+		setLocalVarString "loadoutSecondary" ( localVarString( "cacSecondary" ) ); \
+		setLocalVarString "loadoutSecondaryAttachment" ( localVarString( "cacSecondaryAttachment" ) ); \
+		setLocalVarString "loadoutEquipment" ( localVarString( "cacEquipment" ) ); \
+		setLocalVarString "loadoutPerk1" ( localVarString( "cacPerk1" ) ); \
+		setLocalVarString "loadoutPerk2" ( localVarString( "cacPerk2" ) ); \
+		setLocalVarString "loadoutPerk3" ( localVarString( "cacPerk3" ) ); \
+		setLocalVarString "loadoutOffhandSecondary" ( localVarString( "cacOffhandSecondary" ) ); \
+		setLocalVarString "loadoutClassName" ( "Created Class" );
+
+#define UPDATE_CLASS_FOCUS( itemIndex ) \
+		setLocalVarInt "classIndex" itemIndex; \
+		setLocalVarString "loadoutPrimary" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 0, "weapon" ) ); \
+		setLocalVarString "loadoutPrimaryAttachment" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 0, "attachment", 0 ) ); \
+		setLocalVarString "loadoutPrimaryAttachment2" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 0, "attachment", 1 ) ); \
+		if ( localVarString( "loadoutPrimaryAttachment2" ) == "" ) \
+		{ \
+			setLocalVarString "loadoutPrimaryAttachment2" ( "none" ); \
+		} \
+		setLocalVarString "loadoutPrimaryCamo" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 0, "camo" ) ); \
+		setLocalVarString "loadoutSecondary" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 1, "weapon" ) ); \
+		setLocalVarString "loadoutSecondaryAttachment" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 1, "attachment", 0 ) ); \
+		setLocalVarString "loadoutSecondaryAttachment2" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 1, "attachment", 1 ) ); \
+		if ( localVarString( "loadoutSecondaryAttachment2" ) == "" ) \
+		{ \
+			setLocalVarString "loadoutSecondaryAttachment2" ( "none" ); \
+		} \
+		setLocalVarString "loadoutSecondaryCamo" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "weaponSetups", 1, "camo" ) ); \
+		setLocalVarString "loadoutEquipment" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "perks", 0 ) ); \
+		setLocalVarString "loadoutPerk1" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "perks", 1 ) ); \
+		setLocalVarString "loadoutPerk2" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "perks", 2 ) ); \
+		setLocalVarString "loadoutPerk3" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "perks", 3 ) ); \
+		setLocalVarString "loadoutStreak1" ( getPlayerData( "killstreaks", 0 ) ); \
+		setLocalVarString "loadoutStreak2" ( getPlayerData( "killstreaks", 1 ) ); \
+		setLocalVarString "loadoutStreak3" ( getPlayerData( "killstreaks", 2 ) ); \
+		setLocalVarString "loadoutDeathStreak" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "perks", 4 ) ); \
+		setLocalVarString "loadoutOffhandSecondary" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "specialGrenade" ) ); \
+		setLocalVarString "loadoutClassName" ( getPlayerData( "customClasses", localVarInt( "classIndex" ), "name" ) );
+
+#define UPDATE_DEFAULT_CLASS_FOCUS( itemIndex, textArg ) \
+		setLocalVarString "loadoutPrimary" ( tablelookup( "mp/classTable.csv", 0, "loadoutPrimary", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutPrimaryAttachment" ( tablelookup( "mp/classTable.csv", 0, "loadoutPrimaryAttachment", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutPrimaryAttachment2" ( tablelookup( "mp/classTable.csv", 0, "loadoutPrimaryAttachment2", itemIndex + 1 ) ); \
+		if ( localVarString( "loadoutPrimaryAttachment2" ) == "" ) \
+		{ \
+			setLocalVarString "loadoutPrimaryAttachment2" ( "none" ); \
+		} \
+		setLocalVarString "loadoutPrimaryCamo" ( tablelookup( "mp/classTable.csv", 0, "loadoutPrimaryCamo", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutSecondary" ( tablelookup( "mp/classTable.csv", 0, "loadoutSecondary", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutSecondaryAttachment" ( tablelookup( "mp/classTable.csv", 0, "loadoutSecondaryAttachment", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutSecondaryAttachment2" ( tablelookup( "mp/classTable.csv", 0, "loadoutSecondaryAttachment2", itemIndex + 1 ) ); \
+		if ( localVarString( "loadoutSecondaryAttachment2" ) == "" ) \
+		{ \
+			setLocalVarString "loadoutSecondaryAttachment2" ( "none" ); \
+		} \
+		setLocalVarString "loadoutSecondaryCamo" ( tablelookup( "mp/classTable.csv", 0, "loadoutSecondaryCamo", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutEquipment" ( tablelookup( "mp/classTable.csv", 0, "loadoutEquipment", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutPerk1" ( tablelookup( "mp/classTable.csv", 0, "loadoutPerk1", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutPerk2" ( tablelookup( "mp/classTable.csv", 0, "loadoutPerk2", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutPerk3" ( tablelookup( "mp/classTable.csv", 0, "loadoutPerk3", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutStreak1" ( tablelookup( "mp/classTable.csv", 0, "loadoutStreak1", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutStreak2" ( tablelookup( "mp/classTable.csv", 0, "loadoutStreak2", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutStreak3" ( tablelookup( "mp/classTable.csv", 0, "loadoutStreak3", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutDeathStreak" ( tablelookup( "mp/classTable.csv", 0, "loadoutDeathStreak", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutOffhandSecondary" ( tablelookup( "mp/classTable.csv", 0, "loadoutOffhand", itemIndex + 1 ) ); \
+		setLocalVarString "loadoutClassName" ( textArg );

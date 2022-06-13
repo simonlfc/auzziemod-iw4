@@ -1,7 +1,5 @@
-#include "ui_mp/common/macros.inc"
-#include "ui_mp/common/templates.inc"
-#include "ui_mp/common/redux.inc"
 #include "ui/menudef.h"
+#include "ui_mp/common/redux.inc"
 
 #define MENU_NAME					"class"
 #define MENU_TITLE					"auzziemod"
@@ -26,8 +24,6 @@ menudef
 		lerp x "from" 0 "to" -200 "over" 0.1;
 	}
 
-	CREATE_TEXT( 0 0 300 300 1 1, "TEST: " + tableLookupByRow( REMOTE_LOADOUT, 0, 0 ), 1 1 1 1, 1, textfont 0; textalignx 8; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
-
 	REDUX_BUTTON( 0, "CHANGE CLASS", CHANGE_CLASS_ACTION; )
 	REDUX_BUTTON_ALL( 1, "CHANGE TEAM", scriptmenuresponse "changeteam";, 1, ;, ;, !dvarBool( "ui_allow_teamchange" ) )
 	REDUX_SEPARATOR( 2 )
@@ -35,14 +31,14 @@ menudef
 	REDUX_BUTTON( 3.25, "MOD OPTIONS", close "self"; open "mod_options"; )
 	REDUX_SEPARATOR( 4.25 )
 
-#undef _CHOICE_Y_TEXTALIGN
-#define _CHOICE_Y_TEXTALIGN 5
-	PREPROC_SHADER( _CHOICE_ORIGIN( 4.5 ) 74 13 1 1, "redux_discord", 1 1 1 0.25; origin 4 2 )
+#undef CHOICE_Y_TEXTALIGN
+#define CHOICE_Y_TEXTALIGN 5
+	CREATE_SHADER( CHOICE_ORIGIN( 4.5 ) 74 13 1 1, "redux_discord", 1 1 1 0.25; origin 4 2 )
 	REDUX_BUTTON( 4.5, "JOIN OUR DISCORD", exec "openLink www.71stRecon.net/discord"; )
-	PREPROC_SHADER( _CHOICE_ORIGIN( 5.5 ) 74 13 1 1, "redux_paypal", 1 1 1 0.25; origin 4 2 )
+	CREATE_SHADER( CHOICE_ORIGIN( 5.5 ) 74 13 1 1, "redux_paypal", 1 1 1 0.25; origin 4 2 )
 	REDUX_BUTTON( 5.5, "DONATE VIA PAYPAL", exec "openLink www.paypal.me/imJebus3211"; )
-#undef _CHOICE_Y_TEXTALIGN
-#define _CHOICE_Y_TEXTALIGN 0
+#undef CHOICE_Y_TEXTALIGN
+#define CHOICE_Y_TEXTALIGN 0
 
 	REDUX_SEPARATOR( 6.5 )
 	REDUX_BUTTON_VIS( 6.75, "END GAME", open "popup_endgame";, dvarBool( "sv_running" ) )
@@ -68,6 +64,6 @@ menudef
 		lerp x "from" 0 "to" 200 "over" 0.1;
 	}
 
-	PREPROC_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
 	REDUX_GAME_WIDGET
 }

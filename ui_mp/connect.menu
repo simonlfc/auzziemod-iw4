@@ -1,7 +1,5 @@
-#include "ui_mp/common/macros.inc"
-#include "ui_mp/common/templates.inc"
-#include "ui_mp/common/redux.inc"
 #include "ui/menudef.h"
+#include "ui_mp/common/redux.inc"
 
 #define MENU_NAME					"connect"
 
@@ -42,17 +40,17 @@ menudef
 		exec "selectStringTableEntryInDvar mp/didyouknow.csv 0 didyouknow";
 	}
 
-	PREPROC_SHADER_ALL( -426.667 -240 895 504 2 2, "$levelbriefing", 1 1 1 1, 1, exp rect x ( -440 + ( sin( milliseconds() / 3000 ) * 10 ) ) )
-	PREPROC_SHADER( -426.667 -240 853.333 480 2 2, "white", 0 0 0 0.35 )
+	CREATE_SHADER_EX( -426.667 -240 895 504 2 2, "$levelbriefing", 1 1 1 1, 1, exp rect x ( -440 + ( sin( milliseconds() / 3000 ) * 10 ) ) )
+	CREATE_SHADER( -426.667 -240 853.333 480 2 2, "white", 0 0 0 0.35 )
 
-	PREPROC_SHADER( -45 -80 373 103 1 3, "white", 0 0 0 0.8; border 1; bordersize 0.5; bordercolor 1 1 1 0.1 )
+	CREATE_SHADER( -45 -80 373 103 1 3, "white", 0 0 0 0.8; border 1; bordersize 0.5; bordercolor 1 1 1 0.1 )
 
 	CREATE_TEXT( -40 -61 348 0 1 3, gametypeName(), 1 1 1 0.65, 1, CONNECT_TEXT_H0 )
-	PREPROC_SHADER( -32 -50 348 0.25 1 3, "white", 1 1 1 0.3 )
+	CREATE_SHADER( -32 -50 348 0.25 1 3, "white", 1 1 1 0.3 )
 
 	CREATE_TEXT( -40 -67 320 0 1 3, connectionInfo(), 1 1 1 0.3, 1, CONNECT_TEXT_P1 )
 	CREATE_TEXT( -40 -67 320 0 1 3, "Loading", 1 1 1 0.3, connectionInfo() == "", CONNECT_TEXT_P1 )
-	PREPROC_SHADER( 300 -72 16 16 1 3, "redux_spinner", 1 1 1 0.65 )
+	CREATE_SHADER( 300 -72 16 16 1 3, "redux_spinner", 1 1 1 0.65 )
 
 	CREATE_TEXT( -40 -36 0 0 1 3, getMapName(), 1 1 1 1, 1, CONNECT_TEXT_H1 )
 	CREATE_TEXT( -40 -20 285 50 1 3, dvarString( "didyouknow" ), 1 1 1 0.65, 1, CONNECT_TEXT_P0 )

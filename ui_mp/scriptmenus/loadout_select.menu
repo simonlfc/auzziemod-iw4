@@ -1,8 +1,7 @@
-#include "ui_mp/common/macros.inc"
-#include "ui_mp/common/templates.inc"
+#include "ui/menudef.h"
 #include "ui_mp/common/redux.inc"
 #include "ui_mp/common/cac.inc"
-#include "ui/menudef.h"
+#include "ui_mp/common/loadout.inc"
 
 #define MENU_NAME						"loadout_select"
 #define MENU_TITLE						"@" + localVarString( "cac_type" )
@@ -66,7 +65,7 @@ menudef
 	CAC_ATTACHMENT( 8, "8" )
 	CAC_ATTACHMENT( 9, "9" )
 
-	PREPROC_SHADER_VIS( -375 12 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localvarstring( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
+	CREATE_SHADER_VIS( -375 12 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
 	CAC_WEAPON( 0, "m4" )
 	CAC_WEAPON( 1, "famas" )
 	CAC_WEAPON( 2, "scar" )

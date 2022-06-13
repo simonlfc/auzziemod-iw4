@@ -7,7 +7,7 @@ menudef
 	decoration
 	onOpen
 	{
-		setlocalVarString "ui_guid" ( dvarString( "temp" ) );
+		setLocalVarString "ui_guid" ( dvarString( "temp" ) );
 		setDvar "temp" 0;
 		close "self";
 	}
