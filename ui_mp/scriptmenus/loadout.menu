@@ -35,8 +35,8 @@ menudef
 	REDUX_BUTTON( 4.5, "@MENU_PERK1_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 0 ) )
 	REDUX_BUTTON( 5.5, "@MENU_PERK2_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 1 ) )
 	REDUX_BUTTON( 6.5, "@MENU_PERK3_CAPS", CAC_OPEN( "perk_select", setLocalVarInt "perk_slot" 2 ) )
-	REDUX_SEPARATOR( 7.75 )
-	REDUX_BUTTON( 8, "PLAY", scriptmenuresponse "class0"; )
+	REDUX_SEPARATOR( 7.5 )
+	REDUX_BUTTON( 7.75, "PLAY", scriptmenuresponse "class0"; )
 }
 
 menudef

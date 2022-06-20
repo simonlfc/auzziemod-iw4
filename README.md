@@ -12,7 +12,6 @@ auzziemod IW4 is a rewrite of 71st Recon's decade old Modern Warfare 2 sniping m
   + (COD:OL) Cheytac M200
   + (COD:OL) Remington MSR
   + (MW19) AX-50
-  + (MW19) HDR
 + Custom Intervention iron sight attachment
 + Doesn't replace any base game GSCs (hooks.gsc does replace some functions however)
 + Map Voting

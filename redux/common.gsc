@@ -19,7 +19,6 @@ init()
 
     precacheItem( "cheytac_irons_mp" );
     precacheItem( "ax50_mp" );
-    precacheItem( "hdr_mp" );
     precacheItem( "m200_mp" );
     precacheItem( "l115a3_mp" );
     precacheItem( "msr_mp" );

@@ -98,11 +98,13 @@
 #define CAC_TACTICAL( idx, name ) \
 		REDUX_BUTTON_VIS( idx, GET_TACTICAL_LOCNAME( name ), setLocalVarString "loadout_tactical" ( name ); scriptmenuresponse "loadout_tactical:"name; close "loadout_select";, localVarString( "cac_type" ) == "tactical_select" )
 
-#define CAC_LOOKUP_ATTACH( col, localvar, ret )		tablelookup( "mp/attachmentTable.csv", col, localVarString( "loadout" + localvar ), ret )
+#define CAC_LOOKUP_ATTACH( col, localvar, ret )		tablelookup( "redux/attachmentTable.csv", col, localVarString( "loadout" + localvar ), ret )
 #define CAC_LOOKUP_STATS( col, localvar, ret )		tablelookup( "redux/statsTable.csv", col, localVarString( "loadout" + localvar ), ret )
 #define CAC_LOOKUP_PERKS( col, localvar, ret )		tablelookup( "mp/perkTable.csv", col, localVarString( "loadout" + localvar ), ret )
 #define CAC_LOOKUP_CAMOS( col, localvar, ret )		tablelookup( "mp/camoTable.csv", col, localVarString( "loadout" + localvar + "Camo" ), ret )
 #define GET_PRO_PERK( idx )							CAC_LOOKUP_PERKS( 1, localVarString( "loadoutPerk" + idx ), 8 )
+
+#define GET_ATTACHMENT_INDEX( weapon, idx )			CAC_LOOKUP_STATS( 4, weapon, 11 + int( idx ) )
 
 #define UPDATE_CAC_FOCUS \
 		setLocalVarString "loadoutPrimaryAttachment2" ( "none" ); \
@@ -112,10 +114,10 @@
 		setLocalVarString "loadoutStreak3" ( "none" ); \
 		setLocalVarString "loadoutDeathStreak" ( "none" ); \
 		setLocalVarString "loadoutPrimary" ( localVarString( "loadout_primary" ) ); \
-		setLocalVarString "loadoutPrimaryAttachment" ( CAC_LOOKUP_ATTACH( 0, localVarString( "loadout_primary_attachment" ), 4 ); \
+		setLocalVarString "loadoutPrimaryAttachment" ( GET_ATTACHMENT_INDEX( localVarString( "loadout_primary" ), localVarString( "loadout_primary_attachment" ) ) ); \
 		setLocalVarString "loadoutPrimaryCamo" ( localVarString( "loadout_primary_camo" ) ); \
 		setLocalVarString "loadoutSecondary" ( localVarString( "loadout_secondary" ) ); \
-		setLocalVarString "loadoutSecondaryAttachment" ( CAC_LOOKUP_ATTACH( 0, localVarString( "loadout_secondary_attachment" ), 4 ); \
+		setLocalVarString "loadoutSecondaryAttachment" ( GET_ATTACHMENT_INDEX( localVarString( "loadout_secondary" ), localVarString( "loadout_secondary_attachment" ) ) ); \
 		setLocalVarString "loadoutSecondaryCamo" ( localVarString( "loadout_secondary_camo" ) ); \
 		setLocalVarString "loadoutEquipment" ( localVarString( "loadout_lethal" ) ); \
 		setLocalVarString "loadoutPerk1" ( localVarString( "loadout_perk1" ) ); \

@@ -41,7 +41,7 @@ menudef
 	CAC_BUTTON( 7.25, "@MENU_ROCKETS_CAPS", CAC_SUB_OPEN( "weapon_projectile" );, "weapon_select" )
 
 	// scriptmenuresponse didn't work when the index int is passed through, even when converted to a string, so this is a hacky fix
-	REDUX_BUTTON_VIS( 0, "@MPUI_NONE", CAC_SELECT_CAMO( "0" ), localVarString( "cac_type" ) == "camos" )
+	REDUX_BUTTON_VIS( 0, "@MPUI_NONE", CAC_SELECT_CAMO( "none" ), localVarString( "cac_type" ) == "camos" )
 	CAC_CAMO( 1, "desert" )
 	CAC_CAMO( 2, "arctic" )
 	CAC_CAMO( 3, "woodland" )
@@ -98,7 +98,6 @@ menudef
 	CAC_WEAPON( 7, "l115a3" )
 	CAC_WEAPON( 8, "msr" )
 	CAC_WEAPON( 9, "ax50" )
-	CAC_WEAPON( 10, "hdr" )
 
 	CAC_WEAPON( 0, "pp2000" )
 	CAC_WEAPON( 1, "glock" )
