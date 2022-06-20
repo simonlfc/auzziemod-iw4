@@ -34,9 +34,9 @@ menudef
 #undef CHOICE_Y_TEXTALIGN
 #define CHOICE_Y_TEXTALIGN 5
 	CREATE_SHADER( CHOICE_ORIGIN( 4.5 ) 74 13 1 1, "redux_discord", 1 1 1 0.25; origin 4 2 )
-	REDUX_BUTTON( 4.5, "JOIN OUR DISCORD", exec "openLink www.71stRecon.net/discord"; )
+	REDUX_BUTTON_ALL( 4.5, "71stRecon.net/discord", ;, 1, ;, ;, 1 )
 	CREATE_SHADER( CHOICE_ORIGIN( 5.5 ) 74 13 1 1, "redux_paypal", 1 1 1 0.25; origin 4 2 )
-	REDUX_BUTTON( 5.5, "DONATE VIA PAYPAL", exec "openLink www.paypal.me/imJebus3211"; )
+	REDUX_BUTTON_ALL( 5.5, "paypal.me/imJebus3211", ;, 1, ;, ;, 1 )
 #undef CHOICE_Y_TEXTALIGN
 #define CHOICE_Y_TEXTALIGN 0
 

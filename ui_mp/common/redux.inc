@@ -111,6 +111,11 @@
 					setItemColor 			idx forecolor 1 1 1 1; \
 					focus; \
 				} \
+				else \
+				{ \
+					setItemColor 			self backcolor 1 1 1 0.03; \
+					focus; \
+				} \
 			} \
 			leaveFocus \
 			{ \

@@ -1,5 +1,5 @@
-#define C_OFF_Y 0
 #define C_OFF_X 0
+#define C_OFF_Y 0
 
 #define CAC_TEXT_H0 \
 		textAlign 		4; \
@@ -13,17 +13,12 @@
 		textScale 		0.375
 
 #define CAC_ORIGIN( x, y )							( x + C_OFF_X ) ( y + C_OFF_Y )
-#define CAC_LOOKUP_ATTACH( col, localvar, ret )		tablelookup( "mp/attachmentTable.csv", col, localVarString( "loadout" + localvar ), ret )
-#define CAC_LOOKUP_STATS( col, localvar, ret )		tablelookup( "redux/statsTable.csv", col, localVarString( "loadout" + localvar ), ret )
-#define CAC_LOOKUP_PERKS( col, localvar, ret )		tablelookup( "mp/perkTable.csv", col, localVarString( "loadout" + localvar ), ret )
-#define CAC_LOOKUP_CAMOS( col, localvar, ret )		tablelookup( "mp/camoTable.csv", col, localVarString( "loadout" + localvar + "Camo" ), ret )
-#define GET_PRO_PERK( idx )							CAC_LOOKUP_PERKS( 1, localVarString( "loadoutPerk" + idx ), 8 )
 
 #define IW4_GRADIENT( y, h, colour )				CREATE_SHADER( CAC_ORIGIN( -272, y ) -272 h 3 1, "gradient_fadein", colour )
 
 #define IW4_WEAPON( y, slot ) \
 		CREATE_TEXT( CAC_ORIGIN( -272, y ) 272 20 3 1, LOCALISE( CAC_LOOKUP_STATS( 4, slot, 3 ) ), 1 1 1 1, 1, CAC_TEXT_H0 ) \
-		CREATE_SHADER_VIS( CAC_ORIGIN( -272, y ) 272 100 3 1, CAC_LOOKUP_CAMOS( 1, slot, 4 ), 1 1 1 0.5, EXISTS( "loadout" + slot + "Camo" ) ) \
+		CREATE_SHADER_VIS( CAC_ORIGIN( -272, y ) 272 100 3 1, CAC_LOOKUP_CAMOS( 1, slot, 4 ), 1 1 1 0.5, EXISTS( "loadout" + slot + "Camo" ) && localVarString( "loadout" + slot + "Camo" ) != "none" ) \
 		CREATE_SHADER_VIS( CAC_ORIGIN( -200, y ) 200 100 3 1, CAC_LOOKUP_STATS( 4, slot, 6 ), 1 1 1 1, EXISTS( "loadout" + slot ) ) \
 		CREATE_SHADER_VIS( CAC_ORIGIN( -268, y + 58 ) 40 40 3 1, CAC_LOOKUP_ATTACH( 4, slot + "Attachment", 6 ), 1 1 1 1, EXISTS( "loadout" + slot + "Attachment" ) ) \
 		CREATE_SHADER_VIS( CAC_ORIGIN( -224, y + 58 ) 40 40 3 1, CAC_LOOKUP_ATTACH( 4, slot + "Attachment2", 6 ), 1 1 1 1, EXISTS( "loadout" + slot + "Attachment2" ) )

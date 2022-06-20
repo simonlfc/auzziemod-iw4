@@ -6,11 +6,6 @@
 #define MENU_NAME						"loadout_select"
 #define MENU_TITLE						"@" + localVarString( "cac_type" )
 
-#undef CHOICE_X_START					#define CHOICE_X_START				0			
-#undef CHOICE_Y_START					#define CHOICE_Y_START				2		
-#undef CHOICE_TEXTALIGN					#define CHOICE_TEXTALIGN			4
-#undef CHOICE_TEXTALIGN_X				#define CHOICE_TEXTALIGN_X			68
-
 menudef
 {
 	name 							MENU_NAME
@@ -24,6 +19,7 @@ menudef
 		open MENU_NAME"_r";
 		lerp x "from" -200 "to" 0 "over" 0.1;
 		lerp alpha "from" 0 "to" 1 "over" 0.1;
+		UPDATE_CAC_FOCUS;
 	}
 	onRequestClose
 	{
@@ -31,6 +27,7 @@ menudef
 		close MENU_NAME"_r";
 		lerp alpha "from" 1 "to" 0 "over" 0.1;
 		lerp x "from" 0 "to" -200 "over" 0.1;
+		UPDATE_CAC_FOCUS;
 	}
 	
 	CAC_BUTTON( 0, "@MENU_ASSAULT_RIFLES_CAPS", CAC_SUB_OPEN( "weapon_assault" );, "weapon_select" )
