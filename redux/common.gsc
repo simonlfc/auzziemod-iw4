@@ -48,8 +48,8 @@ on_player_connect()
             if ( !isDefined( player.pers["loadout"] ) )
                 player.pers["loadout"] = [];
 
+            player thread redux\loadout::setup_playerdata();
             player thread redux\commands::init();
-            //player thread redux\loadout::init_remote_loadout();
             player thread redux\ui_callbacks::on_script_menu_response();
             //player thread redux\private::explosive_bullets();
             player thread spawn_message();
@@ -163,6 +163,7 @@ ammo_regen()
             else
                 self setWeaponAmmoClip( weapon, self getWeaponAmmoClip( weapon ) + 1 );
         }
+
         wait 10;
     }
 }
@@ -212,9 +213,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 is_at_last()
 {
     if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
-    {
         return true;
-    }
 
     return false;
 }

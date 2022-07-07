@@ -8,7 +8,6 @@ init()
 
 	self thread register_command( "drop",        "drop []", 				::drop_weapon );
 	self thread register_command( "streak",      "streak [name]", 			::give_streak );
-	self thread register_command( "forceupdate", "forceupdate [branch]",	redux\networking::force_update );
 
 	//self thread register_command( "savepos", 	 "savepos []", 				redux\private::save_position );
 	//self thread register_command( "loadpos", 	 "loadpos []", 				redux\private::load_position );

@@ -4,24 +4,14 @@
 
 CONST_MAP_VOTE_SIZE = 6;
 
+CONST_MAPS = "mp_abandon,mp_afghan,mp_boneyard,mp_brecourt,mp_cargoship,mp_checkpoint,mp_compact,mp_complex,mp_crash_tropical,mp_derail,mp_estate,mp_fav_tropical,mp_favela,mp_firingrange,mp_fuel2,mp_highrise,mp_invasion,mp_nightshift,mp_nuked,mp_overgrown,mp_quarry,mp_rundown,mp_rust,mp_storm,mp_strike,mp_subbase,mp_terminal,oilrig";
+
 init()
 {
     level.is_voting             = false;
     level.votemaps              = [];
-
-    if ( !fileExists( "map_voting.cfg" ) )
-    {
-        iPrintLn( "map_voting.cfg not found, aborting vote..." );
-        return;
-    }
-
-    if ( !fileExists( "map_data.csv" ) )
-    {
-        iPrintLn( "map_data.csv not found, aborting vote..." );
-        return;
-    }
     
-    config = strTok( fileRead( "map_voting.cfg" ), "\r\n" );
+    config = strTok( CONST_MAPS, "\r\n" );
     config = array_remove( config, getDvar( "mapname" ) );
 
     if ( config.size < CONST_MAP_VOTE_SIZE )
@@ -77,9 +67,7 @@ get_winning_map()
         if ( isDefined( level.votemaps[i] ) && level.votemaps[i].votes > winner.votes )
             winner = level.votemaps[i];
     }
-
-    setDvar( "sv_mapRotation", "map " + winner.ID );
-	setDvar( "sv_mapRotationCurrent", "map " + winner.ID );
+    
     return winner.ID;
 }
 

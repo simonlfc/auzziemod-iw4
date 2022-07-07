@@ -18,7 +18,6 @@ on_script_menu_response()
 
         if ( response == "class0" )
         {
-            //self thread redux\loadout::update_remote_loadout();
             self closepopupMenu();
 			self closeInGameMenu();
 
