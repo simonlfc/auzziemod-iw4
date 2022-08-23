@@ -102,7 +102,7 @@
 #define CAC_LOOKUP_STATS( col, localvar, ret )		tablelookup( "redux/statsTable.csv", col, localVarString( "loadout" + localvar ), ret )
 #define CAC_LOOKUP_PERKS( col, localvar, ret )		tablelookup( "mp/perkTable.csv", col, localVarString( "loadout" + localvar ), ret )
 #define CAC_LOOKUP_CAMOS( col, localvar, ret )		tablelookup( "mp/camoTable.csv", col, localVarString( "loadout" + localvar + "Camo" ), ret )
-#define GET_PRO_PERK( idx )							CAC_LOOKUP_PERKS( 1, localVarString( "loadoutPerk" + idx ), 8 )
+#define GET_PRO_PERK( idx )							CAC_LOOKUP_PERKS( 1, "Perk" + idx, 8 )
 
 #define GET_ATTACHMENT_INDEX( weapon, idx )			CAC_LOOKUP_STATS( 4, weapon, 11 + int( idx ) )
 
