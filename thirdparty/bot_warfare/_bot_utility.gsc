@@ -728,6 +728,20 @@ load_waypoints()
 	level.waypointCount = 0;
 	level.waypoints		= [];
 	mapname				= getDvar( "mapname" );
+
+	// DLC exceptions
+	if ( getSubStr( mapname, mapname.size - 9, mapname.size ) == "_tropical" )
+	{
+		mapname = getSubStr( mapname, 0, mapname.size - 9 );
+	}
+	else if ( getSubStr( mapname, mapname.size - 3, mapname.size ) == "_sh" )
+	{
+		mapname = getSubStr( mapname, 0, mapname.size - 3 );
+	}
+	else if ( getSubStr( mapname, mapname.size - 7, mapname.size ) == "_spring" )
+	{
+		mapname = getSubStr( mapname, 0, mapname.size - 7 );
+	}
 	
 	thirdparty\bot_warfare\_bot_http::getRemoteWaypoints( mapname );
 
