@@ -26,6 +26,8 @@ init()
     level thread redux\voting::init();
     level thread on_player_connect();
 
+    setDvar( "bg_surfacePenetration", 128 );
+
     // ever so slightly hacky
     if ( level.gametype == "sd" )
     {
@@ -49,7 +51,6 @@ on_player_connect()
                 player.pers["loadout"] = [];
 
             player thread redux\commands::init();
-            //player thread redux\loadout::init_remote_loadout();
             player thread redux\ui_callbacks::on_script_menu_response();
             //player thread redux\private::explosive_bullets();
             player thread spawn_message();
@@ -163,6 +164,7 @@ ammo_regen()
             else
                 self setWeaponAmmoClip( weapon, self getWeaponAmmoClip( weapon ) + 1 );
         }
+
         wait 10;
     }
 }
@@ -212,9 +214,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 is_at_last()
 {
     if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
-    {
         return true;
-    }
 
     return false;
 }

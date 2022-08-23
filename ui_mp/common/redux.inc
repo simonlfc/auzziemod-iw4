@@ -78,7 +78,7 @@
 		REDUX_BUTTON_ALL( idx, string, action_, visibility, ;, ;, 0 )
 
 #define REDUX_BUTTON_ALL( idx, string, action_, visibility, focus, leavefocus, disable_ ) \
-		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 32 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, visibility && dvarBool( "gpad_enabled" ), origin 218 0; group idx ) \
+		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 32 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, visibility && dvarBool( "gpad_enabled" ), origin 218 0; group idx; exp forecolor r ( 0 ); exp forecolor g ( 0 ); exp forecolor b ( 0 ); ) \
 		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 16 16 1 1, "button_ps3_cross", 1 1 1 0, visibility && dvarBool( "gpad_enabled" ) && dvarInt( "gpad_style" ) == 1, origin 226 CHOICE_GAMEPAD_Y; group idx ) \
 		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 16 16 1 1, "button_a", 1 1 1 0, visibility && dvarBool( "gpad_enabled" ) && dvarInt( "gpad_style" ) == 0, origin 226 CHOICE_GAMEPAD_Y; group idx ) \
 		itemDef \

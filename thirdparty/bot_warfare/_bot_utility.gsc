@@ -721,42 +721,6 @@ parseTokensIntoWaypoint( tokens )
 }
 
 /*
-	Returns an array of each line
-*/
-getWaypointLinesFromFile( filename )
-{
-	result		 = spawnStruct();
-	result.lines = [];
-
-	waypointStr	 = fileRead( filename );
-
-	if ( !isDefined( waypointStr ) )
-	{
-		return result;
-	}
-
-	line = "";
-	for ( i = 0; i < waypointStr.size; i++ )
-	{
-		c = waypointStr[i];
-
-		if ( c == "\n" )
-		{
-			result.lines[result.lines.size] = line;
-
-			line							= "";
-			continue;
-		}
-
-		line += c;
-	}
-	result.lines[result.lines.size] = line;
-
-	return result;
-}
-
-
-/*
 	Loads the waypoints. Populating everything needed for the waypoints.
 */
 load_waypoints()
@@ -774,7 +738,7 @@ load_waypoints()
 
 	if ( !level.waypoints.size )
 	{
-		redux\networking::network_print( "Waypoints", "No waypoints loaded." );
+		redux\networking::console_print( "Waypoints", "No waypoints loaded." );
 	}
 
 	level.waypointCount = level.waypoints.size;

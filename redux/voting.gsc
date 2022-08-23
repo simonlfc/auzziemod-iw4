@@ -14,7 +14,7 @@ init()
         iPrintLn( "map_voting.cfg not found, aborting vote..." );
         return;
     }
-
+    
     if ( !fileExists( "map_data.csv" ) )
     {
         iPrintLn( "map_data.csv not found, aborting vote..." );
