@@ -738,7 +738,7 @@ load_waypoints()
 
 	if ( !level.waypoints.size )
 	{
-		redux\networking::network_print( "Waypoints", "No waypoints loaded." );
+		redux\networking::console_print( "Waypoints", "No waypoints loaded." );
 	}
 
 	level.waypointCount = level.waypoints.size;

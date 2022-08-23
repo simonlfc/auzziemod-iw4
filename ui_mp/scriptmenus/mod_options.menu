@@ -24,7 +24,7 @@ menudef
 	}
 
 #define REDUX_BIND( idx, string, bind ) \
-		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 55 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, 1, origin 195 0; group idx ) \
+		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 55 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, 1, origin 195 0; group idx; exp forecolor r ( 0 ); exp forecolor g ( 0 ); exp forecolor b ( 0 ); ) \
 		CREATE_TEXT( CHOICE_RECT( idx ), "KEYBINDING", 1 1 1 0.25, 1, textfont 0; textalignx 8; textaligny 5; textscale 0.2; textstyle 3; textalign ITEM_ALIGN_TOP_LEFT ) \
 		CREATE_TEXT( CHOICE_RECT( idx ), string, 1 1 1 1, 1, textfont 0; textalignx 8; textaligny 4.5; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT ) \
 		itemDef \
@@ -62,10 +62,11 @@ menudef
 			} \
 		}
 
-#define REDUX_SLIDER( idx, string, dvar, dvar_min, dvar_max, dvar_default, action_ ) \
+#define REDUX_SLIDER( idx, string, dvar, dvar_min, dvar_max, dvar_default, action_, show_value ) \
 		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 55 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, 1, origin 195 0 ) \
 		CREATE_TEXT( CHOICE_RECT( idx ), "SLIDER", 1 1 1 0.25, 1, textfont 0; textalignx 8; textaligny 5; textscale 0.2; textstyle 3; textalign ITEM_ALIGN_TOP_LEFT ) \
 		CREATE_TEXT( CHOICE_RECT( idx ), string, 1 1 1 1, 1, textfont 0; textalignx 8; textaligny 4.5; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT ) \
+		CREATE_TEXT( CHOICE_RECT( idx ), dvarInt( dvar ), 1 1 1 0.65, show_value, textalignX -30; textalignY -2; textfont 0; textscale 0.175; textalign ITEM_ALIGN_BOTTOM_RIGHT ) \
 		itemDef \
 		{ \
 			rect 					CHOICE_RECT( idx ) \
@@ -100,9 +101,9 @@ menudef
 	REDUX_BIND( 3, "SLOW LAST (FFA)", "slowlast"; )
 	REDUX_BIND( 4, "2 PIECE (FFA)", "2piece"; )
 	REDUX_SEPARATOR( 5 )
-	REDUX_SLIDER( 5.25, "YAWSPEED", "cl_yawspeed", 500, 2000, 950, ; )
-	REDUX_SLIDER( 6.25, "HORIZONTAL SAFE AREA", "safearea_adjusted_horizontal", 0.85, 1, 1, exec "resetViewport"; )
-	REDUX_SLIDER( 7.25, "VERTICAL SAFE AREA", "safearea_adjusted_vertical", 0.85, 1, 1, exec "resetViewport"; )
+	REDUX_SLIDER( 5.25, "YAWSPEED", "cl_yawspeed", 500, 2000, 950, ;, 1 )
+	REDUX_SLIDER( 6.25, "HORIZONTAL SAFE AREA", "safearea_adjusted_horizontal", 0.85, 1, 1, exec "resetViewport";, 0 )
+	REDUX_SLIDER( 7.25, "VERTICAL SAFE AREA", "safearea_adjusted_vertical", 0.85, 1, 1, exec "resetViewport";, 0 )
 	REDUX_SEPARATOR( 8.25 )
 	REDUX_BUTTON( 8.5, "EDIT KILLSTREAK BINDS", ; )
 }

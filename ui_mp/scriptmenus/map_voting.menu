@@ -11,7 +11,7 @@ menudef
 	blurWorld						7
 	onOpen
 	{
-		setlocalVarInt "map_vote_id" 999;
+		setlocalVarInt "map_vote_id" -1;
 		exec "-scores";
 	}
 	onEsc

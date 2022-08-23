@@ -1,0 +1,45 @@
+#a0 map name,#b1 preview material,#c3 localised name
+mp_afghan,map_vote_mp_afghan,Afghan
+mp_derail,map_vote_mp_derail,Derail
+mp_estate,map_vote_mp_estate,Estate
+mp_favela,map_vote_mp_favela,Favela
+mp_highrise,map_vote_mp_highrise,Highrise
+mp_invasion,map_vote_mp_invasion,Invasion
+mp_checkpoint,map_vote_mp_checkpoint,Karachi
+mp_quarry,map_vote_mp_quarry,Quarry
+mp_rundown,map_vote_mp_rundown,Rundown
+mp_rust,map_vote_mp_rust,Rust
+mp_boneyard,map_vote_mp_boneyard,Scrapyard
+mp_nightshift,map_vote_mp_nightshift,Skidrow
+mp_subbase,map_vote_mp_subbase,Sub Base
+mp_terminal,map_vote_mp_terminal,Terminal
+mp_underpass,map_vote_mp_underpass,Underpass
+mp_brecourt,map_vote_mp_brecourt,Wasteland
+mp_complex,map_vote_mp_complex,Bailout
+mp_crash,map_vote_mp_crash,Crash
+mp_overgrown,map_vote_mp_overgrown,Overgrown
+mp_compact,map_vote_mp_compact,Salvage
+mp_storm,map_vote_mp_storm,Storm
+mp_abandon,map_vote_mp_abandon,Carnival
+mp_fuel2,map_vote_mp_fuel2,Fuel
+mp_strike,map_vote_mp_strike,Strike
+mp_trailerpark,map_vote_mp_trailerpark,Trailer Park
+mp_vacant,map_vote_mp_vacant,Vacant
+mp_nuked,map_vote_mp_nuked,Nuketown
+mp_cross_fire,map_vote_mp_cross_fire,Crossfire
+mp_bloc,map_vote_mp_bloc,Bloc
+mp_cargoship,map_vote_mp_cargoship,Wet Work
+mp_killhouse,map_vote_mp_killhouse,Killhouse
+mp_bog_sh,map_vote_mp_bog_sh,Bog
+mp_cargoship_sh,map_vote_mp_cargoship_sh,Freighter
+mp_shipment,map_vote_mp_shipment,Shipment
+mp_shipment_long,map_vote_mp_shipment_long,Shipment: Long
+mp_rust_long,map_vote_mp_rust_long,Rust: Long
+mp_firingrange,map_vote_mp_firingrange,Firing Range
+mp_storm_spring,map_vote_mp_storm_spring,Chemical Plant
+mp_fav_tropical,map_vote_mp_fav_tropical,Favela: Tropical
+mp_estate_tropical,map_vote_mp_estate_tropical,Estate: Tropical
+mp_crash_tropical,map_vote_mp_crash_tropical,Crash: Tropical
+mp_bloc_sh,map_vote_mp_bloc_sh,Forgotten City
+oilrig,map_vote_oilrig,Oilrig
+mp_custom_map_name,map_vote_missing,Custom Map Name Here

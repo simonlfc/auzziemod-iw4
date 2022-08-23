@@ -19,6 +19,7 @@ hooks()
     replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 												// Force ranked
     replaceFunc( maps\mp\_utility::matchMakingGame, ::hook_return_true ); 												// Force ranked
     replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 												// Force ranked
+    replaceFunc( maps\mp\gametypes\_gamelogic::onForfeit, ::hook_return_false ); 										// Disable forfeits
 
     replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
     replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hook_return_false ); 									// Disable Deathstreaks
@@ -317,9 +318,9 @@ give_loadout_hook( team, class, allowCopycat )
 
 	if ( level.killstreakRewards )
 	{
-		loadoutKillstreak1 = self getPlayerData( "killstreaks", 0 );
-		loadoutKillstreak2 = self getPlayerData( "killstreaks", 1 );
-		loadoutKillstreak3 = self getPlayerData( "killstreaks", 2 );
+		loadoutKillstreak1 = "uav";
+		loadoutKillstreak2 = "airdrop";
+		loadoutKillstreak3 = "airdrop_mega";
 	}
 	else
 	{
