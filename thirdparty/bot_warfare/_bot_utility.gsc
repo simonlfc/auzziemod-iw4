@@ -728,11 +728,6 @@ load_waypoints()
 	level.waypointCount = 0;
 	level.waypoints		= [];
 	mapname				= getDvar( "mapname" );
-
-	if ( getSubStr( mapname, 0, 3 ) == "mp_" )
-	{
-		mapname = strTok( getDvar( "mapname" ), "_" )[1];
-	}
 	
 	thirdparty\bot_warfare\_bot_http::getRemoteWaypoints( mapname );
 
