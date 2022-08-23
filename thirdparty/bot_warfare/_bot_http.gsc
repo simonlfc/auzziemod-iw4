@@ -25,7 +25,7 @@ getRemoteWaypoints( mapname )
 		redux\networking::console_print( "Waypoints", "Using gametype '" + gametype + "' specific waypoints." );
 	}
 	
-	redux\networking::console_print( "Waypoints", "Contacting: " + url );
+	redux\networking::console_print( "Waypoints", "Downloading: " + url );
 	res = getLinesFromUrl( url );
 
 	if ( !res.lines.size )

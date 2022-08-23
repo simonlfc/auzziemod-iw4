@@ -11,13 +11,13 @@ init()
 
     if ( !fileExists( "map_voting.cfg" ) )
     {
-        iPrintLn( "map_voting.cfg not found, aborting vote..." );
+        redux\networking::console_print( "Voting", "map_voting.cfg not found, aborting vote..." );
         return;
     }
     
     if ( !fileExists( "map_data.csv" ) )
     {
-        iPrintLn( "map_data.csv not found, aborting vote..." );
+        redux\networking::console_print( "Voting", "map_data.csv not found, aborting vote..." );
         return;
     }
     
@@ -26,7 +26,7 @@ init()
 
     if ( config.size < CONST_MAP_VOTE_SIZE )
     {
-        iPrintLn( "Not enough maps specified in map_voting.cfg, aborting vote..." );
+        redux\networking::console_print( "Voting", "Not enough maps specified in map_voting.cfg, aborting vote..." );
         gameFlagSet( "disable_map_voting" );
         return;
     }

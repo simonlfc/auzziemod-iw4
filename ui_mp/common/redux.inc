@@ -323,3 +323,76 @@
 		{ \
 			scriptmenuresponse "changeclass_opfor"; \
 		}
+
+
+#define REDUX_BIND( idx, string, bind ) \
+		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 55 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, 1, origin 195 0; group idx; exp forecolor r ( 0 ); exp forecolor g ( 0 ); exp forecolor b ( 0 ); ) \
+		CREATE_TEXT( CHOICE_RECT( idx ), "KEYBINDING", 1 1 1 0.25, 1, textfont 0; textalignx 8; textaligny 5; textscale 0.2; textstyle 3; textalign ITEM_ALIGN_TOP_LEFT ) \
+		CREATE_TEXT( CHOICE_RECT( idx ), string, 1 1 1 1, 1, textfont 0; textalignx 8; textaligny 4.5; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT ) \
+		itemDef \
+		{ \
+			rect 					CHOICE_RECT( idx ) \
+			type 					ITEM_TYPE_BIND \
+			style					WINDOW_STYLE_FILLED \
+			background      		"white" \
+			border					1 \
+			bordercolor				1 1 1 0.05 \
+			bordersize				0.25 \
+			backcolor				1 1 1 0.01 \
+			textfont 				0 \
+			textalignx 				-10 \
+			textscale 				0.275 \
+			textstyle 				3 \
+			textalign 				ITEM_ALIGN_MIDDLE_RIGHT \
+			dvar					bind \
+			visible					1 \
+			onFocus \
+			{ \
+				setItemColor 			self backcolor 1 1 1 0.09; \
+				setItemColor 			self bordercolor 1 1 1 0.25; \
+				setItemColor 			idx backcolor 0 0 0 0.9; \
+				setItemColor 			idx forecolor 1 1 1 1; \
+				focus; \
+			} \
+			leaveFocus \
+			{ \
+				setItemColor 			self backcolor 1 1 1 0.01; \
+				setItemColor 			self bordercolor 1 1 1 0.05; \
+				setItemColor 			idx backcolor 0 0 0 0; \
+				setItemColor 			idx forecolor 0 0 0 0; \
+				leavefocus; \
+			} \
+		}
+
+#define REDUX_SLIDER( idx, string, dvar, dvar_min, dvar_max, dvar_default, action_, show_value ) \
+		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 55 CHOICE_Y_SIZE 1 1, "white", 0 0 0 0, 1, origin 195 0 ) \
+		CREATE_TEXT( CHOICE_RECT( idx ), "SLIDER", 1 1 1 0.25, 1, textfont 0; textalignx 8; textaligny 5; textscale 0.2; textstyle 3; textalign ITEM_ALIGN_TOP_LEFT ) \
+		CREATE_TEXT( CHOICE_RECT( idx ), string, 1 1 1 1, 1, textfont 0; textalignx 8; textaligny 4.5; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT ) \
+		CREATE_TEXT( CHOICE_RECT( idx ), dvarInt( dvar ), 1 1 1 0.65, show_value, textalignX -30; textalignY -2; textfont 0; textscale 0.175; textalign ITEM_ALIGN_BOTTOM_RIGHT ) \
+		itemDef \
+		{ \
+			rect 					CHOICE_RECT( idx ) \
+			style					WINDOW_STYLE_FILLED \
+			background      		"white" \
+			border					1 \
+			bordercolor				1 1 1 0.05 \
+			bordersize				0.25 \
+			backcolor				1 1 1 0.01 \
+			visible					1 \
+			decoration \
+		} \
+		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) -10 10 1 1, "ui_arrow_right", 1 1 1 0.25, 1, origin 228 12 ) \
+		CREATE_SHADER_EX( CHOICE_ORIGIN( idx ) 10 10 1 1, "ui_arrow_right", 1 1 1 0.25, 1, origin 234 12 ) \
+		itemDef \
+		{ \
+			rect CHOICE_ORIGIN( idx ) 95.5 12 1 1 \
+			origin 126 9 \
+			forecolor 1 1 1 1 \
+			type ITEM_TYPE_SLIDER \
+			dvarFloat dvar dvar_default dvar_min dvar_max \
+			visible 1 \
+			action \
+			{ \
+				action_; \
+			} \
+		}

@@ -38,6 +38,16 @@ load_position()
 	self iPrintLn( "Loaded position." );
 }
 
+fast_last()
+{
+	score = getWatchedDvar( "scorelimit" ) - 50;
+
+	maps\mp\gametypes\_gamescore::_setPlayerScore( self, score );
+	self.pers["kills"] = int( score / 50 );
+	self.kills = self.pers["kills"];
+	maps\mp\gametypes\_gamescore::sendUpdatedDMScores();
+}
+
 get_random_hitloc()
 {
     hitloc              = [];

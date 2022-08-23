@@ -179,7 +179,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
         if ( victim isTestClient() )
             return int( iDamage );
         else
-            return int( iDamage * 0.15 );
+            return int( iDamage * 0.25 );
     }
 
     if ( level.gametype == "sd" && sMeansOfDeath == "MOD_FALLING" )
