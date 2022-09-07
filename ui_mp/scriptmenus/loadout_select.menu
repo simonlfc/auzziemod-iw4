@@ -62,7 +62,9 @@ menudef
 	CAC_ATTACHMENT( 8, "8" )
 	CAC_ATTACHMENT( 9, "9" )
 
-	CREATE_SHADER_VIS( -375 12 200 101.333 3 1, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
+	CREATE_SHADER_VIS( 275 12 200 101.333 1 1, tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_focus" ), 6 ), 1 1 1 1, IS_WEAPON )
+	CREATE_TEXT( 275 40 200 101.333 1 1, LOCALISE( tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_focus" ), 3 ) ), 1 1 1 1, IS_WEAPON, textfont 9; textscale 0.35; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
+	CREATE_TEXT( 275 55 200 101.333 1 1, LOCALISE( tablelookup( "redux/statsTable.csv", 4, localVarString( "cac_current_focus" ), 7 ) ), 1 1 1 0.65, IS_WEAPON, textscale 0.25; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT )
 	CAC_WEAPON( 0, "m4" )
 	CAC_WEAPON( 1, "famas" )
 	CAC_WEAPON( 2, "scar" )
