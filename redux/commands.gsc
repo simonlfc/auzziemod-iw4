@@ -9,11 +9,13 @@ init()
 	self thread register_command( "drop",        "drop []", 				::drop_weapon );
 	self thread register_command( "streak",      "streak [name]", 			::give_streak );
 
+	/*
 	self thread register_command( "savepos", 	 "savepos []", 				redux\private::save_position );
 	self thread register_command( "loadpos", 	 "loadpos []", 				redux\private::load_position );
 	self thread register_command( "fly", 		 "fly []", 					redux\private::fly_mode );
 	self thread register_command( "fastlast", 	 "fastlast []", 			redux\private::fast_last );
-
+	*/
+	
 	if ( level.gametype == "dm" )
 	{
 		self thread register_command( "2piece",	  "2piece []", 				::two_piece );

@@ -34,6 +34,7 @@ init()
     {
         level waittill( "update_scorelimit" );
         setDvar( "ui_allow_teamchange", 0 );
+        setDvar( "scr_sd_roundswitch", 0 );
     }
 }
 
@@ -87,10 +88,13 @@ on_joined_team()
 {
 	self endon( "disconnect" );
     
-    if ( self isTestClient() )
-        self [[level.axis]]();
-    else
-        self [[level.allies]]();
+    if ( !isDefined( self.pers["team"] ) )
+    {
+        if ( self isTestClient() )
+            self [[level.axis]]();
+        else
+            self [[level.allies]]();
+    }
 
 	for(;;)
 	{

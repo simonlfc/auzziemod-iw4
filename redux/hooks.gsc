@@ -17,7 +17,6 @@ hook_return_false()
 hooks()
 {
     replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 												// Force ranked
-    replaceFunc( maps\mp\_utility::matchMakingGame, ::hook_return_true ); 												// Force ranked
     replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 												// Force ranked
     replaceFunc( maps\mp\gametypes\_gamelogic::onForfeit, ::hook_return_false ); 										// Disable forfeits
 
