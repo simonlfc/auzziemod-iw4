@@ -3,6 +3,8 @@ auzziemod IW4
 
 auzziemod IW4 is a rewrite of 71st Recon's decade old Modern Warfare 2 sniping mod.
 
+Due to the upcoming mod-breaking deprecation of several functions in IW4x yet again for fuck knows what reason, you'll need to run a custom build of IW4x with the HTTP functions re-added to use them, or locally download the waypoints branch to your mod folder.
+
 ## Features
 + Custom controller-friendly menu layout
 + One mod for both FFA & SND
