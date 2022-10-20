@@ -4,5 +4,5 @@
 *.class
 demos/
 logs/
+players/
 missingasset.csv
-!storage/loadout.class

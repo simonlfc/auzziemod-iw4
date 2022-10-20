@@ -9,12 +9,12 @@ init()
 	self thread register_command( "drop",        "drop []", 				::drop_weapon );
 	self thread register_command( "streak",      "streak [name]", 			::give_streak );
 
-	/*
+	/#
 	self thread register_command( "savepos", 	 "savepos []", 				redux\private::save_position );
 	self thread register_command( "loadpos", 	 "loadpos []", 				redux\private::load_position );
 	self thread register_command( "fly", 		 "fly []", 					redux\private::fly_mode );
 	self thread register_command( "fastlast", 	 "fastlast []", 			redux\private::fast_last );
-	*/
+	#/
 	
 	if ( level.gametype == "dm" )
 	{
@@ -24,26 +24,18 @@ init()
 	}
 }
 
-register_command( command, desc, action )
+register_command( command, description, function )
 {
-    new_cmd = [];
-    new_cmd["name"] = command;
-    new_cmd["desc"] = "^3usage:^7 " + desc;
-    new_cmd["action"] = action;
+	level endon( "game_ended" );
+	self endon( "disconnect" );
 
-    self setClientDvar( new_cmd["name"], new_cmd["desc"] );
-    self notifyOnPlayerCommand( new_cmd["name"], new_cmd["name"] );
+	self setClientDvar( command, description );
+	self notifyOnPlayerCommand( command, command );
 
-    self thread monitor_command( new_cmd );
-}
-
-monitor_command( cmd )
-{
-    self endon ( "disconnect" );
-	for (;;)
+	for ( ;; )
 	{
-    	self waittill ( cmd["name"] );
-    	self thread [[cmd["action"]]]();
+		self waittill( command );
+		self thread [[function]]();
 	}
 }
 

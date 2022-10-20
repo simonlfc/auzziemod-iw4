@@ -5,5 +5,5 @@ init()
     thread redux\hooks::hooks();
     thread redux\common::init();
     thread thirdparty\bot_warfare\_bot::init();
-    redux\networking::check_for_updates();
+    thread redux\bounces::init();
 }

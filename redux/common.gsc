@@ -74,6 +74,9 @@ on_player_spawned()
         self waittill( "spawned_player" );
         self thread ammo_regen();
 
+        self.hasRadar = true;
+	    self.radarMode = "normal_radar";
+
         if ( level.gametype == "dm" )
         {
             self thread last_check();

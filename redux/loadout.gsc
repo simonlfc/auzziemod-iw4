@@ -28,7 +28,9 @@ init_loadout_stat( stat, value )
     if ( value == "" )
         value = "none";
 
+    /#
     self iPrintLn( "Initialised stat: ", stat, " with: ", value );
+    #/
     
     self.pers["loadout"][ stat ] = value;
     return;
