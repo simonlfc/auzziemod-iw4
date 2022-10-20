@@ -743,11 +743,11 @@ load_waypoints()
 		mapname = getSubStr( mapname, 0, mapname.size - 7 );
 	}
 	
-	thirdparty\bot_warfare\_bot_http::getRemoteWaypoints( mapname );
+	thirdparty\bot_warfare\_bot_waypoints::get_waypoints( mapname );
 
 	if ( !level.waypoints.size )
 	{
-		redux\networking::console_print( "Waypoints", "No waypoints loaded." );
+		redux\common::console_print( "Waypoints", "No waypoints loaded." );
 	}
 
 	level.waypointCount = level.waypoints.size;

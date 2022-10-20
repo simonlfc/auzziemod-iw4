@@ -226,3 +226,8 @@ is_at_last()
 
     return false;
 }
+
+console_print( head, msg )
+{
+    printConsole( "^6[" + head + "] ^7" + msg + "\n" );
+}
