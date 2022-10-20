@@ -82,7 +82,10 @@ on_player_spawned()
             self thread last_check();
 
             if ( self isTestClient() )
+            {
                 self thread bot_score_check();
+                self thread bot_log_position();
+            }
         }
     }
 }
@@ -165,6 +168,11 @@ ammo_regen()
 
     for(;;)
     {
+        if ( !isAlive( self ) )
+        {
+            continue;
+        }
+
         foreach ( weapon in self getWeaponsListAll() )
         {
             if ( maps\mp\gametypes\_weapons::isPrimaryWeapon( weapon ) )
@@ -179,6 +187,12 @@ ammo_regen()
 
 modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
 {
+    if ( victim isTestClient() && ( !isDefined( sMeansOfDeath ) || sMeansOfDeath == "MOD_TRIGGER_HURT" ) )
+	{
+		victim thread bot_teleport_fix();
+		return 0;
+	}
+
     if ( !isPlayer( eAttacker ) || !isPlayer( victim ) || isKillstreakWeapon( sWeapon ) )
         return int( iDamage * 0.01 );
         
@@ -230,4 +244,41 @@ is_at_last()
 console_print( head, msg )
 {
     printConsole( "^6[" + head + "] ^7" + msg + "\n" );
+}
+
+// credit 2 shockeh
+bot_teleport_fix()
+{
+	self setOrigin( self.lastOnGround + ( 0, 0, 10 ) );
+
+	self.stop = true;
+	self.bot.target = self;
+	self.bot.towards_goal = undefined;
+	self.bot.script_goal = undefined;
+
+	self notify( "kill_goal" );
+	self notify( "new_goal_internal" );
+	self notify( "bad_path_internal" );
+
+	wait 7;
+	self.stop = undefined;
+}
+
+bot_log_position()
+{
+	level endon( "game_ended" );
+	self endon( "disconnect" );
+
+	if ( getDvar( "g_gametype" ) == "sd" ) // The function needs to be killed if the bot dies in S&D
+		self endon( "death" );
+
+	self.lastOnGround = ( 0, 0, 0 );
+
+	for(;;)
+	{
+		if ( self isOnGround() )
+			self.lastOnGround = self.origin;
+
+		wait 5;
+	}
 }
