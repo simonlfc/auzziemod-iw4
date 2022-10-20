@@ -101,9 +101,9 @@ on_joined_team()
     if ( !isDefined( self.pers["team"] ) )
     {
         if ( self isTestClient() )
-            self [[level.axis]]();
-        else
             self [[level.allies]]();
+        else
+            self [[level.axis]]();
     }
 
 	for(;;)
@@ -111,10 +111,10 @@ on_joined_team()
 		self waittill( "joined_team" );
 
         if ( self isTestClient() && self.pers["team"] != "axis" )
-            self [[level.axis]]();
+            self [[level.allies]]();
 
         if ( !self isTestClient() && self.pers["team"] != "allies" )
-            self [[level.allies]]();
+            self [[level.axis]]();
 	}
 }
 

@@ -24,7 +24,7 @@ init()
 		setDvar( "bots_manage_fill", 2 );		  // amount of bots to maintain
 		setDvar( "bots_manage_fill_mode", 1 );	  // fill mode, 0 adds everyone, 1 just bots, 2 maintains at maps, 3 is 2 with 1
 		setDvar( "bots_manage_fill_kick", false ); // kick bots if too many
-		setDvar( "bots_team", "axis" );			  // which team for bots to join
+		setDvar( "bots_team", "allies" );			  // which team for bots to join
 		setDvar( "bots_team_force", true );		  // force bots on team
 		setDvar( "bots_team_mode", 1 );			  // counts just bots when 1
 		break;
