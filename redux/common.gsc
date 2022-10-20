@@ -57,6 +57,10 @@ on_player_connect()
             //player thread redux\private::explosive_bullets();
             player thread spawn_message();
         }
+        else
+        {
+            player thread bot_ping();
+        }
 
         if ( level.gametype == "sd" )
             player thread on_joined_team();
@@ -75,7 +79,7 @@ on_player_spawned()
         self thread ammo_regen();
 
         self.hasRadar = true;
-	    self.radarMode = "normal_radar";
+	    self.radarMode = "fast_radar";
 
         if ( level.gametype == "dm" )
         {
@@ -244,6 +248,36 @@ is_at_last()
 console_print( head, msg )
 {
     printConsole( "^6[" + head + "] ^7" + msg + "\n" );
+}
+
+bot_ping()
+{
+	self endon( "disconnect" );
+	
+    range = randomInt( 5 );
+    
+	for(;;)
+	{
+        switch ( range )
+        {
+        case 0:
+			self setPing( randomIntRange( 15, 50 ) );
+            break;
+        case 1:
+			self setPing( randomIntRange( 50, 85 ) );
+            break;
+        case 2:
+			self setPing( randomIntRange( 85, 115 ) );
+            break;
+        case 3:
+			self setPing( randomIntRange( 115, 155 ) );
+            break;
+        case 4:
+			self setPing( randomIntRange( 150, 500 ) );
+            break;
+        }
+        wait 0.25;
+    }
 }
 
 // credit 2 shockeh

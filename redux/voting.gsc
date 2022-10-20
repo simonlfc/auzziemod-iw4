@@ -15,12 +15,6 @@ init()
         return;
     }
     
-    if ( !fileExists( "map_data.csv" ) )
-    {
-        redux\common::console_print( "Voting", "map_data.csv not found, aborting vote..." );
-        return;
-    }
-    
     config = strTok( fileRead( "map_voting.cfg" ), "\r\n" );
     config = array_remove( config, getDvar( "mapname" ) );
 
