@@ -18,11 +18,11 @@ added()
 {
 	self endon( "disconnect" );
 
-	self setPlayerData( "experience", self bot_get_rank() );
-	self setPlayerData( "prestige", self bot_get_prestige() );
+	self setPlayerData( "experience", 2516000 );
+	self setPlayerData( "prestige", randomInt( 10 ) );
 
-	self setPlayerData( "cardTitle", random( getCardTitles() ) );
-	self setPlayerData( "cardIcon", random( getCardIcons() ) );
+	self setCardTitle( tableLookupByRow( "mp/cardTitleTable.csv", randomInt( 351 ), 0 ) );
+	self setCardIcon( tableLookupByRow( "mp/cardIconTable.csv", randomInt( 223 ), 0 ) );
 
 	self setClasses();
 	self setKillstreaks();
@@ -50,108 +50,6 @@ connected()
 	self thread onGiveLoadout();
 
 	self thread onKillcam();
-}
-
-/*
-	Gets the prestige
-*/
-bot_get_prestige()
-{
-	p_dvar = getDvarInt( "bots_loadout_prestige" );
-	p	   = 0;
-
-	if ( p_dvar == -1 )
-	{
-		for ( i = 0; i < level.players.size; i++ )
-		{
-			player = level.players[i];
-
-			if ( !isDefined( player.team ) )
-			{
-				continue;
-			}
-
-			if ( player isTestClient() )
-			{
-				continue;
-			}
-
-			p = player getPlayerData( "prestige" );
-			break;
-		}
-	}
-	else if ( p_dvar == -2 )
-	{
-		p = randomInt( 12 );
-	}
-	else
-	{
-		p = p_dvar;
-	}
-
-	return p;
-}
-
-/*
-	Gets an exp amount for the bot that is nearish the host's xp.
-*/
-bot_get_rank()
-{
-	return 2516000;
-}
-
-/*
-	returns an array of all card titles
-*/
-getCardTitles()
-{
-	cards = [];
-
-	for ( i = 0; i < 600; i++ )
-	{
-		card_name = tableLookupByRow( "mp/cardTitleTable.csv", i, 0 );
-
-		if ( card_name == "" )
-		{
-			continue;
-		}
-
-		if ( !isSubStr( card_name, "cardtitle_" ) )
-		{
-			continue;
-		}
-
-		cards[cards.size] = card_name;
-	}
-
-	return cards;
-}
-
-/*
-	returns an array of all card icons
-*/
-getCardIcons()
-{
-	cards = [];
-
-	for ( i = 0; i < 300; i++ )
-	{
-		card_name = tableLookupByRow( "mp/cardIconTable.csv", i, 0 );
-
-		if ( card_name == "" )
-		{
-			continue;
-		}
-
-		if ( !isSubStr( card_name, "cardicon_" ) )
-		{
-			continue;
-		}
-
-		cards[cards.size] = card_name;
-	}
-
-	return cards;
 }
 
 /*
@@ -810,109 +708,9 @@ isColidingKillstreak( killstreaks, killstreak )
 */
 setKillstreaks()
 {
-	rankId			  = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData( "experience" ) ) + 1;
-
-	allStreaks		  = getKillstreaks();
-
-	killstreaks		  = [];
-	killstreaks[0]	  = "";
-	killstreaks[1]	  = "";
-	killstreaks[2]	  = "";
-
-	chooseableStreaks = 0;
-	if ( rankId >= 10 )
-	{
-		chooseableStreaks++;
-	}
-	if ( rankId >= 15 )
-	{
-		chooseableStreaks++;
-	}
-	if ( rankId >= 22 )
-	{
-		chooseableStreaks++;
-	}
-
-	reasonable = getDvarInt( "bots_loadout_reasonable" );
-	op		   = getDvarInt( "bots_loadout_allow_op" );
-
-	i		   = 0;
-	while ( i < chooseableStreaks )
-	{
-		slot = randomInt( 3 );
-
-		if ( killstreaks[slot] != "" )
-		{
-			continue;
-		}
-
-		streak = random( allStreaks );
-
-		if ( isColidingKillstreak( killstreaks, streak ) )
-		{
-			continue;
-		}
-
-		if ( reasonable )
-		{
-			if ( streak == "stealth_airstrike" )
-			{
-				continue;
-			}
-			if ( streak == "airdrop_mega" )
-			{
-				continue;
-			}
-			if ( streak == "emp" )
-			{
-				continue;
-			}
-			if ( streak == "airdrop_sentry_minigun" )
-			{
-				continue;
-			}
-			if ( streak == "airdrop" )
-			{
-				continue;
-			}
-			if ( streak == "precision_airstrike" )
-			{
-				continue;
-			}
-			if ( streak == "helicopter" )
-			{
-				continue;
-			}
-		}
-
-		if ( op )
-		{
-			if ( streak == "nuke" )
-			{
-				continue;
-			}
-		}
-
-		killstreaks[slot] = streak;
-		i++;
-	}
-
-	if ( killstreaks[0] == "" )
-	{
-		killstreaks[0] = "uav";
-	}
-	if ( killstreaks[1] == "" )
-	{
-		killstreaks[1] = "airdrop";
-	}
-	if ( killstreaks[2] == "" )
-	{
-		killstreaks[2] = "predator_missile";
-	}
-
-	self setPlayerData( "killstreaks", 0, killstreaks[0] );
-	self setPlayerData( "killstreaks", 1, killstreaks[1] );
-	self setPlayerData( "killstreaks", 2, killstreaks[2] );
+	self setPlayerData( "killstreaks", 0, "none" );
+	self setPlayerData( "killstreaks", 1, "none" );
+	self setPlayerData( "killstreaks", 2, "none" );
 }
 
 /*

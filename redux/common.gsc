@@ -28,6 +28,7 @@ init()
     level thread on_player_connect();
 
     setDvar( "bg_surfacePenetration", 128 );
+    setDvar( "player_sprintUnlimited", true );
 
     // ever so slightly hacky
     if ( level.gametype == "sd" )
