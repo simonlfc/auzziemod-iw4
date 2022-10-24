@@ -36,6 +36,62 @@ hooks()
 	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
 
 	replaceFunc( maps\mp\_utility::getWeaponClass, ::get_weapon_class_hook );											// Use our custom statsTable instead
+	replaceFunc( maps\mp\gametypes\sd::onStartGameType, ::on_start_gametype_hook );										// Fix SD teams
+	replaceFunc( maps\mp\gametypes\_teams::getJoinTeamPermissions, ::hook_return_true );								// Allow unbalanced teams
+}
+
+on_start_gametype_hook()
+{
+	if ( !isDefined( game["switchedsides"] ) )
+		game["switchedsides"] = false;
+							 
+	game["attackers"] = "axis";						   
+	game["defenders"] = "allies";  
+	
+	setClientNameMode( "auto_change" );
+	
+	game["strings"]["target_destroyed"] = &"MP_TARGET_DESTROYED";
+	game["strings"]["bomb_defused"] = &"MP_BOMB_DEFUSED";
+	
+	precacheString( game["strings"]["target_destroyed"] );
+	precacheString( game["strings"]["bomb_defused"] );
+
+	level._effect["bombexplosion"] = loadfx("explosions/tanker_explosion");
+	
+	setObjectiveText( game["attackers"], &"OBJECTIVES_SD_ATTACKER" );
+	setObjectiveText( game["defenders"], &"OBJECTIVES_SD_DEFENDER" );
+
+	setObjectiveScoreText( game["attackers"], &"OBJECTIVES_SD_ATTACKER_SCORE" );
+	setObjectiveScoreText( game["defenders"], &"OBJECTIVES_SD_DEFENDER_SCORE" );
+
+	setObjectiveHintText( game["attackers"], &"OBJECTIVES_SD_ATTACKER_HINT" );
+	setObjectiveHintText( game["defenders"], &"OBJECTIVES_SD_DEFENDER_HINT" );
+
+	level.spawnMins = ( 0, 0, 0 );
+	level.spawnMaxs = ( 0, 0, 0 );	
+	maps\mp\gametypes\_spawnlogic::placeSpawnPoints( "mp_sd_spawn_attacker" );
+	maps\mp\gametypes\_spawnlogic::placeSpawnPoints( "mp_sd_spawn_defender" );
+	
+	level.mapCenter = maps\mp\gametypes\_spawnlogic::findBoxCenter( level.spawnMins, level.spawnMaxs );
+	setMapCenter( level.mapCenter );
+	
+	allowed[0] = "sd";
+	allowed[1] = "bombzone";
+	allowed[2] = "blocker";
+	maps\mp\gametypes\_gameobjects::main( allowed );
+	
+	maps\mp\gametypes\_rank::registerScoreInfo( "win", 2 );
+	maps\mp\gametypes\_rank::registerScoreInfo( "loss", 1 );
+	maps\mp\gametypes\_rank::registerScoreInfo( "tie", 1.5 );
+	
+	maps\mp\gametypes\_rank::registerScoreInfo( "kill", 50 );
+	maps\mp\gametypes\_rank::registerScoreInfo( "headshot", 50 );
+	maps\mp\gametypes\_rank::registerScoreInfo( "assist", 20 );
+	maps\mp\gametypes\_rank::registerScoreInfo( "plant", 100 );
+	maps\mp\gametypes\_rank::registerScoreInfo( "defuse", 100 );
+	
+	thread maps\mp\gametypes\sd::updateGametypeDvars();
+	thread maps\mp\gametypes\sd::bombs();
 }
 
 get_weapon_class_hook( weapon )
@@ -254,56 +310,6 @@ give_loadout_hook( team, class, allowCopycat )
 		loadoutPerk3 					= redux\loadout::get_loadout_stat( "perk3" );
 		loadoutOffhand 					= redux\loadout::get_loadout_stat( "tactical" );
 		loadoutDeathStreak 				= "specialty_null"; // we disable these
-	}
-
-	if ( !(isDefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat) )
-	{
-		isCustomClass = isSubstr( class, "custom" );
-
-		if ( isCustomClass )
-		{
-			if ( !isValidPrimary( loadoutPrimary ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary )) )
-				loadoutPrimary = table_getWeapon( level.classTableName, 10, 0 );
-
-			if ( !isValidAttachment( loadoutPrimaryAttachment ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryAttachment )) )
-				loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 0 , 0);
-
-			if ( !isValidAttachment( loadoutPrimaryAttachment2 ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryAttachment2 )) )
-				loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
-
-			if ( !isValidCamo( loadoutPrimaryCamo ) || (isCustomClass && !self isItemUnlocked( loadoutPrimary + " " + loadoutPrimaryCamo )) )
-				loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, 10, 0 );
-
-			if ( !isValidSecondary( loadoutSecondary ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary )) )
-				loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
-
-			if ( !isValidAttachment( loadoutSecondaryAttachment ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryAttachment )) )
-				loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 1 , 0);
-
-			if ( !isValidAttachment( loadoutSecondaryAttachment2 ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryAttachment2 )) )
-				loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 1, 1 );;
-
-			if ( !isValidCamo( loadoutSecondaryCamo ) || (isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryCamo )) )
-				loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, 10, 1 );
-
-			if ( !isValidEquipment( loadoutEquipment ) || (isCustomClass && !self isItemUnlocked( loadoutEquipment )) )
-				loadoutEquipment = table_getEquipment( level.classTableName, 10, 0 );
-
-			if ( !isValidPerk1( loadoutPerk1 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk1 )) )
-				loadoutPerk1 = table_getPerk( level.classTableName, 10, 1 );
-
-			if ( !isValidPerk2( loadoutPerk2 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk2 )) )
-				loadoutPerk2 = table_getPerk( level.classTableName, 10, 2 );
-
-			if ( !isValidPerk3( loadoutPerk3 ) || (isCustomClass && !self isItemUnlocked( loadoutPerk3 )) )
-				loadoutPerk3 = table_getPerk( level.classTableName, 10, 3 );
-
-			if ( !isValidOffhand( loadoutOffhand ) )
-				loadoutOffhand = table_getOffhand( level.classTableName, 10 );
-
-			if ( !isValidDeathstreak( loadoutDeathstreak ) || (isCustomClass && !self isItemUnlocked( loadoutDeathstreak )) )
-				loadoutDeathstreak = table_getDeathstreak( level.classTableName, 10 );
-		}
 	}
 
 	if ( loadoutPerk1 != "specialty_bling" )

@@ -81,15 +81,15 @@ on_player_spawned()
         self.hasRadar = true;
 	    self.radarMode = "fast_radar";
 
+        if ( self isTestClient() )
+            self thread bot_log_position();
+
         if ( level.gametype == "dm" )
         {
             self thread last_check();
 
             if ( self isTestClient() )
-            {
                 self thread bot_score_check();
-                self thread bot_log_position();
-            }
         }
     }
 }
@@ -110,10 +110,11 @@ on_joined_team()
 	{
 		self waittill( "joined_team" );
 
-        if ( self isTestClient() && self.pers["team"] != "axis" )
+        // failsafe
+        if ( self isTestClient() && self.pers["team"] != "allies" )
             self [[level.allies]]();
 
-        if ( !self isTestClient() && self.pers["team"] != "allies" )
+        if ( !self isTestClient() && self.pers["team"] != "axis" )
             self [[level.axis]]();
 	}
 }
@@ -172,10 +173,10 @@ ammo_regen()
 
     for(;;)
     {
+        self waittill_notify_or_timeout( "reload", 10 );
+
         if ( !isAlive( self ) )
-        {
             continue;
-        }
 
         foreach ( weapon in self getWeaponsListAll() )
         {
@@ -184,8 +185,6 @@ ammo_regen()
             else
                 self setWeaponAmmoClip( weapon, self getWeaponAmmoClip( weapon ) + 1 );
         }
-
-        wait 10;
     }
 }
 
@@ -208,7 +207,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
             return int( iDamage * 0.25 );
     }
 
-    if ( level.gametype == "sd" && sMeansOfDeath == "MOD_FALLING" )
+    if ( sMeansOfDeath == "MOD_FALLING" )
         iDamage = 1;
 
     if ( sMeansOfDeath == "MOD_MELEE"
@@ -253,7 +252,6 @@ console_print( head, msg )
 bot_ping()
 {
 	self endon( "disconnect" );
-	
     range = randomInt( 5 );
     
 	for(;;)
@@ -276,7 +274,8 @@ bot_ping()
 			self setPing( randomIntRange( 150, 500 ) );
             break;
         }
-        wait 0.25;
+
+        wait ( randomIntRange( 1, 8 ) );
     }
 }
 
@@ -303,7 +302,7 @@ bot_log_position()
 	level endon( "game_ended" );
 	self endon( "disconnect" );
 
-	if ( getDvar( "g_gametype" ) == "sd" ) // The function needs to be killed if the bot dies in S&D
+	if ( getDvar( "g_gametype" ) == "sd" )
 		self endon( "death" );
 
 	self.lastOnGround = ( 0, 0, 0 );

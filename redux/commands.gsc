@@ -6,28 +6,33 @@ init()
 {
 	self endon( "disconnect" );
 
-	self thread register_command( "drop",        "drop []", 				::drop_weapon );
-	self thread register_command( "streak",      "streak [name]", 			::give_streak );
+	self thread register_command( "drop", "drop []", ::drop_weapon, false );
+	self thread register_command( "streak", "streak [name]", ::give_streak, false );
+
+
+	self thread register_command( "2piece", "2piece []", ::two_piece, true );
+	self thread register_command( "suicide", "suicide []", ::_suicide, true );
+	self thread register_command( "slowlast", "slowlast []", ::slow_last, true );
 
 	/#
-	self thread register_command( "savepos", 	 "savepos []", 				redux\private::save_position );
-	self thread register_command( "loadpos", 	 "loadpos []", 				redux\private::load_position );
-	self thread register_command( "fly", 		 "fly []", 					redux\private::fly_mode );
-	self thread register_command( "fastlast", 	 "fastlast []", 			redux\private::fast_last );
+	self thread register_command( "savepos", "savepos []", redux\private::save_position, false );
+	self thread register_command( "loadpos", "loadpos []", redux\private::load_position, false );
+	self thread register_command( "fly", "fly []", redux\private::fly_mode, false );
+	self thread register_command( "fastlast", "fastlast []", redux\private::fast_last, true );
 	#/
-	
-	if ( level.gametype == "dm" )
-	{
-		self thread register_command( "2piece",	  "2piece []", 				::two_piece );
-		self thread register_command( "suicide",  "suicide []", 			::_suicide );
-		self thread register_command( "slowlast", "slowlast []", 			::slow_last );
-	}
 }
 
-register_command( command, description, function )
+register_command( command, description, function, dm_only )
 {
 	level endon( "game_ended" );
 	self endon( "disconnect" );
+
+	// let's just register it anyways because if you change gametype its gonna be confusing
+	if ( dm_only && level.gametype != "dm" )
+	{
+		self setClientDvar( command, "^1Unavailable in this gametype." );
+		return;
+	}
 
 	self setClientDvar( command, description );
 	self notifyOnPlayerCommand( command, command );
@@ -55,13 +60,10 @@ give_streak()
 		return;
 	}
 
-	for ( i = 0; i < 28; i++ )
+	if ( tableLookup( "mp/killstreakTable.csv", 1, streak_name, 1 ) == streak_name )
 	{
-		if ( streak_name == tableLookup( "mp/killstreakTable.csv", 0, i, 1 ) )
-		{
-			self maps\mp\killstreaks\_killstreaks::giveKillstreak( streak_name, false );
-			return;
-		}
+		self maps\mp\killstreaks\_killstreaks::giveKillstreak( streak_name, false );
+		return;
 	}
 
 	self iPrintLn( "Invalid streak name." );
@@ -75,6 +77,7 @@ two_piece()
 		maps\mp\gametypes\_gamescore::_setPlayerScore( self, getWatchedDvar( "scorelimit" ) - 100 );
 		self.pers["kills"] = ( getWatchedDvar( "scorelimit" ) / 50 ) - 2;
 		self.kills = self.pers["kills"];
+		maps\mp\gametypes\_gamescore::sendUpdatedDMScores();
 	}
 }
 
