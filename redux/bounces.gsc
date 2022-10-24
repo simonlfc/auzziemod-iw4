@@ -56,7 +56,7 @@ run_bounces()
 			if ( v[2] > 0 )
 				continue;
 				
-			for (  bIndex = 0; bIndex < level.bouncePos.size; bIndex++ )
+			for ( bIndex = 0; bIndex < level.bouncePos.size; bIndex++ )
 			{		
 				if ( !isDefined( level.bouncePos[bIndex] ) )
 					continue;

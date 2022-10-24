@@ -16,7 +16,6 @@ init()
     precacheMenu( "loadout_select" );
     precacheMenu( "mod_options" );
     precacheMenu( "callvote" );
-    precacheMenu( "loadout_init" );
 
     precacheItem( "cheytac_irons_mp" );
     precacheItem( "ax50_mp" );
