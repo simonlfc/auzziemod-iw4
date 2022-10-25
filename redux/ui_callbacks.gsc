@@ -25,6 +25,9 @@ on_script_menu_response()
 			self [[level.class]]( "class0" );
         }
 
+        if ( isSubStr( response, "streak" ) )
+            self thread give_streak( strTok( response, ":" )[1] );
+
         if ( isSubStr( response, "loadout_" ) )
         {
             switch ( strTok( response, ":" )[0] )
@@ -43,4 +46,28 @@ on_script_menu_response()
             }
         }
     }
+}
+
+give_streak( name )
+{
+	if ( !self redux\common::is_at_last() && level.gametype == "dm" )
+	{
+		self iPrintLn( "Streaks can't be given before last." );
+		return;
+	}
+
+	if ( name == "emp" || name == "nuke" )
+	{
+		self iPrintLn( "Tactical Nuke and EMP are unavailable." );
+		return;
+	}
+
+	if ( tableLookup( "mp/killstreakTable.csv", 1, name, 1 ) == name )
+	{
+		self maps\mp\killstreaks\_killstreaks::giveKillstreak( name, false );
+		return;
+	}
+
+	self iPrintLn( "Invalid streak name." );
+
 }

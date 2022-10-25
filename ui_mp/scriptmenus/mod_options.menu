@@ -82,14 +82,14 @@ menudef
 		open "mod_options";
 	}
 
-	REDUX_BIND( 0, "UAV", 					"streak uav"; )
-	REDUX_BIND( 1, "Care Package", 			"streak airdrop"; )
-	REDUX_BIND( 2, "Sentry Gun", 			"streak sentry"; )
-	REDUX_BIND( 3, "Predator Missile", 		"streak predator_missile"; )
-	REDUX_BIND( 4, "Precision Airstrike", 	"streak precision_airstrike"; )
-	REDUX_BIND( 5, "Emergency Airdrop", 	"streak airdrop_mega"; )
-	REDUX_BIND( 6, "Chopper Gunner", 		"streak helicopter_minigun"; )
-	REDUX_BIND( 7, "AC-130", 				"streak ac130"; )
+	REDUX_BIND( 0, "UAV", 					"openscriptmenu killstreak_binds streak:uav"; )
+	REDUX_BIND( 1, "Care Package", 			"openscriptmenu killstreak_binds streak:airdrop"; )
+	REDUX_BIND( 2, "Sentry Gun", 			"openscriptmenu killstreak_binds streak:sentry"; )
+	REDUX_BIND( 3, "Predator Missile", 		"openscriptmenu killstreak_binds streak:predator_missile"; )
+	REDUX_BIND( 4, "Precision Airstrike", 	"openscriptmenu killstreak_binds streak:precision_airstrike"; )
+	REDUX_BIND( 5, "Emergency Airdrop", 	"openscriptmenu killstreak_binds streak:airdrop_mega"; )
+	REDUX_BIND( 6, "Chopper Gunner", 		"openscriptmenu killstreak_binds streak:helicopter_minigun"; )
+	REDUX_BIND( 7, "AC-130", 				"openscriptmenu killstreak_binds streak:ac130"; )
 }
 
 menudef

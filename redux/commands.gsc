@@ -7,8 +7,6 @@ init()
 	self endon( "disconnect" );
 
 	self thread register_command( "drop", "drop []", ::drop_weapon, false );
-	self thread register_command( "streak", "streak [name]", ::give_streak, false );
-
 
 	self thread register_command( "2piece", "2piece []", ::two_piece, true );
 	self thread register_command( "suicide", "suicide []", ::_suicide, true );
@@ -42,32 +40,6 @@ register_command( command, description, function, dm_only )
 		self waittill( command );
 		self thread [[function]]();
 	}
-}
-
-give_streak()
-{
-	if ( !self redux\common::is_at_last() && level.gametype == "dm" )
-	{
-		self iPrintLn( "Streaks can't be given before last." );
-		return;
-	}
-
-	streak_name = getDvar( "streak" );
-
-	if ( streak_name == "emp" || streak_name == "nuke" )
-	{
-		self iPrintLn( "Tactical Nuke and EMP are unavailable." );
-		return;
-	}
-
-	if ( tableLookup( "mp/killstreakTable.csv", 1, streak_name, 1 ) == streak_name )
-	{
-		self maps\mp\killstreaks\_killstreaks::giveKillstreak( streak_name, false );
-		return;
-	}
-
-	self iPrintLn( "Invalid streak name." );
-
 }
 
 two_piece()
