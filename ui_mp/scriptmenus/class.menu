@@ -4,7 +4,6 @@
 #define MENU_NAME					"class"
 #define MENU_TITLE					"auzziemod"
 
-#define REMOTE_LOADOUT				"storage/" + localVarString( "ui_guid" ) + "/loadout.class"
 menudef
 {
 	name 							MENU_NAME

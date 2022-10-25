@@ -188,6 +188,14 @@ ammo_regen()
     }
 }
 
+Select( eval, a, b )
+{
+    if ( eval )
+        return a;
+
+    return b;
+}
+
 modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
 {
     if ( victim isTestClient() && ( !isDefined( sMeansOfDeath ) || sMeansOfDeath == "MOD_TRIGGER_HURT" ) )
@@ -196,19 +204,14 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 		return 0;
 	}
 
-    if ( !isPlayer( eAttacker ) || !isPlayer( victim ) || isKillstreakWeapon( sWeapon ) )
-        return int( iDamage * 0.01 );
+    if ( isKillstreakWeapon( sWeapon ) )
+        return 0;
         
     if ( eAttacker isTestClient() )
-    {
-        if ( victim isTestClient() )
-            return int( iDamage );
-        else
-            return int( iDamage * 0.25 );
-    }
+        return Select( victim isTestClient(), iDamage, iDamage * 0.25 );
 
     if ( sMeansOfDeath == "MOD_FALLING" )
-        iDamage = 1;
+        return Select( level.gametype == "sd", 1, iDamage );
 
     if ( sMeansOfDeath == "MOD_MELEE"
     || sMeansOfDeath == "MOD_GRENADE"
@@ -232,8 +235,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 	if ( getWeaponClass( sWeapon ) == "weapon_sniper" || sWeapon == "throwingknife_mp" )
 		iDamage = 99999;
 
-    iDamage = floor( iDamage );
-	return int( iDamage );
+	return iDamage;
 }
 
 is_at_last()
