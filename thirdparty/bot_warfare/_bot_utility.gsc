@@ -1902,7 +1902,6 @@ botGiveLoadout( team, class, allowCopycat )
 		loadoutPerk2				= clonedLoadout["loadoutPerk2"];
 		loadoutPerk3				= clonedLoadout["loadoutPerk3"];
 		loadoutOffhand				= clonedLoadout["loadoutOffhand"];
-		loadoutDeathStreak			= "specialty_copycat";
 	}
 	else if ( isSubstr( class, "custom" ) )
 	{
@@ -1923,7 +1922,6 @@ botGiveLoadout( team, class, allowCopycat )
 		loadoutPerk2				= maps\mp\gametypes\_class::cac_getPerk( class_num, 2 );
 		loadoutPerk3				= maps\mp\gametypes\_class::cac_getPerk( class_num, 3 );
 		loadoutOffhand				= maps\mp\gametypes\_class::cac_getOffhand( class_num );
-		loadoutDeathStreak			= maps\mp\gametypes\_class::cac_getDeathstreak( class_num );
 	}
 	else
 	{
@@ -1945,7 +1943,6 @@ botGiveLoadout( team, class, allowCopycat )
 		loadoutPerk2		 = maps\mp\gametypes\_class::table_getPerk( level.classTableName, class_num, 2 );
 		loadoutPerk3		 = maps\mp\gametypes\_class::table_getPerk( level.classTableName, class_num, 3 );
 		loadoutOffhand		 = maps\mp\gametypes\_class::table_getOffhand( level.classTableName, class_num );
-		loadoutDeathstreak	 = maps\mp\gametypes\_class::table_getDeathstreak( level.classTableName, class_num );
 	}
 
 	if ( loadoutPerk1 != "specialty_bling" )
@@ -2034,34 +2031,6 @@ botGiveLoadout( team, class, allowCopycat )
 	// Perks
 	self _clearPerks();
 	self maps\mp\gametypes\_class::_detachAll();
-
-	// these special case giving pistol death have to come before
-	// perk loadout to ensure player perk icons arent overwritten
-	if ( level.dieHardMode )
-	{
-		self maps\mp\perks\_perks::givePerk( "specialty_pistoldeath" );
-	}
-
-	// only give the deathstreak for the initial spawn for this life.
-	if ( loadoutDeathStreak != "specialty_null" && ( getTime() - self.spawnTime ) < 0.1 )
-	{
-		deathVal = int( tableLookup( "mp/perkTable.csv", 1, loadoutDeathStreak, 6 ) );
-
-		if ( self botGetPerkUpgrade( loadoutPerk1 ) == "specialty_rollover" || self botGetPerkUpgrade( loadoutPerk2 ) == "specialty_rollover" || self botGetPerkUpgrade( loadoutPerk3 ) == "specialty_rollover" )
-		{
-			deathVal -= 1;
-		}
-
-		if ( self.pers["cur_death_streak"] == deathVal )
-		{
-			self thread maps\mp\perks\_perks::givePerk( loadoutDeathStreak );
-			self thread maps\mp\gametypes\_hud_message::splashNotify( loadoutDeathStreak );
-		}
-		else if ( self.pers["cur_death_streak"] > deathVal )
-		{
-			self thread maps\mp\perks\_perks::givePerk( loadoutDeathStreak );
-		}
-	}
 
 	self botLoadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3 );
 

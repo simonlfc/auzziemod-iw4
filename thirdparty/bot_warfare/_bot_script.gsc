@@ -188,12 +188,7 @@ getPerks( perktype )
 
 		perk_name = tableLookupByRow( "mp/perktable.csv", i, 1 );
 
-		if ( perk_name == "specialty_c4death" )
-		{
-			continue;
-		}
-
-		if ( perk_name == "_specialty_blastshield" )
+		if ( perk_name == "specialty_c4death" || perk_name == "specialty_pistoldeath" || perk_name == "specialty_coldblooded" || perk_name == "specialty_localjammer" || perk_name == "_specialty_blastshield" )
 		{
 			continue;
 		}
