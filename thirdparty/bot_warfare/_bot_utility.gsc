@@ -742,6 +742,11 @@ load_waypoints()
 	{
 		mapname = getSubStr( mapname, 0, mapname.size - 7 );
 	}
+
+	if ( mapname == "mp_fav" )
+	{
+		mapname = "mp_favela";
+	}
 	
 	thirdparty\bot_warfare\_bot_waypoints::get_waypoints( mapname );
 
