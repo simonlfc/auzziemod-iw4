@@ -8,22 +8,10 @@
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
+	REDUX_INGAME_MENU( true )
 	onOpen
 	{
 		close "changeclass";
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
 	}
 	
 	REDUX_BUTTON( 0, "@MENU_PRIMARY_CAPS", CAC_OPEN( "weapon_select", setLocalVarInt "weapon_slot" 0 ) )
@@ -41,22 +29,6 @@ menudef
 
 menudef
 {
-	name 							MENU_NAME"_r"
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	visible 						when ( menuisopen( MENU_NAME ) )
-	decoration
-	onOpen
-	{
-		lerp x "from" 200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" 200 "over" 0.1;
-	}
-
-	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	REDUX_INGAME_SUB
 	IW4_LOADOUT
 }

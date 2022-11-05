@@ -8,25 +8,16 @@
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	blurWorld						11
+	REDUX_INGAME_MENU( true )
+	blurWorld 11
 	onOpen
 	{
 		close "loadout";
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
 		UPDATE_CAC_FOCUS;
 	}
 	onRequestClose
 	{
 		open "loadout";
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
 		UPDATE_CAC_FOCUS;
 	}
 	

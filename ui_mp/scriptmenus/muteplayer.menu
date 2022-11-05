@@ -6,64 +6,15 @@
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( true )
 
-	itemDef
-	{
-		name "playermutelist"
-		rect CHOICE_ORIGIN( 0 ) CHOICE_X_SIZE 400 1 1
-		visible 1
-		forecolor WHITE 1
-		outlinecolor 1 1 1 0.2
-		type 6
-		textalignx 6
-		textscale 0.275
-		feeder 20
-		elementWidth CHOICE_X_SIZE
-		elementHeight 18
-//		numcol			xpos	xwidth	textlen	  alignment
-		columns 2		2		46		10		  0
-						48		172		25		  0
-		doubleClick
-		{
-			play "mouse_click";
-			uiScript "mutePlayer";
-		}
-	}
+	REDUX_GENERIC_FEEDER( FEEDER_MUTELIST, uiScript "mutePlayer";, 
+		//		numcol	xpos		xwidth		textlen	  	alignment
+		columns 2		2			46			10		  	0
+						48			172			25		  	0 )
 }
 
 menudef
 {
-	name 							MENU_NAME"_r"
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	visible 						when ( menuisopen( MENU_NAME ) )
-	decoration
-	onOpen
-	{
-		lerp x "from" 200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" 200 "over" 0.1;
-	}
-
-	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	REDUX_INGAME_SUB
 }

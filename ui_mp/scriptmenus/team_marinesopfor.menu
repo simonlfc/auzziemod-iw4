@@ -6,22 +6,7 @@
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( true )
 
 	REDUX_BUTTON_ALL( 0, "SPECTATOR", scriptmenuresponse "spectator";, 1, ;, ;, team( "name" ) == "TEAM_SPECTATOR" || !dvarbool( "scr_game_spectatetype" ) || !dvarBool( "ui_allow_teamchange" ) )
 	REDUX_SEPARATOR( 1 )
@@ -33,22 +18,6 @@ menudef
 
 menudef
 {
-	name 							MENU_NAME"_r"
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	visible 						when ( menuisopen( MENU_NAME ) )
-	decoration
-	onOpen
-	{
-		lerp x "from" 200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" 200 "over" 0.1;
-	}
-
-	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	REDUX_INGAME_SUB
 	REDUX_GAME_WIDGET
 }

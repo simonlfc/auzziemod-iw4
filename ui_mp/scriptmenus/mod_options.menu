@@ -6,22 +6,7 @@
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( true )
 
 	REDUX_BIND( 0, "+USERELOAD", "+usereload"; )
 	REDUX_BIND( 1, "DROP WEAPON", "drop"; )
@@ -38,47 +23,19 @@ menudef
 
 menudef
 {
-	name 							MENU_NAME"_r"
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	visible 						when ( menuisopen( MENU_NAME ) )
-	decoration
-	onOpen
-	{
-		lerp x "from" 200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" 200 "over" 0.1;
-	}
+	REDUX_INGAME_SUB
 
 	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
 }
 
-#undef MENU_NAME 	
-#define MENU_NAME		"killstreak_binds"
-#undef MENU_TITLE 	
-#define MENU_TITLE		"KILLSTREAK BINDS"
+#undef MENU_NAME 	#define MENU_NAME		"killstreak_binds"
+#undef MENU_TITLE 	#define MENU_TITLE		"KILLSTREAK BINDS"
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( true )
 	onRequestClose
 	{
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
 		open "mod_options";
 	}
 
@@ -94,21 +51,5 @@ menudef
 
 menudef
 {
-	name 							MENU_NAME"_r"
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	visible 						when ( menuisopen( MENU_NAME ) )
-	decoration
-	onOpen
-	{
-		lerp x "from" 200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" 200 "over" 0.1;
-	}
-
-	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	REDUX_INGAME_SUB
 }

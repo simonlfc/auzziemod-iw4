@@ -2,6 +2,8 @@
 #define BLACK						0 0 0
 #define EXISTS( var )				localVarString( var ) != ""
 #define LOCALISE( string )			"@" + string
+#define true						1
+#define false						0
 
 #define CHOICE_GAMEPAD_Y			8 // getting lazy here :D
 #define CHOICE_X_START				-50
@@ -58,18 +60,69 @@
 		CREATE_TEXT( -57 465 20 10 1 0, "ESC", 0 0 0 1, !dvarBool( "gpad_enabled" ), textfont 6; textscale 0.2; textstyle 0; textalign ITEM_ALIGN_MIDDLE_CENTER ) \
 		CREATE_TEXT( -68.5 460 284 20 1 0, "Back", 1 1 1 1, 1, textfont 0; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT; textalignx 36 )
 
-#define REDUX_INGAME_MENU \
+#define REDUX_INGAME_MENU( create_sub ) \
+		name 						MENU_NAME \
+		rect 						0 0 640 480 4 4 \
+		forecolor 					1 1 1 1
 		focuscolor 					1 1 1 1 \
 		blurworld 					7 \
 		execKey "f" \
 		{ \
 			open "popup_friends"; \
 		} \
+		onOpen \
+		{ \
+			if ( create_sub ) \
+			{ \
+				open MENU_NAME"_r"; \
+			} \
+			REDUX_ANIMATE_OPEN; \
+		} \
+		onRequestClose \
+		{ \
+			if ( create_sub ) \
+			{ \
+				close MENU_NAME"_r"; \
+			} \
+			REDUX_ANIMATE_CLOSE; \
+		} \
 		CREATE_SHADER( 215 -4 -40 640 1 0, "gradient_fadein", 0 0 0 0.5 ) \
 		CREATE_SHADER_EX( -68 -4 284 640 1 0, "white", 0 0 0 0.8, 1, border 1; bordersize 0.5; bordercolor 1 1 1 0.1 ) \
 		CREATE_TEXT( -50 ( CHOICE_Y_START - 17 ) 0 0 1 1, MENU_TITLE, 1 1 1 1, 1, textfont 9; textscale 0.35; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT ) \
 		CREATE_SHADER( -50 ( CHOICE_Y_START - 7 ) 250 0.25 1 1, "white", 1 1 1 0.1 ) \
 		REDUX_BACK_WIDGET
+
+#define REDUX_INGAME_SUB \
+		name 						MENU_NAME##"_r" \
+		rect 						0 0 640 480 4 4 \
+		forecolor 					1 1 1 1 \
+		visible 					when ( menuisopen( MENU_NAME ) ) \
+		decoration \
+		onOpen \
+		{ \
+			REDUX_ANIMATE_SUB_OPEN; \
+		} \
+		onRequestClose \
+		{ \
+			REDUX_ANIMATE_SUB_CLOSE; \
+		} \
+		CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+
+#define REDUX_ANIMATE_OPEN \
+		lerp x "from" -200 "to" 0 "over" 0.1; \
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+
+#define REDUX_ANIMATE_CLOSE \
+		lerp alpha "from" 1 "to" 0 "over" 0.1; \
+		lerp x "from" 0 "to" -200 "over" 0.1;
+
+#define REDUX_ANIMATE_SUB_OPEN \
+		lerp x "from" 200 "to" 0 "over" 0.1; \
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+
+#define REDUX_ANIMATE_SUB_CLOSE \
+		lerp alpha "from" 1 "to" 0 "over" 0.1; \
+		lerp x "from" 0 "to" 200 "over" 0.1;
 
 #define REDUX_BUTTON( idx, string, action_ ) \
 		REDUX_BUTTON_VIS( idx, string, action_, 1 )
@@ -139,6 +192,27 @@
 
 #define REDUX_SEPARATOR_VIS( idx, visibility ) \
 		CREATE_SHADER_VIS( CHOICE_ORIGIN( idx ) 250 4 1 1, "gradient_center", 1 1 1 0.05; origin 0 0, visibility )
+
+#define REDUX_GENERIC_FEEDER( index, action_, data ) \
+		itemDef \
+		{ \
+			rect 					CHOICE_ORIGIN( 0 ) CHOICE_X_SIZE 400 1 1 \
+			visible 				1 \
+			forecolor 				WHITE 1 \
+			outlinecolor 			1 1 1 0.2 \
+			type 					6 \
+			textalignx 				6 \
+			textscale 				0.275 \
+			feeder 					index \
+			elementWidth 			CHOICE_X_SIZE \
+			elementHeight 			18 \
+			data \		
+			doubleClick \		
+			{ \		
+				play 				"mouse_click"; \
+				action_; \
+			} \
+		}
 
 #define INGAME_FACTION_ICON( pos, alpha ) \
 		CREATE_SHADER_VIS( pos, dvarstring( "g_TeamIcon_Allies" ), 1 1 1 alpha, localVarString( "ui_team" ) == "marines" ) \

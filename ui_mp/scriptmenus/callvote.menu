@@ -6,22 +6,7 @@
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		open MENU_NAME"_r";
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		close MENU_NAME"_r";
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( true )
 
 	REDUX_BUTTON( 0, "Restart Map", exec "cmd callvote map_restart"; close "self"; )
 	REDUX_BUTTON( 1, "Rotate Map", exec "cmd callvote map_rotate"; close "self"; )
@@ -29,113 +14,39 @@ menudef
 	REDUX_BUTTON( 3, "Kick Player", open "callvote_kick"; close "self"; )
 }
 
-#undef MENU_NAME 	
-#define MENU_NAME		"callvote_map"
-#undef MENU_TITLE 	
-#define MENU_TITLE		"VOTE: CHANGE MAP"
+#undef MENU_NAME 	#define MENU_NAME		"callvote_map"
+#undef MENU_TITLE 	#define MENU_TITLE		"VOTE: CHANGE MAP"
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( false )
 	onRequestClose
 	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
 		open "callvote";
 	}
 
-	itemDef
-	{
-		rect CHOICE_ORIGIN( 0 ) CHOICE_X_SIZE 400 1 1
-		visible 1
-		forecolor WHITE 1
-		outlinecolor 1 1 1 0.2
-		type 6
-		textalignx 6
-		textscale 0.275
-		feeder FEEDER_ALLMAPS
-		elementWidth CHOICE_X_SIZE
-		elementHeight 18
-//		numcol			xpos		xwidth		textlen	  	alignment
-		columns 1 		2 			190 		25			0
-		doubleClick
-		{
-			play "mouse_click";
-			uiScript "voteMap";
-		}
-	}
+	REDUX_GENERIC_FEEDER( FEEDER_ALLMAPS, uiScript "voteMap";, 
+		//		numcol	xpos		xwidth		textlen	  	alignment
+		columns 1 		2 			190 		25			0 )
 }
 
-#undef MENU_NAME 	
-#define MENU_NAME		"callvote_kick"
-#undef MENU_TITLE 	
-#define MENU_TITLE		"VOTE: KICK PLAYER"
+#undef MENU_NAME 	#define MENU_NAME		"callvote_kick"
+#undef MENU_TITLE 	#define MENU_TITLE		"VOTE: KICK PLAYER"
 
 menudef
 {
-	name 							MENU_NAME
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	REDUX_INGAME_MENU
-	onOpen
-	{
-		lerp x "from" -200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
+	REDUX_INGAME_MENU( false )
 	onRequestClose
 	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" -200 "over" 0.1;
 		open "callvote";
 	}
 
-	itemDef
-	{
-		rect CHOICE_ORIGIN( 0 ) CHOICE_X_SIZE 400 1 1
-		visible 1
-		forecolor WHITE 1
-		outlinecolor 1 1 1 0.2
-		type 6
-		textalignx 6
-		textscale 0.275
-		feeder FEEDER_PLAYER_LIST
-		elementWidth CHOICE_X_SIZE
-		elementHeight 18
-//		numcol			xpos		xwidth		textlen	  	alignment
-		columns 1 		2 			190 		25			0
-		doubleClick
-		{
-			play "mouse_click";
-			uiScript "voteKick";
-		}
-	}
+	REDUX_GENERIC_FEEDER( FEEDER_PLAYER_LIST, uiScript "voteKick";, 
+		//		numcol	xpos		xwidth		textlen	  	alignment
+		columns 1 		2 			190 		25			0 )
 }
 
 menudef
 {
-	name 							MENU_NAME"_r"
-	rect 							0 0 640 480 4 4
-	forecolor 						1 1 1 1
-	visible 						when ( menuisopen( MENU_NAME ) )
-	decoration
-	onOpen
-	{
-		lerp x "from" 200 "to" 0 "over" 0.1;
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-	}
-	onRequestClose
-	{
-		lerp alpha "from" 1 "to" 0 "over" 0.1;
-		lerp x "from" 0 "to" 200 "over" 0.1;
-	}
-
-	CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
+	REDUX_INGAME_SUB
 }
