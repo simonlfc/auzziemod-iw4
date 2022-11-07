@@ -60,16 +60,28 @@
 		CREATE_TEXT( -57 465 20 10 1 0, "ESC", 0 0 0 1, !dvarBool( "gpad_enabled" ), textfont 6; textscale 0.2; textstyle 0; textalign ITEM_ALIGN_MIDDLE_CENTER ) \
 		CREATE_TEXT( -68.5 460 284 20 1 0, "Back", 1 1 1 1, 1, textfont 0; textscale 0.275; textstyle 3; textalign ITEM_ALIGN_MIDDLE_LEFT; textalignx 36 )
 
+#define REDUX_ANIMATE_OPEN \
+		lerp x "from" -200 "to" 0 "over" 0.1; \
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+
+#define REDUX_ANIMATE_CLOSE \
+		lerp alpha "from" 1 "to" 0 "over" 0.1; \
+		lerp x "from" 0 "to" -200 "over" 0.1;
+
+#define REDUX_ANIMATE_SUB_OPEN \
+		lerp x "from" 200 "to" 0 "over" 0.1; \
+		lerp alpha "from" 0 "to" 1 "over" 0.1;
+
+#define REDUX_ANIMATE_SUB_CLOSE \
+		lerp alpha "from" 1 "to" 0 "over" 0.1; \
+		lerp x "from" 0 "to" 200 "over" 0.1;
+
 #define REDUX_INGAME_MENU( create_sub ) \
 		name 						MENU_NAME \
-		rect 						0 0 640 480 4 4 \
-		forecolor 					1 1 1 1
+		rect 						0 0 640 480 4 4; \
+		forecolor 					1 1 1 1 \
 		focuscolor 					1 1 1 1 \
 		blurworld 					7 \
-		execKey "f" \
-		{ \
-			open "popup_friends"; \
-		} \
 		onOpen \
 		{ \
 			if ( create_sub ) \
@@ -93,8 +105,8 @@
 		REDUX_BACK_WIDGET
 
 #define REDUX_INGAME_SUB \
-		name 						MENU_NAME##"_r" \
-		rect 						0 0 640 480 4 4 \
+		name 						MENU_NAME"_r" \
+		rect 						0 0 640 480 4 4; \
 		forecolor 					1 1 1 1 \
 		visible 					when ( menuisopen( MENU_NAME ) ) \
 		decoration \
@@ -107,22 +119,6 @@
 			REDUX_ANIMATE_SUB_CLOSE; \
 		} \
 		CREATE_SHADER( 0 0 854 480 0 0, "gradient_fadein", 0 0 0 0.4 )
-
-#define REDUX_ANIMATE_OPEN \
-		lerp x "from" -200 "to" 0 "over" 0.1; \
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-
-#define REDUX_ANIMATE_CLOSE \
-		lerp alpha "from" 1 "to" 0 "over" 0.1; \
-		lerp x "from" 0 "to" -200 "over" 0.1;
-
-#define REDUX_ANIMATE_SUB_OPEN \
-		lerp x "from" 200 "to" 0 "over" 0.1; \
-		lerp alpha "from" 0 "to" 1 "over" 0.1;
-
-#define REDUX_ANIMATE_SUB_CLOSE \
-		lerp alpha "from" 1 "to" 0 "over" 0.1; \
-		lerp x "from" 0 "to" 200 "over" 0.1;
 
 #define REDUX_BUTTON( idx, string, action_ ) \
 		REDUX_BUTTON_VIS( idx, string, action_, 1 )

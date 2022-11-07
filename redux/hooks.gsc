@@ -18,27 +18,92 @@ hooks()
 {
     replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 												// Force ranked
     replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 												// Force ranked
-    replaceFunc( maps\mp\gametypes\_gamelogic::onForfeit, ::hook_return_false ); 										// Disable forfeits
+	replaceFunc( maps\mp\_utility::getWeaponClass, ::get_weapon_class_hook );											// Use our custom statsTable instead
 
+    replaceFunc( maps\mp\gametypes\_gamelogic::onForfeit, ::hook_return_false ); 										// Disable forfeits
+	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
     replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
+
     replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hook_return_false ); 									// Disable Deathstreaks
     replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); 									// Disable Riot Shield
     replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); 										// Disable Last Stand
     replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); 									// Intercept valid weapon check to allow for our custom attachments
 	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::give_loadout_hook ); 											// Add support for in-game loadout
-	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); 												// Allow class changing at any time
 	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback
 	replaceFunc( maps\mp\gametypes\_damage::PlayerKilled_internal, ::player_killed_hook ); 								// Disable assisted suicides
-	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
+
+	replaceFunc( maps\mp\gametypes\_teams::getJoinTeamPermissions, ::hook_return_true );								// Allow unbalanced teams
+	replaceFunc( maps\mp\gametypes\_playerlogic::maySpawn, ::may_spawn_hook );											// Allow first connect players to spawn mid-round
+
+	replaceFunc( maps\mp\gametypes\sd::onStartGameType, ::on_start_gametype_hook );										// Fix SD teams
+
+	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); 												// Allow class changing at any time
+
+	replaceFunc( maps\mp\killstreaks\_airdrop::useHoldThink, ::use_hold_think_hook );									// Disable owner crate capture time
 
 	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, ::hook_return_false );						// Disable tac insert enemy listener
 	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hook_return_false );							// Disable tac insert damage
 	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitor_ti_use_hook );									// Give player Throwing Knife after placing TI
 	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
 
-	replaceFunc( maps\mp\_utility::getWeaponClass, ::get_weapon_class_hook );											// Use our custom statsTable instead
-	replaceFunc( maps\mp\gametypes\sd::onStartGameType, ::on_start_gametype_hook );										// Fix SD teams
-	replaceFunc( maps\mp\gametypes\_teams::getJoinTeamPermissions, ::hook_return_true );								// Allow unbalanced teams
+}
+
+may_spawn_hook()
+{
+	if ( getGametypeNumLives() || isDefined( level.disableSpawning ) )
+	{
+		if ( isDefined( level.disableSpawning ) && level.disableSpawning )
+			return false;
+
+		if ( self.pers["teamKillPunish"] )
+			return false;
+
+		if ( !self.pers["lives"] && gameHasStarted() )
+		{
+			return false;
+		}
+		/*
+		else if ( gameHasStarted() )
+		{
+			// disallow spawning for late comers
+			if ( !level.inGracePeriod && !self.hasSpawned )
+				return false;
+		}
+		*/
+	}
+	return true;
+}
+
+use_hold_think_hook( player, useTime ) 
+{
+    player playerLinkTo( self );
+    player playerLinkedOffsetEnable();
+    
+    player _disableWeapon();
+    
+    self.curProgress = 0;
+    self.inUse = true;
+    self.useRate = 0;
+	self.useTime = 3000;
+    
+    player thread maps\mp\killstreaks\_airdrop::personalUseBar( self );
+   
+    result = maps\mp\killstreaks\_airdrop::useHoldThinkLoop( player );
+	assert ( isDefined( result ) );
+    
+    if ( isAlive( player ) )
+    {
+        player _enableWeapon();
+        player unlink();
+    }
+    
+    if ( !isDefined( self ) )
+    	return false;
+
+    self.inUse = false;
+	self.curProgress = 0;
+
+	return ( result );
 }
 
 player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, isFauxDeath )

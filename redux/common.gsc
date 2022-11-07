@@ -26,8 +26,14 @@ init()
     level thread redux\voting::init();
     level thread on_player_connect();
 
+    // gameplay changes
+    setDvar( "g_knockback", 1 );
     setDvar( "bg_surfacePenetration", 128 );
     setDvar( "player_sprintUnlimited", true );
+    setDvar( "bg_viewKickMin", 2 );
+    setDvar( "bg_viewKickMax", 10 );
+    setDvar( "bg_viewKickRandom", 0.4 );
+    setDvar( "bg_viewKickScale", 0.15 );
 
     // ever so slightly hacky
     if ( level.gametype == "sd" )
@@ -204,14 +210,14 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 		return 0;
 	}
 
+    if ( sMeansOfDeath == "MOD_FALLING" )
+        return Select( level.gametype == "sd", 1, iDamage );
+
     if ( isKillstreakWeapon( sWeapon ) )
         return 0;
         
     if ( eAttacker isTestClient() )
         return Select( victim isTestClient(), iDamage, iDamage * 0.25 );
-
-    if ( sMeansOfDeath == "MOD_FALLING" )
-        return Select( level.gametype == "sd", 1, iDamage );
 
     if ( sMeansOfDeath == "MOD_MELEE"
     || sMeansOfDeath == "MOD_GRENADE"
@@ -277,7 +283,7 @@ bot_ping()
             break;
         }
 
-        wait ( randomIntRange( 1, 8 ) );
+        wait 5;
     }
 }
 
