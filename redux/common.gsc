@@ -211,7 +211,7 @@ modify_player_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint
 	}
 
     if ( sMeansOfDeath == "MOD_FALLING" )
-        return Select( level.gametype == "sd", 1, iDamage );
+        return Select( level.gametype == "sd", 0, iDamage );
 
     if ( isKillstreakWeapon( sWeapon ) )
         return 0;
