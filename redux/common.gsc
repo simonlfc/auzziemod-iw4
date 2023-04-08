@@ -8,12 +8,12 @@ init()
 	level.rankedMatch = true;
 	level.modifyPlayerDamage = ::modifyPlayerDamage;
 
+	level._effect["flesh_body"] = loadFX( "impacts/flesh_hit_body_fatal_exit" );
+	level._effect["flesh_head"] = loadFX( "impacts/flesh_hit_head_fatal_exit" );
+	
 	// asset precaching
     if ( !isDefined( game["precachedAssets"] ) )
     {
-        level._effect["flesh_body"] = loadFX( "impacts/flesh_hit_body_fatal_exit" );
-        level._effect["flesh_head"] = loadFX( "impacts/flesh_hit_head_fatal_exit" );
-
         precacheMenu( "map_voting" );
         precacheMenu( "loadout" );
         precacheMenu( "loadout_select" );
