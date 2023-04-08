@@ -4,51 +4,85 @@
 #include maps\mp\gametypes\_damage;
 #include maps\mp\gametypes\_class;
 
-hook_return_true()
+hookReturnTrue( var1, var2, var3, var4, var5 )
 {
 	return true;
 }
 
-hook_return_false()
+hookReturnFalse( var1, var2, var3, var4, var5 )
 {
 	return false;
 }
 
 hooks()
 {
-    replaceFunc( maps\mp\_utility::rankingEnabled, ::hook_return_true ); 												// Force ranked
-    replaceFunc( maps\mp\_utility::privateMatch, ::hook_return_false ); 												// Force ranked
-	replaceFunc( maps\mp\_utility::getWeaponClass, ::get_weapon_class_hook );											// Use our custom statsTable instead
+	// Disable quickmessages
+	replaceFunc( maps\mp\gametypes\_quickmessages::init, ::hookReturnFalse );
 
-    replaceFunc( maps\mp\gametypes\_gamelogic::onForfeit, ::hook_return_false ); 										// Disable forfeits
-	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::process_lobby_data_hook ); 							// Intercept processLobbyData for map voting
-    replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip ); 	// Disable pre-match timer
+	// Force ranked
+	replaceFunc( maps\mp\_utility::rankingEnabled, ::hookReturnTrue );
+	replaceFunc( maps\mp\_utility::privateMatch, ::hookReturnFalse );
 
-    replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hook_return_false ); 									// Disable Deathstreaks
-    replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::is_valid_primary_hook ); 									// Disable Riot Shield
-    replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::is_valid_perk3_hook ); 										// Disable Last Stand
-    replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::is_valid_weapon_hook ); 									// Intercept valid weapon check to allow for our custom attachments
-	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::give_loadout_hook ); 											// Add support for in-game loadout
-	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::player_damage_hook ); 					// Add damage callback
-	replaceFunc( maps\mp\gametypes\_damage::PlayerKilled_internal, ::player_killed_hook ); 								// Disable assisted suicides
+	// Use our custom statstable.csv instead
+	replaceFunc( maps\mp\_utility::getWeaponClass, ::getWeaponClassHook );
 
-	replaceFunc( maps\mp\gametypes\_teams::getJoinTeamPermissions, ::hook_return_true );								// Allow unbalanced teams
-	replaceFunc( maps\mp\gametypes\_playerlogic::maySpawn, ::may_spawn_hook );											// Allow first connect players to spawn mid-round
+	// Disable forfeits
+	replaceFunc( maps\mp\gametypes\_gamelogic::onForfeit, ::hookReturnFalse );
 
-	replaceFunc( maps\mp\gametypes\sd::onStartGameType, ::on_start_gametype_hook );										// Fix SD teams
+	// Intercept processLobbyData for map voting
+	replaceFunc( maps\mp\gametypes\_gamelogic::processLobbyData, ::processLobbyDataHook );
 
-	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menu_class_hook ); 												// Allow class changing at any time
+	// Disable pre-match timer
+	replaceFunc( maps\mp\gametypes\_gamelogic::matchStartTimerPC, maps\mp\gametypes\_gamelogic::matchStartTimerSkip );
 
-	replaceFunc( maps\mp\killstreaks\_airdrop::useHoldThink, ::use_hold_think_hook );									// Disable owner crate capture time
+	// Disable Deathstreaks
+	replaceFunc( maps\mp\gametypes\_class::isValidDeathstreak, ::hookReturnFalse );
 
-	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, ::hook_return_false );						// Disable tac insert enemy listener
-	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hook_return_false );							// Disable tac insert damage
-	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitor_ti_use_hook );									// Give player Throwing Knife after placing TI
-	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::set_ti_hook );									// Give player Throwing Knife after placing TI
+	// Disable Riot Shield
+	replaceFunc( maps\mp\gametypes\_class::isValidPrimary, ::isValidPrimaryHook );
 
+	// Disable Last Stand
+	replaceFunc( maps\mp\gametypes\_class::isValidPerk3, ::isValidPerk3Hook );
+
+	// Intercept valid weapon check to allow for our custom attachments
+	replaceFunc( maps\mp\gametypes\_class::isValidWeapon, ::isValidWeaponHook );
+
+	// Add support for in-game loadout
+	replaceFunc( maps\mp\gametypes\_class::giveLoadout, ::giveLoadoutHook );
+
+	// Add damage callback
+	replaceFunc( maps\mp\gametypes\_damage::Callback_PlayerDamage_internal, ::playerDamageInternalHook );
+
+	// Disable assisted suicides
+	replaceFunc( maps\mp\gametypes\_damage::PlayerKilled_internal, ::playerKilledInternalHook );
+
+	// Allow unbalanced teams
+	replaceFunc( maps\mp\gametypes\_teams::getJoinTeamPermissions, ::hookReturnTrue );
+
+	// Allow first connect players to spawn mid-round
+	replaceFunc( maps\mp\gametypes\_playerlogic::maySpawn, ::maySpawnHook );
+
+	// Fix SD teams
+	replaceFunc( maps\mp\gametypes\sd::onStartGameType, ::onStartGametypeHook );
+
+	// Allow class changing at any time
+	replaceFunc( maps\mp\gametypes\_menus::menuClass, ::menuClassHook );
+
+	// Disable owner crate capture time
+	replaceFunc( maps\mp\killstreaks\_airdrop::useHoldThink, ::useHoldThinkLoopHook );
+
+	// Disable tac insert enemy listener
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickEnemyUseListener, ::hookReturnFalse );
+
+	// Disable tac insert damage
+	replaceFunc( maps\mp\perks\_perkfunctions::GlowStickDamageListener, ::hookReturnFalse );
+
+	// Give player Throwing Knife after placing TI
+	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitorTIUseHook );
+	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::setTIHook );
 }
 
-may_spawn_hook()
+maySpawnHook()
 {
 	if ( getGametypeNumLives() || isDefined( level.disableSpawning ) )
 	{
@@ -59,9 +93,8 @@ may_spawn_hook()
 			return false;
 
 		if ( !self.pers["lives"] && gameHasStarted() )
-		{
 			return false;
-		}
+
 		/*
 		else if ( gameHasStarted() )
 		{
@@ -71,46 +104,47 @@ may_spawn_hook()
 		}
 		*/
 	}
+
 	return true;
 }
 
-use_hold_think_hook( player, useTime ) 
+useHoldThinkLoopHook( player, useTime )
 {
-    player playerLinkTo( self );
-    player playerLinkedOffsetEnable();
-    
-    player _disableWeapon();
-    
-    self.curProgress = 0;
-    self.inUse = true;
-    self.useRate = 0;
-	self.useTime = 3000;
-    
-    player thread maps\mp\killstreaks\_airdrop::personalUseBar( self );
-   
-    result = maps\mp\killstreaks\_airdrop::useHoldThinkLoop( player );
-	assert ( isDefined( result ) );
-    
-    if ( isAlive( player ) )
-    {
-        player _enableWeapon();
-        player unlink();
-    }
-    
-    if ( !isDefined( self ) )
-    	return false;
+	player playerLinkTo( self );
+	player playerLinkedOffsetEnable();
 
-    self.inUse = false;
+	player _disableWeapon();
+
+	self.curProgress = 0;
+	self.inUse = true;
+	self.useRate = 0;
+	self.useTime = 3000;
+
+	player thread maps\mp\killstreaks\_airdrop::personalUseBar( self );
+
+	result = maps\mp\killstreaks\_airdrop::useHoldThinkLoop( player );
+	assert( isDefined( result ) );
+
+	if ( isAlive( player ) )
+	{
+		player _enableWeapon();
+		player unlink();
+	}
+
+	if ( !isDefined( self ) )
+		return false;
+
+	self.inUse = false;
 	self.curProgress = 0;
 
 	return ( result );
 }
 
-player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, isFauxDeath )
+playerKilledInternalHook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, isFauxDeath )
 {
 	prof_begin( "PlayerKilled" );
 	//prof_begin( " PlayerKilled_1" );
-	
+
 	victim endon( "spawned" );
 	victim notify( "killed_player" );
 
@@ -127,33 +161,31 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 			victim.idFlags = 0;
 		else if ( sWeapon == "nuke_mp" )
 			victim.idFlags = 0;
-		else if ( level.friendlyfire >= 2)
+		else if ( level.friendlyfire >= 2 )
 			victim.idFlags = 0;
 		else
-			assertEx( 0, "Victims ID flags not set, but means of death was gr or nuke: " + sMeansOfDeath  );
+			assertEx( 0, "Victims ID flags not set, but means of death was gr or nuke: " + sMeansOfDeath );
 	}
 
 	if ( victim.hasRiotShieldEquipped )
 		victim LaunchShield( iDamage, sMeansofDeath );
-		
+
 	//victim thread checkForceBleedOut();
 
 	if ( !isFauxDeath )
 	{
 		if ( isDefined( victim.endGame ) )
-		{
-			victim VisionSetNakedForPlayer( getDvar( "mapname" ), 2 );
-		}
+			victim VisionSetNakedForPlayer( level.script, 2 );
 		else if ( !isDefined( victim.nuked ) )
 		{
-			victim VisionSetNakedForPlayer( getDvar( "mapname" ), 0 );
+			victim VisionSetNakedForPlayer( level.script, 0 );
 			victim ThermalVisionOff();
 		}
 	}
 	else
 	{
 		victim.fauxDead = true;
-		self notify ( "death" );
+		self notify( "death" );
 	}
 
 	if ( game[ "state" ] == "postgame" )
@@ -192,14 +224,14 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 		deathTimeOffset = ( gettime() - victim.lastStandParams.lastStandStartTime ) / 1000;
 		victim.lastStandParams = undefined;
 	}
-	
+
 	//prof_end( " PlayerKilled_1" );
 	//prof_begin( " PlayerKilled_2" );
-	
+
 	if ( !( ( !isDefined( attacker ) || attacker.classname == "trigger_hurt" || attacker.classname == "worldspawn" || attacker == victim ) && isDefined( self.attackers ) ) )
 	{
 		if ( isDefined( attacker ) )
-			attacker.assistedSuicide = undefined;	
+			attacker.assistedSuicide = undefined;
 	}
 
 	// override MOD
@@ -207,38 +239,38 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 		sMeansOfDeath = "MOD_HEAD_SHOT";
 	else if ( sMeansOfDeath != "MOD_MELEE" && !isDefined( victim.nuked ) )
 		victim playDeathSound();
-	
+
 	friendlyFire = isFriendlyFire( victim, attacker );
-	
+
 	if ( isDefined( attacker ) )
 	{
-		// override attacker if it's a vehicle	
+		// override attacker if it's a vehicle
 		if ( attacker.code_classname == "script_vehicle" && isDefined( attacker.owner ) )
 			attacker = attacker.owner;
 
-		// override attacker if it's a sentry	
+		// override attacker if it's a sentry
 		if ( attacker.code_classname == "misc_turret" && isDefined( attacker.owner ) )
 			attacker = attacker.owner;
 
-		// override attacker if it's a crate	
+		// override attacker if it's a crate
 		if ( attacker.code_classname == "script_model" && isDefined( attacker.owner ) )
 		{
 			attacker = attacker.owner;
-			
+
 			if ( !isFriendlyFire( victim, attacker ) && attacker != victim )
 				attacker notify( "crushed_enemy" );
 		}
 	}
-	
+
 	//prof_end( " PlayerKilled_2" );
 	//prof_begin( " PlayerKilled_3" );
-	
+
 	//prof_begin( " PlayerKilled_3_drop" );
 	// drop weapons from killed player
 	victim maps\mp\gametypes\_weapons::dropScavengerForDeath( attacker );	// must be done before dropWeaponForDeath, since we use some weapon information
 	victim maps\mp\gametypes\_weapons::dropWeaponForDeath( attacker );
 	//prof_end( " PlayerKilled_3_drop" );
-	
+
 	if ( !isFauxDeath )
 	{
 		victim.sessionstate = "dead";
@@ -247,7 +279,7 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 
 	// UTS update aliveCount
 	victim maps\mp\gametypes\_playerlogic::removeFromAliveCount();
-	
+
 	if ( !isDefined( victim.switching_teams ) )
 	{
 		// update our various stats
@@ -260,71 +292,63 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 
 	if ( isDefined( attacker ) )
 		attacker checkKillSteal( victim );
-	
+
 	// obituary
 	obituary( victim, attacker, sWeapon, sMeansOfDeath );
 
 	doKillcam = false;
 
 	lifeId = getNextLifeId();
-	
+
 	victim logPrintPlayerDeath( lifeId, attacker, iDamage, sMeansOfDeath, sWeapon, sPrimaryWeapon, sHitLoc );
 	victim maps\mp\_matchdata::logPlayerLife( lifeId );
 	victim maps\mp\_matchdata::logPlayerDeath( lifeId, attacker, iDamage, sMeansOfDeath, sWeapon, sPrimaryWeapon, sHitLoc );
-	
-	if ( (sMeansOfDeath == "MOD_MELEE") )
+
+	if ( ( sMeansOfDeath == "MOD_MELEE" ) )
 	{
 		if ( IsSubStr( sWeapon, "riotshield" ) )
 		{
 			attacker incPlayerStat( "shieldkills", 1 );
-			
+
 			if ( !matchMakingGame() )
 				victim incPlayerStat( "shielddeaths", 1 );
 		}
 		else
 			attacker incPlayerStat( "knifekills", 1 );
 	}
-	
+
 	//prof_end( " PlayerKilled_3" );
 	//prof_begin( " PlayerKilled_4" );
-	
+
 	if ( victim isSwitchingTeams() )
-	{
 		handleTeamChangeDeath();
-	}
-	else if ( !isPlayer( attacker ) || (isPlayer( attacker ) && sMeansOfDeath == "MOD_FALLING") )
-	{
+	else if ( !isPlayer( attacker ) || ( isPlayer( attacker ) && sMeansOfDeath == "MOD_FALLING" ) )
 		handleWorldDeath( attacker, lifeId, sMeansOfDeath, sHitLoc );
-	}
 	else if ( attacker == victim )
-	{
 		handleSuicideDeath( sMeansOfDeath, sHitLoc );
-	}
 	else if ( friendlyFire )
 	{
 		if ( !isDefined( victim.nuked ) )
-		{
 			handleFriendlyFireDeath( attacker );
-		}
 	}
 	else
 	{
 		if ( sMeansOfDeath == "MOD_GRENADE" && eInflictor == attacker )
-			addAttacker( victim, attacker, eInflictor, sWeapon, iDamage, (0,0,0), vDir, sHitLoc, psOffsetTime, sMeansOfDeath );
+			addAttacker( victim, attacker, eInflictor, sWeapon, iDamage, ( 0, 0, 0 ), vDir, sHitLoc, psOffsetTime, sMeansOfDeath );
 
 		doKillcam = true;
 		handleNormalDeath( lifeId, attacker, eInflictor, sWeapon, sMeansOfDeath );
 		victim thread maps\mp\gametypes\_missions::playerKilled( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, sPrimaryWeapon, sHitLoc, attacker.modifiers );
-		
+
 		victim.pers["cur_death_streak"]++;
-		
+
 		if ( !getGametypeNumLives() && !matchMakingGame() )
 			victim setPlayerStatIfGreater( "deathstreak", victim.pers["cur_death_streak"] );
 	}
-	
+
 	//prof_end( " PlayerKilled_4" );
 	//prof_begin( " PlayerKilled_5" );
-	
+
 	// clear any per life variables
 	victim resetPlayerVariables();
 	victim.lastAttacker = attacker;
@@ -337,7 +361,7 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 	if ( isFauxDeath )
 	{
 		doKillcam = false;
-		deathAnimDuration = (victim PlayerForceDeathAnim( eInflictor, sMeansOfDeath, sWeapon, sHitLoc, vDir ));
+		deathAnimDuration = ( victim PlayerForceDeathAnim( eInflictor, sMeansOfDeath, sWeapon, sHitLoc, vDir ) );
 	}
 
 	victim.body = victim clonePlayer( deathAnimDuration );
@@ -353,13 +377,14 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 
 	thread delayStartRagdoll( victim.body, sHitLoc, vDir, sWeapon, eInflictor, sMeansOfDeath );
 
-	// allow per gametype death handling	
+	// allow per gametype death handling
 	victim thread [[ level.onPlayerKilled ]]( eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration, lifeId );
 
 	if ( isPlayer( attacker ) )
 		attackerNum = attacker getEntityNumber();
 	else
 		attackerNum = -1;
+
 	killcamentity = victim getKillcamEntity( attacker, eInflictor, sWeapon );
 	killcamentityindex = -1;
 	killcamentitystarttime = 0;
@@ -368,29 +393,32 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 	{
 		killcamentityindex = killcamentity getEntityNumber();// must do this before any waiting lest the entity be deleted
 		killcamentitystarttime = killcamentity.birthtime;
+
 		if ( !isdefined( killcamentitystarttime ) )
 			killcamentitystarttime = 0;
 	}
 
-	 /#
+	/#
+
 	if ( getDvarInt( "scr_forcekillcam" ) != 0 )
 		doKillcam = true;
-	#/
+
+#/
 
 	if ( isDefined( attacker.finalKill ) )
 		maps\mp\_awards::addAwardWinner( "finalkill", attacker.clientid );
-	
+
 	//prof_end( " PlayerKilled_5" );
 	//prof_begin( " PlayerKilled_6" );
-	
+
 	if ( isDefined( attacker.finalKill ) && doKillcam && !isDefined( level.nukeDetonated ) )
 	{
 		level thread doFinalKillcam( 5.0, victim, attacker, attackerNum, killcamentityindex, killcamentitystarttime, sWeapon, deathTimeOffset, psOffsetTime );
 
 		if ( !isFauxDeath )
-			wait ( 1.0 );
+			wait( 1.0 );
 	}
-	
+
 	if ( !isFauxDeath )
 	{
 		if ( !level.showingFinalKillcam && !level.killcam && doKillcam )
@@ -398,21 +426,23 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 			if ( victim _hasPerk( "specialty_copycat" ) && isDefined( victim.pers["copyCatLoadout"] ) )
 			{
 				victim thread maps\mp\gametypes\_killcam::waitDeathCopyCatButton( attacker );
-				wait ( 1.0 );
+				wait( 1.0 );
 			}
 		}
-		
+
 		// let the player watch themselves die
 		wait( 0.25 );
 		victim thread maps\mp\gametypes\_killcam::cancelKillCamOnUse();
 		wait( 0.25 );
-		
+
 		self.respawnTimerStartTime = gettime() + 1000;
 		timeUntilSpawn = maps\mp\gametypes\_playerlogic::TimeUntilSpawn( true );
+
 		if ( timeUntilSpawn < 1 )
 			timeUntilSpawn = 1;
+
 		victim thread maps\mp\gametypes\_playerlogic::predictAboutToSpawnPlayerOverTime( timeUntilSpawn );
-		
+
 		wait( 1.0 );
 		victim notify( "death_delay_finished" );
 	}
@@ -420,21 +450,21 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 	postDeathDelay = ( getTime() - victim.deathTime ) / 1000;
 	self.respawnTimerStartTime = gettime();
 
-	if ( !(isDefined( victim.cancelKillcam) && victim.cancelKillcam) && doKillcam && level.killcam && game[ "state" ] == "playing" && !victim isUsingRemote() && !level.showingFinalKillcam )
+	if ( !( isDefined( victim.cancelKillcam ) && victim.cancelKillcam ) && doKillcam && level.killcam && game[ "state" ] == "playing" && !victim isUsingRemote() && !level.showingFinalKillcam )
 	{
 		livesLeft = !( getGametypeNumLives() && !victim.pers[ "lives" ] );
 		timeUntilSpawn = maps\mp\gametypes\_playerlogic::TimeUntilSpawn( true );
 		willRespawnImmediately = livesLeft && ( timeUntilSpawn <= 0 );
-		
+
 		if ( !livesLeft )
 			timeUntilSpawn = -1;
 
 		victim maps\mp\gametypes\_killcam::killcam( attackerNum, killcamentityindex, killcamentitystarttime, sWeapon, postDeathDelay + deathTimeOffset, psOffsetTime, timeUntilSpawn, maps\mp\gametypes\_gamelogic::timeUntilRoundEnd(), attacker, victim );
 	}
-	
+
 	//prof_end( " PlayerKilled_6" );
 	//prof_begin( " PlayerKilled_7" );
-	
+
 	//self openMenu( "killedby_card_hide" );
 
 	if ( game[ "state" ] != "playing" )
@@ -444,7 +474,7 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 			victim.sessionstate = "dead";
 			victim ClearKillcamState();
 		}
-		
+
 		//prof_end( " PlayerKilled_7" );
 		prof_end( "PlayerKilled" );
 		return;
@@ -452,32 +482,30 @@ player_killed_hook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, sWeapo
 
 	// class may be undefined if we have changed teams
 	if ( isValidClass( victim.class ) )
-	{
 		victim thread maps\mp\gametypes\_playerlogic::spawnClient();
-	}
-	
+
 	//prof_end( " PlayerKilled_7" );
 	prof_end( "PlayerKilled" );
 }
 
-on_start_gametype_hook()
+onStartGametypeHook()
 {
 	if ( !isDefined( game["switchedsides"] ) )
 		game["switchedsides"] = false;
-							 
-	game["attackers"] = "axis";						   
-	game["defenders"] = "allies";  
-	
+
+	game["attackers"] = "axis";
+	game["defenders"] = "allies";
+
 	setClientNameMode( "auto_change" );
-	
+
 	game["strings"]["target_destroyed"] = &"MP_TARGET_DESTROYED";
 	game["strings"]["bomb_defused"] = &"MP_BOMB_DEFUSED";
-	
+
 	precacheString( game["strings"]["target_destroyed"] );
 	precacheString( game["strings"]["bomb_defused"] );
 
-	level._effect["bombexplosion"] = loadfx("explosions/tanker_explosion");
-	
+	level._effect["bombexplosion"] = loadfx( "explosions/tanker_explosion" );
+
 	setObjectiveText( game["attackers"], &"OBJECTIVES_SD_ATTACKER" );
 	setObjectiveText( game["defenders"], &"OBJECTIVES_SD_DEFENDER" );
 
@@ -488,63 +516,63 @@ on_start_gametype_hook()
 	setObjectiveHintText( game["defenders"], &"OBJECTIVES_SD_DEFENDER_HINT" );
 
 	level.spawnMins = ( 0, 0, 0 );
-	level.spawnMaxs = ( 0, 0, 0 );	
+	level.spawnMaxs = ( 0, 0, 0 );
 	maps\mp\gametypes\_spawnlogic::placeSpawnPoints( "mp_sd_spawn_attacker" );
 	maps\mp\gametypes\_spawnlogic::placeSpawnPoints( "mp_sd_spawn_defender" );
-	
+
 	level.mapCenter = maps\mp\gametypes\_spawnlogic::findBoxCenter( level.spawnMins, level.spawnMaxs );
 	setMapCenter( level.mapCenter );
-	
+
 	allowed[0] = "sd";
 	allowed[1] = "bombzone";
 	allowed[2] = "blocker";
 	maps\mp\gametypes\_gameobjects::main( allowed );
-	
+
 	maps\mp\gametypes\_rank::registerScoreInfo( "win", 2 );
 	maps\mp\gametypes\_rank::registerScoreInfo( "loss", 1 );
 	maps\mp\gametypes\_rank::registerScoreInfo( "tie", 1.5 );
-	
+
 	maps\mp\gametypes\_rank::registerScoreInfo( "kill", 50 );
 	maps\mp\gametypes\_rank::registerScoreInfo( "headshot", 50 );
 	maps\mp\gametypes\_rank::registerScoreInfo( "assist", 20 );
 	maps\mp\gametypes\_rank::registerScoreInfo( "plant", 100 );
 	maps\mp\gametypes\_rank::registerScoreInfo( "defuse", 100 );
-	
+
 	thread maps\mp\gametypes\sd::updateGametypeDvars();
 	thread maps\mp\gametypes\sd::bombs();
 }
 
-get_weapon_class_hook( weapon )
+getWeaponClassHook( weapon )
 {
 	tokens = strTok( weapon, "_" );
 
 	weaponClass = tablelookup( "redux/statstable.csv", 4, tokens[0], 2 );
-	
+
 	// handle special case weapons like grenades, airdrop markers, etc...
 	if ( weaponClass == "" )
 	{
 		weaponName = strip_suffix( weapon, "_mp" );
 		weaponClass = tablelookup( "redux/statstable.csv", 4, weaponName, 2 );
 	}
-	
+
 	if ( isMG( weapon ) )
 		weaponClass = "weapon_mg";
 	else if ( isKillstreakWeapon( weapon ) )
-		weaponClass = "killstreak"; 
+		weaponClass = "killstreak";
 	else if ( isDeathStreakWeapon( weapon ) )
 		weaponClass = "deathstreak";
 	else if ( weapon == "none" ) //airdrop crates
 		weaponClass = "other";
 	else if ( weaponClass == "" )
 		weaponClass = "other";
-	
+
 	assertEx( weaponClass != "", "ERROR: invalid weapon class for weapon " + weapon );
-	
+
 	return weaponClass;
 }
 
 
-set_ti_hook()
+setTIHook()
 {
 	self setOffhandPrimaryClass( "other" );
 	self takeWeapon( "throwingknife_mp" );
@@ -552,27 +580,27 @@ set_ti_hook()
 
 	self _giveWeapon( "flare_mp", 0 );
 	self giveStartAmmo( "flare_mp" );
- 
-	self thread monitor_ti_use_hook();
+
+	self thread monitorTIUseHook();
 }
 
-monitor_ti_use_hook()
+monitorTIUseHook()
 {
-	self endon ( "death" );
-	self endon ( "disconnect" );
-	level endon ( "game_ended" );
-	self endon ( "end_monitorTIUse" );
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+	self endon( "end_monitorTIUse" );
 
 	self thread maps\mp\perks\_perkfunctions::updateTISpawnPosition();
 	self thread maps\mp\perks\_perkfunctions::clearPreviousTISpawnpoint();
-	
+
 	for ( ;; )
 	{
 		self waittill( "grenade_fire", lightstick, weapName );
-				
+
 		if ( weapName != "flare_mp" )
 			continue;
-		
+
 		if ( isDefined( self.setSpawnPoint ) )
 			self maps\mp\perks\_perkfunctions::deleteTI( self.setSpawnPoint );
 
@@ -582,27 +610,28 @@ monitor_ti_use_hook()
 		if ( self touchingBadTrigger() )
 			continue;
 
-		TIGroundPosition = playerPhysicsTrace( self.TISpawnPosition + (0,0,16), self.TISpawnPosition - (0,0,2048) ) + (0,0,1);
-		
+		TIGroundPosition = playerPhysicsTrace( self.TISpawnPosition + ( 0, 0, 16 ), self.TISpawnPosition - ( 0, 0, 2048 ) ) + ( 0, 0, 1 );
+
 		glowStick = spawn( "script_model", TIGroundPosition );
 		glowStick.angles = self.angles;
 		glowStick.team = self.team;
 		glowStick.enemyTrigger = spawn( "script_origin", TIGroundPosition );
 		glowStick thread maps\mp\perks\_perkfunctions::GlowStickSetupAndWaitForDeath( self );
 		glowStick.playerSpawnPos = self.TISpawnPosition;
-		
+
 		glowStick thread maps\mp\gametypes\_weapons::createBombSquadModel( "weapon_light_stick_tactical_bombsquad", "tag_fire_fx", level.otherTeam[self.team], self );
-		
+
 		self maps\mp\perks\_perks::givePerk( "throwingknife_mp" );
-		self.setSpawnPoint = glowStick;		
+		self.setSpawnPoint = glowStick;
 		return;
 	}
 }
 
 
-process_lobby_data_hook()
+processLobbyDataHook()
 {
 	curPlayer = 0;
+
 	foreach ( player in level.players )
 	{
 		if ( !isDefined( player ) )
@@ -610,13 +639,13 @@ process_lobby_data_hook()
 
 		player.clientMatchDataId = curPlayer;
 		curPlayer++;
-		
-		setClientMatchData( "players", player.clientMatchDataId, "xuid", player.name );		
+
+		setClientMatchData( "players", player.clientMatchDataId, "xuid", player.name );
 	}
-	
+
 	maps\mp\_awards::assignAwards();
 	maps\mp\_scoreboard::processLobbyScoreboards();
-	
+
 	sendClientMatchData();
 	waitframe();
 
@@ -628,11 +657,11 @@ process_lobby_data_hook()
 		foreach ( player in level.players )
 			player.pers["stats"] = player.stats;
 
-		redux\voting::start_map_vote();
+		redux\voting::startMapVote();
 	}
 }
 
-is_valid_weapon_hook( refString )
+isValidWeaponHook( refString )
 {
 	if ( isSubStr( refString, "irons" ) )
 		return true;
@@ -649,17 +678,17 @@ is_valid_weapon_hook( refString )
 		return true;
 
 	assertMsg( "Replacing invalid weapon/attachment combo: " + refString );
-	
+
 	return false;
 }
 
 
-give_loadout_hook( team, class, allowCopycat )
+giveLoadoutHook( team, class, allowCopycat )
 {
 	self takeAllWeapons();
-	
+
 	primaryIndex = 0;
-	
+
 	// initialize specialty array
 	self.specialty = [];
 
@@ -714,19 +743,19 @@ give_loadout_hook( team, class, allowCopycat )
 		class_num 						= getClassIndex( class );
 		self.class_num 					= class_num;
 
-		loadoutPrimary 					= redux\loadout::get_loadout_stat( "primary_weapon" );
-		loadoutPrimaryAttachment 		= redux\loadout::get_loadout_stat( "primary_attachment" );
+		loadoutPrimary 					= redux\loadout::getLoadoutStat( "primary_weapon" );
+		loadoutPrimaryAttachment 		= redux\loadout::getLoadoutStat( "primary_attachment" );
 		loadoutPrimaryAttachment2 		= "none"; // i am not implementing bling in menus bro get fookt make a pr
-		loadoutPrimaryCamo 				= redux\loadout::get_loadout_stat( "primary_camo" );
-		loadoutSecondary 				= redux\loadout::get_loadout_stat( "secondary_weapon" );
-		loadoutSecondaryAttachment 		= redux\loadout::get_loadout_stat( "secondary_attachment" );
+		loadoutPrimaryCamo 				= redux\loadout::getLoadoutStat( "primary_camo" );
+		loadoutSecondary 				= redux\loadout::getLoadoutStat( "secondary_weapon" );
+		loadoutSecondaryAttachment 		= redux\loadout::getLoadoutStat( "secondary_attachment" );
 		loadoutSecondaryAttachment2 	= "none"; // i am not implementing bling in menus bro get fookt make a pr
-		loadoutSecondaryCamo 			= redux\loadout::get_loadout_stat( "secondary_camo" );
-		loadoutEquipment 				= redux\loadout::get_loadout_stat( "lethal" );
-		loadoutPerk1 					= redux\loadout::get_loadout_stat( "perk1" );
-		loadoutPerk2 					= redux\loadout::get_loadout_stat( "perk2" );
-		loadoutPerk3 					= redux\loadout::get_loadout_stat( "perk3" );
-		loadoutOffhand 					= redux\loadout::get_loadout_stat( "tactical" );
+		loadoutSecondaryCamo 			= redux\loadout::getLoadoutStat( "secondary_camo" );
+		loadoutEquipment 				= redux\loadout::getLoadoutStat( "lethal" );
+		loadoutPerk1 					= redux\loadout::getLoadoutStat( "perk1" );
+		loadoutPerk2 					= redux\loadout::getLoadoutStat( "perk2" );
+		loadoutPerk3 					= redux\loadout::getLoadoutStat( "perk3" );
+		loadoutOffhand 					= redux\loadout::getLoadoutStat( "tactical" );
 	}
 
 	if ( loadoutPerk1 != "specialty_bling" )
@@ -734,7 +763,7 @@ give_loadout_hook( team, class, allowCopycat )
 		loadoutPrimaryAttachment2 = "none";
 		loadoutSecondaryAttachment2 = "none";
 	}
-	
+
 	if ( loadoutPerk1 != "specialty_onemanarmy" && loadoutSecondary == "onemanarmy" )
 		loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
 
@@ -750,17 +779,17 @@ give_loadout_hook( team, class, allowCopycat )
 		loadoutKillstreak2 = "none";
 		loadoutKillstreak3 = "none";
 	}
-	
+
 	secondaryName = buildWeaponName( loadoutSecondary, loadoutSecondaryAttachment, loadoutSecondaryAttachment2 );
-	self _giveWeapon( secondaryName, int(tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ) ) );
+	self _giveWeapon( secondaryName, int( tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ) ) );
 
 	self.loadoutPrimaryCamo = int( tableLookup( "mp/camoTable.csv", 1, loadoutPrimaryCamo, 0 ) );
 	self.loadoutPrimary = loadoutPrimary;
 	self.loadoutSecondary = loadoutSecondary;
 	self.loadoutSecondaryCamo = int( tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ) );
-	
+
 	self setOffhandPrimaryClass( "other" );
-	
+
 	// Action Slots
 	self _setActionSlot( 1, "" );
 	self _setActionSlot( 1, "nightvision" );
@@ -770,82 +799,81 @@ give_loadout_hook( team, class, allowCopycat )
 	// Perks
 	self _clearPerks();
 	self _detachAll();
-	
+
 	self loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3 );
-		
+
 	self setKillstreaks( loadoutKillstreak1, loadoutKillstreak2, loadoutKillstreak3 );
-		
+
 	if ( self hasPerk( "specialty_extraammo", true ) && getWeaponClass( secondaryName ) != "weapon_projectile" )
 		self giveMaxAmmo( secondaryName );
 
 	// Primary Weapon
 	primaryName = buildWeaponName( loadoutPrimary, loadoutPrimaryAttachment, loadoutPrimaryAttachment2 );
 	self _giveWeapon( primaryName, self.loadoutPrimaryCamo );
-	
+
 	// fix changing from a riotshield class to a riotshield class during grace period not giving a shield
 	if ( primaryName == "riotshield_mp" && level.inGracePeriod )
-		self notify ( "weapon_change", "riotshield_mp" );
+		self notify( "weapon_change", "riotshield_mp" );
 
 	if ( self hasPerk( "specialty_extraammo", true ) )
 		self giveMaxAmmo( primaryName );
 
 	self setSpawnWeapon( primaryName );
-	
+
 	primaryTokens = strtok( primaryName, "_" );
 	self.pers["primaryWeapon"] = primaryTokens[0];
-	
+
 	// Primary Offhand was given by givePerk (it's your perk1)
-	
+
 	// Secondary Offhand
 	offhandSecondaryWeapon = loadoutOffhand + "_mp";
+
 	if ( loadoutOffhand == "flash_grenade" )
 		self setOffhandSecondaryClass( "flash" );
 	else
 		self setOffhandSecondaryClass( "smoke" );
-	
+
 	self giveWeapon( offhandSecondaryWeapon );
-	if( loadOutOffhand == "smoke_grenade" )
+
+	if ( loadOutOffhand == "smoke_grenade" )
 		self setWeaponAmmoClip( offhandSecondaryWeapon, 1 );
-	else if( loadOutOffhand == "flash_grenade" )
+	else if ( loadOutOffhand == "flash_grenade" )
 		self setWeaponAmmoClip( offhandSecondaryWeapon, 2 );
-	else if( loadOutOffhand == "concussion_grenade" )
+	else if ( loadOutOffhand == "concussion_grenade" )
 		self setWeaponAmmoClip( offhandSecondaryWeapon, 2 );
 	else
 		self setWeaponAmmoClip( offhandSecondaryWeapon, 1 );
-	
+
 	primaryWeapon = primaryName;
 	self.primaryWeapon = primaryWeapon;
 	self.secondaryWeapon = secondaryName;
 
 	self maps\mp\gametypes\_teams::playerModelForWeapon( self.pers["primaryWeapon"], getBaseWeaponName( secondaryName ) );
-		
+
 	self.isSniper = weaponClass( self.primaryWeapon ) == "sniper";
-	
+
 	self maps\mp\gametypes\_weapons::updateMoveSpeedScale( "primary" );
 
 	// cac specialties that require loop threads
 	self maps\mp\perks\_perks::cac_selector();
-	
-	self notify ( "changed_kit" );
-	self notify ( "giveLoadout" );
+
+	self notify( "changed_kit" );
+	self notify( "giveLoadout" );
 }
 
-menu_class_hook( response )
+menuClassHook( response )
 {
 	self closeMenus();
-	
+
 	// clear new status of unlocked classes
 	if ( response == "demolitions_mp,0" && self getPlayerData( "featureNew", "demolitions" ) )
-	{
 		self setPlayerData( "featureNew", "demolitions", false );
-	}
+
 	if ( response == "sniper_mp,0" && self getPlayerData( "featureNew", "sniper" ) )
-	{
 		self setPlayerData( "featureNew", "sniper", false );
-	}
 
 	// this should probably be an assert
-	if(!isDefined(self.pers["team"]) || (self.pers["team"] != "allies" && self.pers["team"] != "axis"))
+	if ( !isDefined( self.pers["team"] ) || ( self.pers["team"] != "allies" && self.pers["team"] != "axis" ) )
 		return;
 
 	class = self maps\mp\gametypes\_class::getClassChoice( response );
@@ -857,8 +885,8 @@ menu_class_hook( response )
 		return;
 	}
 
-	if ( response != "class0" && ( isDefined( self.pers["class"] ) && self.pers["class"] == class ) && 
-		( isDefined( self.pers["primary"] ) && self.pers["primary"] == primary ) )
+	if ( response != "class0" && ( isDefined( self.pers["class"] ) && self.pers["class"] == class ) &&
+	        ( isDefined( self.pers["primary"] ) && self.pers["primary"] == primary ) )
 		return;
 
 	if ( self.sessionstate == "playing" )
@@ -873,7 +901,7 @@ menu_class_hook( response )
 		self maps\mp\gametypes\_class::setClass( self.pers["class"] );
 		self.tag_stowed_back = undefined;
 		self.tag_stowed_hip = undefined;
-		
+
 		self maps\mp\gametypes\_class::giveLoadout( self.pers["team"], self.pers["class"] );
 	}
 	else
@@ -892,89 +920,91 @@ menu_class_hook( response )
 	self thread maps\mp\gametypes\_spectating::setSpectatePermissions();
 }
 
-is_valid_primary_hook( refString )
+isValidPrimaryHook( refString )
 {
 	switch ( refString )
 	{
-		case "ak47":
-		case "m16":
-		case "m4":
-		case "fn2000":
-		case "masada":
-		case "famas":
-		case "fal":
-		case "scar":
-		case "tavor":
-		case "mp5k":
-		case "uzi":
-		case "p90":
-		case "kriss":
-		case "ump45":
-		case "barrett":
-		case "wa2000":
-		case "m21":
-		case "cheytac":
-		case "rpd":
-		case "sa80":
-		case "mg4":
-		case "m240":
-		case "aug":
-		case "m40a3":
-		case "ak47classic":
-		case "ak74u":
-		case "peacekeeper":
-		case "dragunov":
-			return true;
-		default:
-			assertMsg( "Replacing invalid primary weapon: " + refString );
-			return false;
+	case "ak47":
+	case "m16":
+	case "m4":
+	case "fn2000":
+	case "masada":
+	case "famas":
+	case "fal":
+	case "scar":
+	case "tavor":
+	case "mp5k":
+	case "uzi":
+	case "p90":
+	case "kriss":
+	case "ump45":
+	case "barrett":
+	case "wa2000":
+	case "m21":
+	case "cheytac":
+	case "rpd":
+	case "sa80":
+	case "mg4":
+	case "m240":
+	case "aug":
+	case "m40a3":
+	case "ak47classic":
+	case "ak74u":
+	case "peacekeeper":
+	case "dragunov":
+		return true;
+
+	default:
+		assertMsg( "Replacing invalid primary weapon: " + refString );
+		return false;
 	}
 }
 
-is_valid_perk3_hook( refString )
+isValidPerk3Hook( refString )
 {
 	switch ( refString )
 	{
-		case "specialty_extendedmelee":
-		case "specialty_bulletaccuracy":
-		case "specialty_localjammer":
-		case "specialty_heartbreaker":
-		case "specialty_detectexplosive":
-			return true;
-		default:
-			assertMsg( "Replacing invalid perk3: " + refString );
-			return false;
+	case "specialty_extendedmelee":
+	case "specialty_bulletaccuracy":
+	case "specialty_localjammer":
+	case "specialty_heartbreaker":
+	case "specialty_detectexplosive":
+		return true;
+
+	default:
+		assertMsg( "Replacing invalid perk3: " + refString );
+		return false;
 	}
 }
 
 
-player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime )
-{	
+playerDamageInternalHook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime )
+{
 	if ( !isReallyAlive( victim ) )
 		return;
-	
+
 	if ( isDefined( eAttacker ) && eAttacker.classname == "script_origin" && isDefined( eAttacker.type ) && eAttacker.type == "soft_landing" )
 		return;
-	
+
 	if ( isDefined( level.hostMigrationTimer ) )
 		return;
-	
+
 	if ( sMeansOfDeath == "MOD_FALLING" )
 		victim thread emitFallDamage( iDamage );
-		
+
 	if ( sMeansOfDeath == "MOD_EXPLOSIVE_BULLET" && iDamage != 1 )
 	{
-		iDamage *= getDvarFloat( "scr_explBulletMod" );	
+		iDamage *= getDvarFloat( "scr_explBulletMod" );
 		iDamage = int( iDamage );
 	}
 
 	if ( isDefined( eAttacker ) && eAttacker.classname == "worldspawn" )
 		eAttacker = undefined;
-	
+
 	if ( isDefined( eAttacker ) && isDefined( eAttacker.gunner ) )
 		eAttacker = eAttacker.gunner;
-	
-	attackerIsNPC = isDefined( eAttacker ) && !isDefined( eAttacker.gunner ) && (eAttacker.classname == "script_vehicle" || eAttacker.classname == "misc_turret" || eAttacker.classname == "script_model");
+
+	attackerIsNPC = isDefined( eAttacker ) && !isDefined( eAttacker.gunner ) && ( eAttacker.classname == "script_vehicle" || eAttacker.classname == "misc_turret" || eAttacker.classname == "script_model" );
 	attackerIsHittingTeammate = level.teamBased && isDefined( eAttacker ) && ( victim != eAttacker ) && isDefined( eAttacker.team ) && ( victim.pers[ "team" ] == eAttacker.team );
 
 	stunFraction = 0.0;
@@ -989,7 +1019,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 	{
 		if ( attackerIsHittingTeammate && level.friendlyfire == 0 )
 			return;
-		
+
 		if ( sMeansOfDeath == "MOD_PISTOL_BULLET" || sMeansOfDeath == "MOD_RIFLE_BULLET" || sMeansOfDeath == "MOD_EXPLOSIVE_BULLET" && !attackerIsHittingTeammate )
 		{
 			if ( isPlayer( eAttacker ) )
@@ -997,14 +1027,15 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 				eAttacker.lastAttackedShieldPlayer = victim;
 				eAttacker.lastAttackedShieldTime = getTime();
 			}
-			victim notify ( "shield_blocked" );
+
+			victim notify( "shield_blocked" );
 
 			// fix turret + shield challenge exploits
 			if ( sWeapon == "turret_minigun_mp" )
 				shieldDamage = 25;
 			else
 				shieldDamage = maps\mp\perks\_perks::cac_modified_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc );
-						
+
 			victim.shieldDamage += shieldDamage;
 
 			// fix turret + shield challenge exploits
@@ -1017,16 +1048,16 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 					xpVal = int( 50 / self.recentShieldXP );
 				else
 					xpVal = 50;
-				
+
 				printLn( xpVal );
-				
+
 				victim thread maps\mp\gametypes\_rank::giveRankXP( "shield_damage", xpVal );
 				victim thread giveRecentShieldXP();
-				
+
 				victim thread maps\mp\gametypes\_missions::genericChallenge( "shield_damage", victim.shieldDamage );
 
 				victim thread maps\mp\gametypes\_missions::genericChallenge( "shield_bullet_hits", victim.shieldBulletHits );
-				
+
 				victim.shieldDamage = 0;
 				victim.shieldBulletHits = 0;
 			}
@@ -1034,29 +1065,28 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 
 		if ( iDFlags & level.iDFLAGS_SHIELD_EXPLOSIVE_IMPACT )
 		{
-			if (  !attackerIsHittingTeammate )
+			if ( !attackerIsHittingTeammate )
 				victim thread maps\mp\gametypes\_missions::genericChallenge( "shield_explosive_hits", 1 );
 
 			sHitLoc = "none";	// code ignores any damage to a "shield" bodypart.
-			if ( !(iDFlags & level.iDFLAGS_SHIELD_EXPLOSIVE_IMPACT_HUGE) )
+
+			if ( !( iDFlags & level.iDFLAGS_SHIELD_EXPLOSIVE_IMPACT_HUGE ) )
 				iDamage *= 0.0;
 		}
 		else if ( iDFlags & level.iDFLAGS_SHIELD_EXPLOSIVE_SPLASH )
 		{
 			if ( isDefined( eInflictor ) && isDefined( eInflictor.stuckEnemyEntity ) && eInflictor.stuckEnemyEntity == victim ) //does enough damage to shield carrier to ensure death
 				iDamage = 101;
-			
+
 			victim thread maps\mp\gametypes\_missions::genericChallenge( "shield_explosive_hits", 1 );
 			sHitLoc = "none";	// code ignores any damage to a "shield" bodypart.
 		}
 		else
-		{
 			return;
-		}
 	}
-	else if ( (smeansofdeath == "MOD_MELEE") && IsSubStr( sweapon, "riotshield" ) )
+	else if ( ( smeansofdeath == "MOD_MELEE" ) && IsSubStr( sweapon, "riotshield" ) )
 	{
-		if ( !(attackerIsHittingTeammate && (level.friendlyfire == 0)) )
+		if ( !( attackerIsHittingTeammate && ( level.friendlyfire == 0 ) ) )
 		{
 			stunFraction = 0.0;
 			victim StunPlayer( 0.0 );
@@ -1065,22 +1095,25 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 
 	if ( !attackerIsHittingTeammate )
 		iDamage = maps\mp\perks\_perks::cac_modified_damage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc );
-		
-	if ( isDefined( level.modifyPlayerDamage ) )	
+
+	if ( isDefined( level.modifyPlayerDamage ) )
 		iDamage = int( [[level.modifyPlayerDamage]]( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc ) );
-		
+
 	if ( !iDamage )
 		return false;
-	
+
 	victim.iDFlags = iDFlags;
 	victim.iDFlagsTime = getTime();
 
 	if ( game[ "state" ] == "postgame" )
 		return;
+
 	if ( victim.sessionteam == "spectator" )
 		return;
+
 	if ( isDefined( victim.canDoCombat ) && !victim.canDoCombat )
 		return;
+
 	if ( isDefined( eAttacker ) && isPlayer( eAttacker ) && isDefined( eAttacker.canDoCombat ) && !eAttacker.canDoCombat )
 		return;
 
@@ -1092,7 +1125,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 			victim _suicide();
 			return;
 		}
-		
+
 		if ( !level.friendlyfire )
 			return;
 	}
@@ -1105,7 +1138,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 
 	friendly = false;
 
-	if ( ( victim.health == victim.maxhealth && ( !isDefined( victim.lastStand ) || !victim.lastStand )  ) || !isDefined( victim.attackers ) && !isDefined( victim.lastStand )  )
+	if ( ( victim.health == victim.maxhealth && ( !isDefined( victim.lastStand ) || !victim.lastStand ) ) || !isDefined( victim.attackers ) && !isDefined( victim.lastStand ) )
 	{
 		victim.attackers = [];
 		victim.attackerData = [];
@@ -1132,7 +1165,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 	prof_end( "PlayerDamage flags/tweaks" );
 
 	// check for completely getting out of the damage
-	if ( !(iDFlags & level.iDFLAGS_NO_PROTECTION) )
+	if ( !( iDFlags & level.iDFLAGS_NO_PROTECTION ) )
 	{
 		// items you own don't damage you in FFA
 		if ( !level.teamBased && attackerIsNPC && isDefined( eAttacker.owner ) && eAttacker.owner == victim )
@@ -1187,11 +1220,11 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 				victim.explosiveInfo[ "cookedKill" ] = isDefined( eInflictor.isCooked );
 				victim.explosiveInfo[ "throwbackKill" ] = isDefined( eInflictor.threwBack );
 			}
-			
+
 			victim.explosiveInfo[ "stickKill" ] = isDefined( eInflictor.isStuck ) && eInflictor.isStuck == "enemy";
 			victim.explosiveInfo[ "stickFriendlyKill" ] = isDefined( eInflictor.isStuck ) && eInflictor.isStuck == "friendly";
 		}
-	
+
 		if ( isPlayer( eAttacker ) )
 			eAttacker.pers[ "participation" ]++ ;
 
@@ -1199,14 +1232,16 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 
 		if ( attackerIsHittingTeammate )
 		{
-			if ( !matchMakingGame() && isPlayer(eAttacker) )
+			if ( !matchMakingGame() && isPlayer( eAttacker ) )
 				eAttacker incPlayerStat( "mostff", 1 );
-			
+
 			prof_begin( "PlayerDamage player" );// profs automatically end when the function returns
-			if ( level.friendlyfire == 0 || ( !isPlayer(eAttacker) && level.friendlyfire != 1 ) )// no one takes damage
+
+			if ( level.friendlyfire == 0 || ( !isPlayer( eAttacker ) && level.friendlyfire != 1 ) ) // no one takes damage
 			{
 				if ( sWeapon == "artillery_mp" || sWeapon == "stealth_bomb_mp" )
 					victim damageShellshockAndRumble( eInflictor, sWeapon, sMeansOfDeath, iDamage, iDFlags, eAttacker );
+
 				return;
 			}
 			else if ( level.friendlyfire == 1 )// the friendly takes damage
@@ -1221,6 +1256,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 			else if ( ( level.friendlyfire == 2 ) && isReallyAlive( eAttacker ) )// only the attacker takes damage
 			{
 				iDamage = int( iDamage * .5 );
+
 				if ( iDamage < 1 )
 					iDamage = 1;
 
@@ -1233,6 +1269,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 			else if ( level.friendlyfire == 3 && isReallyAlive( eAttacker ) )// both friendly and attacker take damage
 			{
 				iDamage = int( iDamage * .5 );
+
 				if ( iDamage < 1 )
 					iDamage = 1;
 
@@ -1240,6 +1277,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 				eAttacker.lastDamageWasFromEnemy = false;
 
 				victim finishPlayerDamageWrapper( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime, stunFraction );
+
 				if ( isReallyAlive( eAttacker ) )// may have died due to friendly fire punishment
 				{
 					eAttacker.friendlydamage = true;
@@ -1249,7 +1287,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 			}
 
 			friendly = true;
-			
+
 		}
 		else// not hitting teammate
 		{
@@ -1260,7 +1298,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 
 			if ( isDefined( eAttacker ) && isPlayer( eAttacker ) )
 				addAttacker( victim, eAttacker, eInflictor, sWeapon, iDamage, vPoint, vDir, sHitLoc, psOffsetTime, sMeansOfDeath );
-			
+
 			if ( sMeansOfDeath == "MOD_EXPLOSIVE" || sMeansOfDeath == "MOD_GRENADE_SPLASH" && iDamage < victim.health )
 				victim notify( "survived_explosion" );
 
@@ -1276,9 +1314,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 				victim.attackerPosition = eAttacker.origin;
 			}
 			else
-			{
 				victim.attackerPosition = undefined;
-			}
 
 			if ( issubstr( sMeansOfDeath, "MOD_GRENADE" ) && isDefined( eInflictor.isCooked ) )
 				victim.wasCooked = getTime();
@@ -1298,7 +1334,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 			victim thread maps\mp\gametypes\_missions::playerDamaged( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, sHitLoc );
 
 			prof_end( "PlayerDamage world" );
-			
+
 		}
 
 		if ( attackerIsNPC && isDefined( eAttacker.gunner ) )
@@ -1306,17 +1342,17 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 		else
 			damager = eAttacker;
 
-		if ( isDefined( damager) && damager != victim && iDamage > 0 )
+		if ( isDefined( damager ) && damager != victim && iDamage > 0 )
 		{
 			if ( iDFlags & level.iDFLAGS_STUN )
 				typeHit = "stun";
-			else if ( victim hasPerk( "specialty_armorvest", true ) || (isExplosiveDamage( sMeansOfDeath ) && victim _hasPerk( "_specialty_blastshield" )) )
+			else if ( victim hasPerk( "specialty_armorvest", true ) || ( isExplosiveDamage( sMeansOfDeath ) && victim _hasPerk( "_specialty_blastshield" ) ) )
 				typeHit = "hitBodyArmor";
-			else if ( victim _hasPerk( "specialty_combathigh") )
+			else if ( victim _hasPerk( "specialty_combathigh" ) )
 				typeHit = "hitEndGame";
 			else
 				typeHit = "standard";
-				
+
 			damager thread maps\mp\gametypes\_damagefeedback::updateDamageFeedback( typeHit );
 		}
 
@@ -1369,7 +1405,7 @@ player_damage_hook( eInflictor, eAttacker, victim, iDamage, iDFlags, sMeansOfDea
 	{
 		if ( isPlayer( eAttacker ) )
 			eAttacker incPlayerStat( "damagedone", iDamage );
-		
+
 		victim incPlayerStat( "damagetaken", iDamage );
 	}*/
 

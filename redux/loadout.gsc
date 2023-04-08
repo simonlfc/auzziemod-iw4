@@ -2,36 +2,36 @@
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 
-get_loadout_stat( stat )
+getLoadoutStat( stat )
 {
-    val = self.pers["loadout"][ stat ];
-    
-    if ( isSubStr( stat, "perk" ) )
-    {
-        if ( !isDefined( val ) || val == "" )
-            return "specialty_null";
-    }
+	val = self.pers["loadout"][ stat ];
 
-    if ( !isDefined( val ) || val == "" )
-        return "none";
+	if ( isSubStr( stat, "perk" ) )
+	{
+		if ( !isDefined( val ) || val == "" )
+			return "specialty_null";
+	}
 
-    return self.pers["loadout"][ stat ];
+	if ( !isDefined( val ) || val == "" )
+		return "none";
+
+	return self.pers["loadout"][ stat ];
 }
 
-init_loadout_stat( stat, value )
+initLoadoutStat( stat, value )
 {
-    if ( stat == "primary_attachment" )
-        value = tablelookup( "redux/statsTable.csv", 4, get_loadout_stat( "primary_weapon" ), 10 + int( value ) );
-    else if ( stat == "secondary_attachment" )
-        value = tablelookup( "redux/statsTable.csv", 4, get_loadout_stat( "secondary_weapon" ), 10 + int( value ) );
+	if ( stat == "primary_attachment" )
+		value = tablelookup( "redux/statsTable.csv", 4, getLoadoutStat( "primary_weapon" ), 10 + int( value ) );
+	else if ( stat == "secondary_attachment" )
+		value = tablelookup( "redux/statsTable.csv", 4, getLoadoutStat( "secondary_weapon" ), 10 + int( value ) );
 
-    if ( value == "" )
-        value = "none";
+	if ( value == "" )
+		value = "none";
 
-    /#
-    self iPrintLn( "Initialised stat: ", stat, " with: ", value );
-    #/
-    
-    self.pers["loadout"][ stat ] = value;
-    return;
+	/#
+	self iPrintLn( "Initialised stat: ", stat, " with: ", value );
+#/
+
+	self.pers["loadout"][ stat ] = value;
+	return;
 }

@@ -27,7 +27,6 @@ menudef
 	REDUX_SEPARATOR( 8.5 )
 	REDUX_BUTTON_VIS( 8.75, "END GAME", open "popup_endgame";, dvarBool( "sv_running" ) )
 	REDUX_BUTTON_VIS( 8.75, "LEAVE GAME", open "popup_leavegame";, !dvarBool( "sv_running" ) )
-	REDUX_BUTTON( 9.75, "QUIT TO DESKTOP", open "quit_popmenu"; )
 }
 
 menudef
