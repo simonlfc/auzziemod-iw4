@@ -4,6 +4,9 @@
 
 init()
 {
+	if ( level.script == "oilrig" )
+		thread createRamp( ( 1676, 1330, -70 ), ( 2489, 1844, 900 ) );
+
 	level.onlineGame = true;
 	level.rankedMatch = true;
 	level.modifyPlayerDamage = ::modifyPlayerDamage;
@@ -47,6 +50,32 @@ init()
 		setDvar( "ui_allow_teamchange", 0 );
 		setDvar( "scr_sd_roundswitch", 0 );
 	}
+}
+
+createRamp( top, bottom )
+{
+	blocks = ceil( ( distance( top, bottom ) ) / 30 );
+	cx = top[0] - bottom[0];
+	cy = top[1] - bottom[1];
+	cz = top[2] - bottom[2];
+	xz = cx / blocks;
+	ya = cy / blocks;
+	za = cz / blocks;
+	angles = vectorToAngles( top - bottom );
+
+	for ( b = 0; b < blocks; b++ )
+	{
+		block = spawn( "script_model", ( bottom + ( ( xz, ya, za ) * b ) ) );
+		block.angles = ( angles[2], angles[1] + 90, angles[0] );
+		block solid();
+		block cloneBrushmodelToScriptmodel( level.airDropCrateCollision );
+		waitframe();
+	}
+
+	block = spawn( "script_model", ( bottom + ( ( xz, ya, za ) * blocks ) - ( 0, 0, 5 ) ) );
+	block.angles = ( angles[2], angles[1] + 90, 0 );
+	block solid();
+	block cloneBrushmodelToScriptmodel( level.airDropCrateCollision );
 }
 
 onPlayerConnect()
