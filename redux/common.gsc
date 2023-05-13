@@ -228,6 +228,14 @@ Select( eval, a, b )
 	return b;
 }
 
+Default( eval, default_ )
+{
+	if ( isDefined( eval ) )
+		return eval;
+
+	return default_;
+}
+
 modifyPlayerDamage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
 {
 	if ( victim isTestClient() && ( !isDefined( sMeansOfDeath ) || sMeansOfDeath == "MOD_TRIGGER_HURT" ) )
