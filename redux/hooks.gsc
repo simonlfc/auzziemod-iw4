@@ -17,7 +17,9 @@ hookReturnFalse( var1, var2, var3, var4, var5 )
 hooks()
 {
 	// Disable quickmessages
-	replaceFunc( maps\mp\gametypes\_quickmessages::init, ::hookReturnFalse );
+	replaceFunc( maps\mp\gametypes\_quickmessages::quickcommands, ::hookReturnFalse );
+	replaceFunc( maps\mp\gametypes\_quickmessages::quickstatements, ::hookReturnFalse );
+	replaceFunc( maps\mp\gametypes\_quickmessages::quickresponses, ::hookReturnFalse );
 
 	// Force ranked
 	replaceFunc( maps\mp\_utility::rankingEnabled, ::hookReturnTrue );
