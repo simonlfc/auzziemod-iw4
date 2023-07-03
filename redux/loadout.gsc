@@ -1,6 +1,7 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include redux\utils;
 
 getLoadoutStat( stat )
 {
@@ -30,7 +31,7 @@ initLoadoutStat( stat, value )
 
 	/#
 	self iPrintLn( "Initialised stat: ", stat, " with: ", value );
-#/
+	#/
 
 	self.pers["loadout"][ stat ] = value;
 	return;

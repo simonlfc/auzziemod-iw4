@@ -3,6 +3,7 @@
 #include maps\mp\gametypes\_hud_util;
 #include maps\mp\gametypes\_damage;
 #include maps\mp\gametypes\_class;
+#include redux\utils;
 
 hookReturnTrue( var1, var2, var3, var4, var5 )
 {
@@ -16,10 +17,19 @@ hookReturnFalse( var1, var2, var3, var4, var5 )
 
 hooks()
 {
-	// Disable quickmessages
+	// Disable quickmessages and relocate variables
+	precacheHeadIcon( "talkingicon" );
+	game["menu_quickcommands"] = "quickcommands";
+	game["menu_quickstatements"] = "quickstatements";
+	game["menu_quickresponses"] = "quickresponses";
+
+	replaceFunc( maps\mp\gametypes\_quickmessages::init, ::hookReturnFalse );
 	replaceFunc( maps\mp\gametypes\_quickmessages::quickcommands, ::hookReturnFalse );
 	replaceFunc( maps\mp\gametypes\_quickmessages::quickstatements, ::hookReturnFalse );
 	replaceFunc( maps\mp\gametypes\_quickmessages::quickresponses, ::hookReturnFalse );
+
+	// We need to notify earlier that it's last alive for EB to work for two-pieces
+	replaceFunc( maps\mp\gametypes\sd::giveLastOnTeamWarning, ::giveLastOnTeamWarningHook );
 
 	// Force ranked
 	replaceFunc( maps\mp\_utility::rankingEnabled, ::hookReturnTrue );
@@ -82,6 +92,28 @@ hooks()
 	// Give player Throwing Knife after placing TI
 	replaceFunc( maps\mp\perks\_perkfunctions::monitorTIUse, ::monitorTIUseHook );
 	replaceFunc( maps\mp\perks\_perkfunctions::setTacticalInsertion, ::setTIHook );
+}
+
+giveLastOnTeamWarningHook()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+	
+	level thread earlyLastAliveWarning();
+	self waitTillRecoveredHealth( 3 );
+	
+	otherTeam = getOtherTeam( self.pers["team"] );
+	level thread teamPlayerCardSplash( "callout_lastteammemberalive", self, self.pers["team"] );
+	level thread teamPlayerCardSplash( "callout_lastenemyalive", self, otherTeam );
+	level notify( "last_alive", self );	
+	self maps\mp\gametypes\_missions::lastManSD();
+}
+
+earlyLastAliveWarning()
+{
+	wait 1;
+	level.canUseEB = true;
 }
 
 maySpawnHook()
@@ -405,7 +437,7 @@ playerKilledInternalHook( eInflictor, attacker, victim, iDamage, sMeansOfDeath, 
 	if ( getDvarInt( "scr_forcekillcam" ) != 0 )
 		doKillcam = true;
 
-#/
+	#/
 
 	if ( isDefined( attacker.finalKill ) )
 		maps\mp\_awards::addAwardWinner( "finalkill", attacker.clientid );

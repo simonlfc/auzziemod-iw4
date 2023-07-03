@@ -8,6 +8,7 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include redux\utils;
 
 
 /*
@@ -701,13 +702,10 @@ loadWaypoints()
 		mapname = "mp_favela";
 
 	if ( !thirdparty\bot_warfare\_bot_waypoints::getWaypoints( mapname ) )
-	{
-		redux\common::consolePrint( "Waypoints", "No waypoints loaded." );
-		return;
-	}
+		consolePrint( "Waypoints", "No waypoints loaded." );
 
 	level.waypointCount = level.waypoints.size;
-	redux\common::consolePrint( "Waypoints", "Loaded " + level.waypointCount + " waypoints." );
+	consolePrint( "Waypoints", "Loaded " + level.waypointCount + " waypoints." );
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{

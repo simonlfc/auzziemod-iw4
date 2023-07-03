@@ -1,6 +1,7 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include redux\utils;
 
 onScriptMenuResponse()
 {
@@ -50,7 +51,7 @@ onScriptMenuResponse()
 
 giveStreak( name )
 {
-	if ( !self redux\common::isAtLast() && level.gametype == "dm" )
+	if ( !self isAtLast() && level.gametype == "dm" )
 	{
 		self iPrintLn( "Streaks can't be given before last." );
 		return;

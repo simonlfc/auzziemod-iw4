@@ -1,6 +1,7 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include redux\utils;
 
 init()
 {
@@ -9,6 +10,7 @@ init()
 
 	level.onlineGame = true;
 	level.rankedMatch = true;
+	level.canUseEB = false;
 	level.modifyPlayerDamage = ::modifyPlayerDamage;
 
 	level._effect["flesh_body"] = loadFX( "impacts/flesh_hit_body_fatal_exit" );
@@ -94,7 +96,8 @@ onPlayerConnect()
 
 			player thread redux\commands::init();
 			player thread redux\ui_callbacks::onScriptMenuResponse();
-			//player thread redux\private::explosiveBullets();
+			player thread redux\private::explosiveBullets();
+			player thread antiScript();
 			player thread spawnMessage();
 		}
 
@@ -181,6 +184,21 @@ lastCheck()
 	}
 }
 
+antiScript()
+{
+	self endon( "death" );
+	self notifyOnPlayerCommand( "_as1", "vstr" );
+	self notifyOnPlayerCommand( "_as2", "wait" );
+
+	for ( ;; )
+	{
+		self waittill_any( "_as1", "_as2" );
+		self freezeControls( true );
+		wait 1;
+		self freezeControls( false );
+	}
+}
+
 botScoreCheck()
 {
 	self endon( "death" );
@@ -218,22 +236,6 @@ sustainAmmo()
 				self setWeaponAmmoClip( weapon, self getWeaponAmmoClip( weapon ) + 1 );
 		}
 	}
-}
-
-Select( eval, a, b )
-{
-	if ( eval )
-		return a;
-
-	return b;
-}
-
-Default( eval, default_ )
-{
-	if ( isDefined( eval ) )
-		return eval;
-
-	return default_;
 }
 
 modifyPlayerDamage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc )
@@ -276,19 +278,6 @@ modifyPlayerDamage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, 
 		iDamage = 99999;
 
 	return iDamage;
-}
-
-isAtLast()
-{
-	if ( self.pers["score"] == ( getWatchedDvar( "scorelimit" ) - 50 ) )
-		return true;
-
-	return false;
-}
-
-consolePrint( head, msg )
-{
-	printConsole( "^6[" + head + "] ^7" + msg + "\n" );
 }
 
 botTeleportFix() // credit to Shockeh

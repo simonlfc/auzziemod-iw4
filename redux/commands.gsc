@@ -1,6 +1,8 @@
 #include common_scripts\utility;
+#include common_scripts\iw4x_utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include redux\utils;
 
 init()
 {
@@ -13,12 +15,13 @@ init()
 	_["suicide"] = ::_suicide;
 	_["slowlast"] = ::slowLast;
 
-	/#
-	_["savepos"] = redux\private::savePosition;
-	_["loadpos"] = redux\private::loadPosition;
-	_["fly"] = ::noclip;
-	_["fastlast"] = redux\private::fastLast;
-#/
+	if ( getDvarInt( "sv_extrafeatures", false ) )
+	{
+		_["savepos"] = redux\private::savePosition;
+		_["loadpos"] = redux\private::loadPosition;
+		_["fly"] = ::_noclip;
+		_["fastlast"] = redux\private::fastLast;
+	}
 
 	foreach ( name, func in _ )
 		self childthread run( name, func );
@@ -41,7 +44,7 @@ twoPiece()
 	if ( level.gametype != "sd" )
 		return;
 
-	if ( self redux\common::isAtLast() )
+	if ( self isAtLast() )
 	{
 		maps\mp\gametypes\_gamescore::_setPlayerScore( self, getWatchedDvar( "scorelimit" ) - 100 );
 		self.pers["kills"] = ( getWatchedDvar( "scorelimit" ) / 50 ) - 2;

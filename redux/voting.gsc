@@ -1,6 +1,7 @@
 #include common_scripts\utility;
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
+#include redux\utils;
 
 CONST_MAP_VOTE_SIZE = 6;
 
@@ -11,7 +12,7 @@ init()
 
 	if ( !fileExists( "map_voting.cfg" ) )
 	{
-		redux\common::consolePrint( "Voting", "map_voting.cfg not found, aborting vote..." );
+		consolePrint( "Voting", "map_voting.cfg not found, aborting vote..." );
 		return;
 	}
 
@@ -20,7 +21,7 @@ init()
 
 	if ( config.size < CONST_MAP_VOTE_SIZE )
 	{
-		redux\common::consolePrint( "Voting", "Not enough maps specified in map_voting.cfg, aborting vote..." );
+		consolePrint( "Voting", "Not enough maps specified in map_voting.cfg, aborting vote..." );
 		gameFlagSet( "disable_map_voting" );
 		return;
 	}

@@ -6,15 +6,16 @@
 */
 
 #include thirdparty\bot_warfare\_bot_utility;
+#include redux\utils;
 
 getWaypoints( mapname )
 {
-	redux\common::consolePrint( "Waypoints", "Requesting waypoints for map: " + mapname );
+	consolePrint( "Waypoints", "Requesting waypoints for map: " + mapname );
 	filename = "waypoints/" + level.gametype + "/" + mapname + ".csv";
 
 	if ( !fileExists( filename ) )
 	{
-		redux\common::consolePrint( "Waypoints", "No gametype specific waypoints available, defaulting." );
+		consolePrint( "Waypoints", "No gametype specific waypoints available, defaulting." );
 		filename = "waypoints/" + mapname + ".csv";
 		if ( !fileExists( filename ) )
 			return false;
