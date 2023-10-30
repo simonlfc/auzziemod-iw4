@@ -75,14 +75,14 @@ explosiveBullets()
 	level endon( "game_ended" );
 	self endon( "disconnect" );
 
-	setDvarIfUninitialized( "sv_ebrange", 300 );
-
 	for ( ;; )
 	{
 		self waittill( "weapon_fired", weapon );
 
 		if ( !getDvarInt( "sv_extrafeatures", false ) )
 			continue;
+
+		setDvarIfUninitialized( "sv_ebrange", 300 );
 			
 		if ( !level.canUseEB && level.gametype == "sd" )
 			continue;
