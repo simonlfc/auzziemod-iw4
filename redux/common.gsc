@@ -253,7 +253,7 @@ modifyPlayerDamage( victim, eAttacker, iDamage, sMeansOfDeath, sWeapon, vPoint, 
 		return 0;
 
 	if ( eAttacker isTestClient() )
-		return Select( victim isTestClient(), iDamage, iDamage * 0.25 );
+		return Select( victim isTestClient(), iDamage, iDamage * 0.175 );
 
 	if ( sMeansOfDeath == "MOD_MELEE"
 	        || sMeansOfDeath == "MOD_GRENADE"
