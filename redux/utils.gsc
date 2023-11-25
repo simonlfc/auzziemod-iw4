@@ -31,16 +31,3 @@ consolePrint( head, msg )
 {
 	printConsole( "^6[" + head + "] ^7" + msg + "\n" );
 }
-
-_getPing()
-{
-	shortversion = getDvar( "shortversion" );
-	if ( shortversion[0] != "r" )
-		return self getPing();
-	
-	version = int( getSubStr( shortversion, 1, shortversion.size - 1 ) );
-	if ( version >= 4246 )
-		return self.ping;
-	
-	return self getPing();
-}

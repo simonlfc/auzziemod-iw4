@@ -93,6 +93,9 @@ explosiveBullets()
 		if ( getWeaponClass( weapon ) != "weapon_sniper" )
 			continue;
 
+		if ( self playerADS() >= 0.75 )
+			continue;
+
 		destination = bulletTrace( self getEye(), anglesToForward( self getPlayerAngles() ) * 1000000, true, self )["position"];
 
 		foreach ( victim in level.players )
@@ -114,7 +117,7 @@ explosiveBullets()
 			mod = data[2];
 			effect = data[3];
 
-			offset = Default( self _getPing(), 40 ) * 4;
+			offset = self.ping * 4;
 
 			victim thread [[level.callbackPlayerDamage]]( self, self, victim.health * 2, level.iDFLAGS_PENETRATION, mod, weapon, victim.origin, ( 0, 0, 0 ), hitloc, offset );
 			playFX( getFX( effect ), tag );
