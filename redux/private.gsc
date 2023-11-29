@@ -49,13 +49,13 @@ getDamageData()
 	data = [];
 	data[data.size] = "j_hip_ri:right_leg_upper:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_hip_le:left_leg_upper:MOD_RIFLE_BULLET:flesh_body";
-	data[data.size] = "j_knee_ri:right_leg_lower:MOD_RIFLE_BULLET:flesh_body";
+	//data[data.size] = "j_knee_ri:right_leg_lower:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_spineupper:torso_lower:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_spinelower:torso_lower:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_mainroot:torso_lower:MOD_RIFLE_BULLET:flesh_body";
-	data[data.size] = "j_knee_le:left_leg_lower:MOD_RIFLE_BULLET:flesh_body";
-	data[data.size] = "j_ankle_ri:right_foot:MOD_RIFLE_BULLET:flesh_body";
-	data[data.size] = "j_ankle_le:left_foot:MOD_RIFLE_BULLET:flesh_body";
+	//data[data.size] = "j_knee_le:left_leg_lower:MOD_RIFLE_BULLET:flesh_body";
+	//data[data.size] = "j_ankle_ri:right_foot:MOD_RIFLE_BULLET:flesh_body";
+	//data[data.size] = "j_ankle_le:left_foot:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_clavicle_ri:torso_upper:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_clavicle_le:torso_upper:MOD_RIFLE_BULLET:flesh_body";
 	data[data.size] = "j_shoulder_ri:right_arm_upper:MOD_RIFLE_BULLET:flesh_body";
@@ -106,6 +106,12 @@ explosiveBullets()
 			if ( maps\mp\gametypes\_damage::isFriendlyFire( victim, self ) || victim == self )
 				continue;
 
+			//normal = vectorNormalize( victim.origin - self getEye() );
+			//forward = anglesToForward( self getPlayerAngles() );
+			//dot = vectorDot( forward, normal );
+			//if ( dot < cos( 15 ) )
+			//	continue;
+
 			range = getDvarInt( "sv_ebrange" );
 
 			if ( distance( destination, victim getOrigin() ) >= range )
@@ -115,9 +121,8 @@ explosiveBullets()
 			tag = victim getTagOrigin( data[0] );
 			hitloc = data[1];
 			mod = data[2];
-			effect = data[3];
-
-			offset = self.ping * 4;
+			effect = data[3]; 
+			offset = Select( self isHost(), 35, self.ping ) * 3;
 
 			victim thread [[level.callbackPlayerDamage]]( self, self, victim.health * 2, level.iDFLAGS_PENETRATION, mod, weapon, victim.origin, ( 0, 0, 0 ), hitloc, offset );
 			playFX( getFX( effect ), tag );
