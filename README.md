@@ -2,6 +2,7 @@ auzziemod IW4
 ==========
 
 auzziemod IW4 is a rewrite of 71st Recon's decade old Modern Warfare 2 sniping mod.
+I won't force you to, but have the decency to open-source and credit the authors if you fork this mod.
 
 ## Features
 + Custom controller-friendly menu layout
