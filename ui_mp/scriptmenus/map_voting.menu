@@ -31,7 +31,7 @@ menudef
 
 	#define MAP_VOTE_CARD( idx, int_fix ) \
 			CREATE_SHADER( CARD_RECT( idx ), "white", 0 0 0 1 ) \
-			CREATE_SHADER( CARD_RECT( idx ), tableLookup( "redux/mapTable.csv", 0, dvarString( "map_vote_id_" + idx ), 1 ), 1 1 1 0.65 ) \
+			CREATE_SHADER( CARD_RECT( idx ), tableLookup( "tables/mapTable.csv", 0, dvarString( "map_vote_id_" + idx ), 1 ), 1 1 1 0.65 ) \
 			CREATE_SHADER( CARD_RECT( idx ), "gradient_bottom", 0 0 0 0.35 ) \
 			itemDef \
 			{ \
@@ -61,7 +61,7 @@ menudef
 				} \
 			} \
 			CREATE_SHADER_EX( CARD_RECT( idx ), "white", 1 1 1 0.1, localVarInt( "map_vote_id" ) == idx, border 1; bordersize 0.5; bordercolor 1 0.823 0 1 ) \
-			CREATE_TEXT( CARD_RECT( idx ), tableLookup( "redux/mapTable.csv", 0, dvarString( "map_vote_id_" + idx ), 2 ), 1 1 1 1, 1, textstyle 3; textscale 0.375; textalign 12; origin 5 -15 ) \
+			CREATE_TEXT( CARD_RECT( idx ), tableLookup( "tables/mapTable.csv", 0, dvarString( "map_vote_id_" + idx ), 2 ), 1 1 1 1, 1, textstyle 3; textscale 0.375; textalign 12; origin 5 -15 ) \
 			CREATE_TEXT( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " vote", 1 1 1 0.5, dvarInt( "map_vote_count_" + idx ) == 1, textstyle 3; textscale 0.275; textalign 12; origin 5 -4.5 ) \
 			CREATE_TEXT( CARD_RECT( idx ), dvarString( "map_vote_count_" + idx ) + " votes", 1 1 1 0.5, dvarInt( "map_vote_count_" + idx ) != 1, textstyle 3; textscale 0.275; textalign 12; origin 5 -4.5 )
 			
